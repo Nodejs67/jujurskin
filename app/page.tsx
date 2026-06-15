@@ -838,16 +838,70 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ───────────────────────────────────── */}
-      <footer className="border-t border-border py-10 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
-              <Sparkles className="w-3 h-3 text-primary" />
+      <footer className="border-t border-border py-12 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+            {/* Brand */}
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
+                  <Sparkles className="w-3 h-3 text-primary" />
+                </div>
+                <span className="text-sm font-semibold">JujurSkin</span>
+              </div>
+              <p className="text-xs text-muted-foreground/60 leading-relaxed">
+                Platform skincare pertama Indonesia yang jujur bilang apa yang tidak kamu butuhkan.
+              </p>
             </div>
-            <span className="text-sm font-medium">JujurSkin</span>
+
+            {/* Fitur */}
+            <div>
+              <p className="text-xs font-semibold text-foreground mb-3 uppercase tracking-wide">Fitur</p>
+              <div className="space-y-2">
+                {[
+                  { label: "Analisis Kulit", href: "/analisis" },
+                  { label: "Lihat Hasil", href: "/hasil" },
+                  { label: "Beri Feedback", href: "/feedback" },
+                ].map((link) => (
+                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Belajar */}
+            <div>
+              <p className="text-xs font-semibold text-foreground mb-3 uppercase tracking-wide">Belajar</p>
+              <div className="space-y-2">
+                {[
+                  { label: "Edukasi Ingredient", href: "/edukasi" },
+                  { label: "Panduan Pemula", href: "/panduan" },
+                  { label: "Produk Indonesia", href: "/produk" },
+                ].map((link) => (
+                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Tentang */}
+            <div>
+              <p className="text-xs font-semibold text-foreground mb-3 uppercase tracking-wide">Tentang</p>
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground/60">Tidak ada iklan</p>
+                <p className="text-xs text-muted-foreground/60">Tidak terafiliasi brand</p>
+                <p className="text-xs text-muted-foreground/60">Berbasis data & sains</p>
+                <p className="text-xs text-muted-foreground/60">100% Gratis</p>
+              </div>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground/50 text-center">Tidak terafiliasi dengan brand skincare manapun · Rekomendasi berbasis data & ilmu pengetahuan</p>
-          <p className="text-xs text-muted-foreground/40">© 2026 JujurSkin Indonesia</p>
+
+          <div className="border-t border-border/50 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
+            <p className="text-xs text-muted-foreground/40">© 2026 JujurSkin Indonesia</p>
+            <p className="text-xs text-muted-foreground/40 text-center">Rekomendasi berbasis data & ilmu pengetahuan, bukan endorsement berbayar</p>
+          </div>
         </div>
       </footer>
 
