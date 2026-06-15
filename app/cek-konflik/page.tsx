@@ -74,6 +74,23 @@ const INGREDIENT_ALIASES: Record<string, string> = {
   "zinc": "zinc",
   "tea tree": "tea-tree",
   "neem": "neem",
+  "adenosine": "adenosine",
+  "allantoin": "allantoin",
+  "licorice": "licorice-root",
+  "licorice root": "licorice-root",
+  "glabridin": "licorice-root",
+  "mandelic acid": "mandelic-acid",
+  "mandelic": "mandelic-acid",
+  "polyglutamic acid": "polyglutamic-acid",
+  "pga": "polyglutamic-acid",
+  "copper peptide": "copper-peptide",
+  "ghk-cu": "copper-peptide",
+  "resveratrol": "resveratrol",
+  "rosehip": "rosehip-oil",
+  "rosehip oil": "rosehip-oil",
+  "sodium pca": "sodium-pca",
+  "ascorbyl glucoside": "ascorbyl-glucoside",
+  "aa2g": "ascorbyl-glucoside",
 };
 
 function matchIngredients(text: string): Ingredient[] {

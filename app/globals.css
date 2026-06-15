@@ -152,4 +152,49 @@
     box-shadow: 0 0 0 1px oklch(0.40 0.10 145), 0 20px 60px -10px oklch(0 0 0 / 0.6), 0 0 40px -10px oklch(0.75 0.18 145 / 0.15);
     transform: translateY(-4px);
   }
+  .glass-card {
+    background: oklch(0.18 0.03 155 / 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid oklch(0.35 0.05 155 / 0.5);
+  }
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      oklch(0.22 0.03 155) 0%,
+      oklch(0.28 0.04 155) 50%,
+      oklch(0.22 0.03 155) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: oklch(0.16 0.03 155);
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.30 0.06 155);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.40 0.10 145);
+}
+
+/* Text selection */
+::selection {
+  background: oklch(0.75 0.18 145 / 0.25);
+  color: oklch(0.94 0.01 80);
 }

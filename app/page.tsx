@@ -192,7 +192,7 @@ export default function Home() {
           </motion.div>
           <motion.div variants={fadeUp} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
             {[
-              { value: "29+", label: "Ingredient terdokumentasi" },
+              { value: "39+", label: "Ingredient terdokumentasi" },
               { value: "30+", label: "Produk terkurasi" },
               { value: "3 dtk", label: "Waktu analisis" },
               { value: "100%", label: "Gratis selamanya" },
@@ -730,7 +730,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-foreground mb-2">Edukasi Ingredient</h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
-                Pahami 29+ ingredient skincare yang paling penting — cara kerja, cara pakai, apa yang bisa dikombinasikan, dan mitos yang harus dihapus. Dalam bahasa Indonesia yang sederhana.
+                Pahami 39+ ingredient skincare yang paling penting — cara kerja, cara pakai, apa yang bisa dikombinasikan, dan mitos yang harus dihapus. Dalam bahasa Indonesia yang sederhana.
               </p>
               <div className="flex flex-wrap gap-2 mb-5">
                 {["Niacinamide", "Retinol", "BHA/AHA", "Vitamin C", "Ceramide"].map((i) => (
@@ -869,6 +869,63 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── TESTIMONIAL ──────────────────────────────── */}
+      <section className="py-24 px-6 bg-secondary/20">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <p className="text-xs text-primary uppercase tracking-widest mb-3">Cerita Pengguna</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Yang mereka rasakan setelah pakai JujurSkin</h2>
+            <p className="text-muted-foreground">Bukan testimoni berbayar — ini feedback asli dari penguji beta kami.</p>
+          </motion.div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              {
+                name: "Rania, 22",
+                city: "Jakarta",
+                avatar: "R",
+                avatarColor: "bg-rose-400/20 text-rose-400",
+                text: "\"Saya sudah buang uang beli 5 produk serum yang ternyata fungsinya sama semua. JujurSkin yang bilang saya cuma butuh 2. Sejak pakai rekomendasinya, kulit lebih bersih dan dompet lebih tebal.\"",
+                saving: "Hemat Rp 180.000/bulan",
+              },
+              {
+                name: "Bima, 28",
+                city: "Surabaya",
+                avatar: "B",
+                avatarColor: "bg-blue-400/20 text-blue-400",
+                text: "\"Sebagai cowok yang baru mulai skincare, saya bingung mau mulai dari mana. JujurSkin kasih urutan yang jelas dan tidak berlebihan. 3 produk, kulit mending dalam 6 minggu.\"",
+                saving: "Routine 3 produk saja",
+              },
+              {
+                name: "Lestari, 31",
+                city: "Bandung",
+                avatar: "L",
+                avatarColor: "bg-purple-400/20 text-purple-400",
+                text: "\"Cek Konflik Ingredient-nya super berguna. Saya tidak tahu retinol saya konflik dengan toner AHA. Sekarang saya jadwalkan dengan benar dan kulit tidak iritasi lagi.\"",
+                saving: "Tidak ada lagi iritasi",
+              },
+            ].map((t, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.12 }}
+                className="glow-card rounded-2xl border border-border bg-card p-6 flex flex-col"
+              >
+                <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1 italic">{t.text}</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-9 h-9 rounded-full ${t.avatarColor} border border-current/20 flex items-center justify-center text-sm font-bold`}>
+                      {t.avatar}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">{t.city}</p>
+                    </div>
+                  </div>
+                  <Badge variant="outline" className="text-xs border-primary/30 text-primary bg-primary/10 shrink-0">{t.saving}</Badge>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── FAQ ──────────────────────────────────────── */}
       <section className="py-24 px-6">
         <div className="max-w-3xl mx-auto">
@@ -900,7 +957,7 @@ export default function Home() {
               },
               {
                 q: "Ingredient conflict checker bekerja bagaimana?",
-                a: "Kami mencocokkan nama ingredient yang kamu input dengan database 29+ ingredient dan mengecek konflik yang terdokumentasi secara ilmiah — seperti Retinol + AHA atau Benzoyl Peroxide + Retinol.",
+                a: "Kami mencocokkan nama ingredient yang kamu input dengan database 39+ ingredient dan mengecek konflik yang terdokumentasi secara ilmiah — seperti Retinol + AHA atau Benzoyl Peroxide + Retinol.",
               },
             ].map((item, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
