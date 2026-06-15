@@ -392,6 +392,50 @@ export default function PanduanPage() {
           </motion.div>
         </section>
 
+        {/* Quick Tools */}
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <p className="text-sm font-semibold text-foreground mb-3">Tools yang berguna setelah membaca panduan ini:</p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {[
+              {
+                icon: "⚗️",
+                title: "Cek Konflik Ingredient",
+                desc: "Pastikan produk yang kamu pakai aman dikombinasikan",
+                href: "/cek-konflik",
+                color: "border-yellow-400/20 bg-yellow-400/5",
+              },
+              {
+                icon: "💰",
+                title: "Budget Planner",
+                desc: "Starter kit terbaik sesuai budgetmu",
+                href: "/kalkulator",
+                color: "border-accent/20 bg-accent/5",
+              },
+              {
+                icon: "📚",
+                title: "Edukasi Ingredient",
+                desc: "Pahami 29+ bahan skincare yang paling penting",
+                href: "/edukasi",
+                color: "border-purple-400/20 bg-purple-400/5",
+              },
+              {
+                icon: "🛍️",
+                title: "Produk Indonesia",
+                desc: "30+ produk lokal terkurasi berdasarkan ingredient",
+                href: "/produk",
+                color: "border-primary/20 bg-primary/5",
+              },
+            ].map((tool) => (
+              <button key={tool.href} onClick={() => router.push(tool.href)}
+                className={`text-left p-4 rounded-xl border ${tool.color} hover:opacity-90 transition-opacity`}>
+                <p className="text-lg mb-1">{tool.icon}</p>
+                <p className="text-sm font-semibold text-foreground mb-0.5">{tool.title}</p>
+                <p className="text-xs text-muted-foreground">{tool.desc}</p>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
         {/* CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           className="rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center"
