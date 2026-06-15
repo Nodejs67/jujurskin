@@ -3,11 +3,38 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, ExternalLink } from "lucide-react";
+import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
 import type { AnalysisResult } from "@/lib/recommendations";
+import { PRODUCTS, type ProductCategory } from "@/lib/products";
+
+const CATEGORY_MAP: Record<string, ProductCategory> = {
+  "Sun Protection": "sunscreen",
+  "Cleansing": "cleanser",
+  "Moisturizing": "moisturizer",
+  "Acne Treatment": "treatment_jerawat",
+  "Brightening & Repair": "serum_niacinamide",
+  "Brightening": "serum_vitamin_c",
+  "Anti-Aging": "serum_retinol",
+  // product name fallbacks
+  "Sunscreen": "sunscreen",
+  "Cleanser": "cleanser",
+  "Moisturizer": "moisturizer",
+  "Niacinamide": "serum_niacinamide",
+  "Vitamin C": "serum_vitamin_c",
+  "Retinol": "serum_retinol",
+  "AHA/BHA": "serum_aha_bha",
+};
+
+function getProductSuggestions(category: string, budget: number) {
+  const productCategory = CATEGORY_MAP[category];
+  if (!productCategory) return [];
+  return PRODUCTS.filter(
+    (p) => p.category === productCategory && (budget === 0 || p.price_min <= budget)
+  ).slice(0, 2);
+}
 
 type Analysis = {
   id: string;
@@ -45,6 +72,7 @@ function HasilContent() {
   const [data, setData] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [expandedRec, setExpandedRec] = useState<number | null>(null);
 
   useEffect(() => {
     const id = params.get("id");
@@ -176,43 +204,96 @@ function HasilContent() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <p className="text-sm font-semibold text-foreground mb-3">Rekomendasi untuk kamu:</p>
           <div className="space-y-3">
-            {h.recs.map((rec, i) => (
-              <div key={i} className="rounded-xl border border-primary/15 bg-primary/5 p-4">
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">
-                      {rec.priority}
+            {h.recs.map((rec, i) => {
+              const productSuggs = getProductSuggestions(rec.category || rec.product, data.budget);
+              const isOpen = expandedRec === i;
+              return (
+                <div key={i} className="rounded-xl border border-primary/15 bg-primary/5 p-4">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">
+                        {rec.priority}
+                      </div>
+                      <p className="text-sm font-semibold text-foreground">{rec.product}</p>
                     </div>
-                    <p className="text-sm font-semibold text-foreground">{rec.product}</p>
+                    <span className="text-xs text-accent font-medium shrink-0 whitespace-nowrap">
+                      Rp {rec.price_min.toLocaleString("id")} – {rec.price_max.toLocaleString("id")}
+                    </span>
                   </div>
-                  <span className="text-xs text-accent font-medium shrink-0 whitespace-nowrap">
-                    Rp {rec.price_min.toLocaleString("id")} – {rec.price_max.toLocaleString("id")}
-                  </span>
+                  <p className="text-xs text-muted-foreground mb-2 leading-relaxed">{rec.reason}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    <Badge variant="outline" className="text-xs border-primary/20 text-primary/70">{rec.frequency}</Badge>
+                    {rec.examples.map((ex, j) => (
+                      <Badge key={j} variant="outline" className="text-xs border-border text-muted-foreground">{ex}</Badge>
+                    ))}
+                  </div>
+
+                  <div className="flex gap-2 mb-0">
+                    <button
+                      onClick={() => setExpandedRec(isOpen ? null : i)}
+                      className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors"
+                    >
+                      <ShoppingBag className="w-3 h-3" />
+                      {isOpen ? "Sembunyikan produk" : `Lihat produk${productSuggs.length > 0 ? ` (${productSuggs.length})` : ""} →`}
+                    </button>
+                    <span className="text-muted-foreground/30">·</span>
+                    <button
+                      onClick={() => router.push("/edukasi")}
+                      className="flex items-center gap-1 text-xs text-primary/70 hover:text-primary transition-colors"
+                    >
+                      <BookOpen className="w-3 h-3" /> Pelajari ingredient →
+                    </button>
+                  </div>
+
+                  {/* Inline product suggestions */}
+                  {isOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25, ease: "easeOut" as const }}
+                      className="mt-3 space-y-2"
+                    >
+                      {productSuggs.length > 0 ? (
+                        <>
+                          {productSuggs.map((prod) => (
+                            <div key={prod.id} className="flex items-start justify-between gap-3 p-3 rounded-lg bg-background/60 border border-border/50">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5 mb-0.5">
+                                  <p className="text-xs font-semibold text-foreground truncate">{prod.name}</p>
+                                  {prod.bpom_registered && (
+                                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-green-400/40 text-green-400 shrink-0">BPOM</Badge>
+                                  )}
+                                </div>
+                                <p className="text-[11px] text-muted-foreground">{prod.brand}</p>
+                                <p className="text-[11px] text-muted-foreground/60 line-clamp-1 mt-0.5">{prod.tagline}</p>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <p className="text-xs font-bold text-accent">Rp {prod.price_min.toLocaleString("id")}</p>
+                                <p className="text-[10px] text-muted-foreground/60">– {prod.price_max.toLocaleString("id")}</p>
+                              </div>
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => router.push(`/produk`)}
+                            className="w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors py-1"
+                          >
+                            Lihat semua produk →
+                          </button>
+                        </>
+                      ) : (
+                        <div className="p-3 rounded-lg bg-background/60 border border-border/50 text-center">
+                          <p className="text-xs text-muted-foreground">Belum ada produk spesifik di database untuk kategori ini.</p>
+                          <button onClick={() => router.push("/produk")} className="text-xs text-primary hover:underline mt-1">
+                            Cari di halaman produk →
+                          </button>
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
                 </div>
-                <p className="text-xs text-muted-foreground mb-2 leading-relaxed">{rec.reason}</p>
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  <Badge variant="outline" className="text-xs border-primary/20 text-primary/70">{rec.frequency}</Badge>
-                  {rec.examples.map((ex, j) => (
-                    <Badge key={j} variant="outline" className="text-xs border-border text-muted-foreground">{ex}</Badge>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => router.push("/produk")}
-                    className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors"
-                  >
-                    <ShoppingBag className="w-3 h-3" /> Lihat produk →
-                  </button>
-                  <span className="text-muted-foreground/30">·</span>
-                  <button
-                    onClick={() => router.push("/edukasi")}
-                    className="flex items-center gap-1 text-xs text-primary/70 hover:text-primary transition-colors"
-                  >
-                    <BookOpen className="w-3 h-3" /> Pelajari ingredient →
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </motion.div>
 
