@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { SiteFooter } from "@/components/site-footer";
 import {
   ArrowLeft, Sparkles, BookOpen, CheckCircle, XCircle, AlertTriangle,
   Sun, Droplets, Shield, ArrowRight, ChevronDown, ChevronUp
@@ -175,7 +176,7 @@ export default function PanduanPage() {
   const [activeSkinType, setActiveSkinType] = useState(0);
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="border-b border-border/50 bg-background/90 backdrop-blur-md sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
@@ -411,6 +412,7 @@ export default function PanduanPage() {
         </motion.div>
 
       </div>
+      <SiteFooter />
     </main>
   );
 }

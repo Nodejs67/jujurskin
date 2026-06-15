@@ -105,7 +105,7 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#demo" className="hover:text-foreground transition-colors">Demo</a>
-            <a href="#fitur" className="hover:text-foreground transition-colors">Fitur</a>
+            <a href="/panduan" className="hover:text-foreground transition-colors">Panduan</a>
             <a href="/edukasi" className="hover:text-foreground transition-colors">Edukasi</a>
             <a href="/produk" className="hover:text-foreground transition-colors">Produk</a>
           </div>

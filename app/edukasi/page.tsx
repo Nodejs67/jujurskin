@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Search, ArrowLeft, BookOpen, Shield, FlaskConical, Sparkles, Droplets, Leaf, Sun, ChevronRight, CheckCircle, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SiteFooter } from "@/components/site-footer";
 import {
   INGREDIENTS,
   CATEGORY_LABELS,
@@ -125,7 +126,7 @@ export default function EdukasiPage() {
   }, [query, activeCategory]);
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="border-b border-border/50 bg-background/90 backdrop-blur-md sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
@@ -266,6 +267,7 @@ export default function EdukasiPage() {
           </Button>
         </motion.div>
       </div>
+      <SiteFooter />
     </main>
   );
 }
