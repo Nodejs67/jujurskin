@@ -1,11 +1,12 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, type Variants, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useState as useNavState } from "react";
 import {
   Shield, TrendingDown, BookOpen, MapPin, AlertTriangle, Sparkles,
-  ArrowRight, CheckCircle, XCircle, ChevronDown, Camera, Zap,
-  DollarSign, CloudSun, FlaskConical, Brain, User, Star, ShoppingBag
+  ArrowRight, CheckCircle, XCircle, ChevronDown, Camera,
+  FlaskConical, Brain, User, ShoppingBag, Menu, X, DollarSign, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -89,8 +90,17 @@ const vsGPT = [
   "Menghitung potensi penghematan bulananmu",
 ];
 
+const NAV_LINKS = [
+  { href: "#demo", label: "Demo" },
+  { href: "/panduan", label: "Panduan" },
+  { href: "/edukasi", label: "Edukasi" },
+  { href: "/produk", label: "Produk" },
+];
+
 export default function Home() {
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useNavState(false);
+
   return (
     <main className="min-h-screen bg-background overflow-x-hidden">
 
@@ -104,15 +114,40 @@ export default function Home() {
             <span className="font-semibold tracking-tight">JujurSkin</span>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#demo" className="hover:text-foreground transition-colors">Demo</a>
-            <a href="/panduan" className="hover:text-foreground transition-colors">Panduan</a>
-            <a href="/edukasi" className="hover:text-foreground transition-colors">Edukasi</a>
-            <a href="/produk" className="hover:text-foreground transition-colors">Produk</a>
+            {NAV_LINKS.map((l) => (
+              <a key={l.href} href={l.href} className="hover:text-foreground transition-colors">{l.label}</a>
+            ))}
           </div>
-          <Button size="sm" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-medium">
-            Mulai Gratis
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button size="sm" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-medium">
+              Mulai Gratis
+            </Button>
+            <button className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
+              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.22, ease: "easeOut" as const }}
+              className="md:hidden border-t border-border bg-background/95 backdrop-blur-md overflow-hidden"
+            >
+              <div className="px-6 py-4 space-y-1">
+                {NAV_LINKS.map((l) => (
+                  <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}
+                    className="block px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors">
+                    {l.label}
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* ── HERO ─────────────────────────────────────── */}
@@ -154,7 +189,20 @@ export default function Home() {
               Lihat Demo <ChevronDown className="w-4 h-4" />
             </Button>
           </motion.div>
-          <motion.div variants={fadeUp} className="mt-14 flex flex-wrap justify-center gap-5 text-xs text-muted-foreground/55">
+          <motion.div variants={fadeUp} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+            {[
+              { value: "29+", label: "Ingredient terdokumentasi" },
+              { value: "30+", label: "Produk terkurasi" },
+              { value: "3 dtk", label: "Waktu analisis" },
+              { value: "100%", label: "Gratis selamanya" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center p-4 rounded-xl border border-border/50 bg-card/50">
+                <p className="text-2xl font-bold text-primary mb-0.5">{stat.value}</p>
+                <p className="text-xs text-muted-foreground/70">{stat.label}</p>
+              </div>
+            ))}
+          </motion.div>
+          <motion.div variants={fadeUp} className="mt-6 flex flex-wrap justify-center gap-5 text-xs text-muted-foreground/55">
             {["Tidak ada iklan berbayar", "Tidak terafiliasi brand apapun", "Data pribadimu aman", "Bahasa Indonesia"].map((t) => (
               <div key={t} className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-primary/50" /> {t}
@@ -677,7 +725,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-foreground mb-2">Edukasi Ingredient</h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
-                Pahami 20+ ingredient skincare yang paling penting — cara kerja, cara pakai, apa yang bisa dikombinasikan, dan mitos yang harus dihapus. Dalam bahasa Indonesia yang sederhana.
+                Pahami 29+ ingredient skincare yang paling penting — cara kerja, cara pakai, apa yang bisa dikombinasikan, dan mitos yang harus dihapus. Dalam bahasa Indonesia yang sederhana.
               </p>
               <div className="flex flex-wrap gap-2 mb-5">
                 {["Niacinamide", "Retinol", "BHA/AHA", "Vitamin C", "Ceramide"].map((i) => (
@@ -698,7 +746,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-foreground mb-2">Produk Indonesia</h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
-                25+ produk skincare lokal terkurasi berdasarkan ingredient — bukan popularitas. Semua sudah BPOM, ada info harga, dan penjelasan kenapa produk itu efektif.
+                30+ produk skincare lokal terkurasi berdasarkan ingredient — bukan popularitas. Semua sudah BPOM, ada info harga, dan penjelasan kenapa produk itu efektif.
               </p>
               <div className="flex flex-wrap gap-2 mb-5">
                 {["Sunscreen", "Cleanser", "Moisturizer", "Serum", "Treatment"].map((c) => (
