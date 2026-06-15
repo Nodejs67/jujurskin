@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
+import { useRouter } from "next/navigation";
 import {
   Shield, TrendingDown, BookOpen, MapPin, AlertTriangle, Sparkles,
   ArrowRight, CheckCircle, XCircle, ChevronDown, Camera, Zap,
@@ -89,6 +90,7 @@ const vsGPT = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   return (
     <main className="min-h-screen bg-background overflow-x-hidden">
 
@@ -145,10 +147,10 @@ export default function Home() {
             Untuk pria & wanita · Seluruh Indonesia · 100% Gratis
           </motion.p>
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium gap-2 px-8">
+            <Button size="lg" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium gap-2 px-8">
               Analisis Kulit Saya <ArrowRight className="w-4 h-4" />
             </Button>
-            <Button size="lg" variant="outline" className="border-border hover:bg-secondary gap-2 px-8">
+            <Button size="lg" variant="outline" className="border-border hover:bg-secondary gap-2 px-8" onClick={() => document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" })}>
               Lihat Demo <ChevronDown className="w-4 h-4" />
             </Button>
           </motion.div>
@@ -265,7 +267,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
+                <Button onClick={() => router.push("/analisis")} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
                   Analisis Kulit Saya <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
@@ -771,7 +773,7 @@ export default function Home() {
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 Tidak perlu kartu kredit. Tidak ada biaya tersembunyi. Tidak ada agenda untuk menyuruhmu beli lebih banyak.
               </p>
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium gap-2 px-10 h-12">
+              <Button size="lg" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium gap-2 px-10 h-12">
                 Analisis Kulit Saya Sekarang <ArrowRight className="w-4 h-4" />
               </Button>
               <p className="mt-4 text-xs text-muted-foreground/60">Untuk pria & wanita · Seluruh Indonesia</p>
