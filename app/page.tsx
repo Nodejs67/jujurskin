@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   Shield, TrendingDown, BookOpen, MapPin, AlertTriangle, Sparkles,
   ArrowRight, CheckCircle, XCircle, ChevronDown, Camera, Zap,
-  DollarSign, CloudSun, FlaskConical, Brain, User, Star
+  DollarSign, CloudSun, FlaskConical, Brain, User, Star, ShoppingBag
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -105,9 +105,9 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#demo" className="hover:text-foreground transition-colors">Demo</a>
-            <a href="#score" className="hover:text-foreground transition-colors">Skin Score</a>
             <a href="#fitur" className="hover:text-foreground transition-colors">Fitur</a>
             <a href="/edukasi" className="hover:text-foreground transition-colors">Edukasi</a>
+            <a href="/produk" className="hover:text-foreground transition-colors">Produk</a>
           </div>
           <Button size="sm" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-medium">
             Mulai Gratis
@@ -655,6 +655,61 @@ export default function Home() {
               JujurSkin mengenal kondisi kulitmu, budgetmu, kotamu, dan perkembangan kulitmu dari waktu ke waktu.
             </p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ── EDUKASI + PRODUK ─────────────────────────── */}
+      <section className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <p className="text-xs text-primary uppercase tracking-widest mb-3">Lebih dari Sekadar Rekomendasi</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Belajar, cari produk, analisis — semua di sini</h2>
+            <p className="text-muted-foreground">Ekosistem lengkap untuk kamu yang ingin benar-benar paham skincare.</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {/* Edukasi Card */}
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              className="glow-card rounded-2xl border border-border bg-card p-8 flex flex-col"
+            >
+              <div className="w-12 h-12 rounded-xl bg-purple-400/10 flex items-center justify-center mb-5">
+                <BookOpen className="w-6 h-6 text-purple-400" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-2">Edukasi Ingredient</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
+                Pahami 20+ ingredient skincare yang paling penting — cara kerja, cara pakai, apa yang bisa dikombinasikan, dan mitos yang harus dihapus. Dalam bahasa Indonesia yang sederhana.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                {["Niacinamide", "Retinol", "BHA/AHA", "Vitamin C", "Ceramide"].map((i) => (
+                  <Badge key={i} variant="outline" className="text-xs border-purple-400/20 text-purple-400/80 bg-purple-400/5">{i}</Badge>
+                ))}
+              </div>
+              <Button variant="outline" onClick={() => router.push("/edukasi")} className="border-purple-400/30 text-purple-400 hover:bg-purple-400/10 gap-2">
+                <BookOpen className="w-4 h-4" /> Buka Edukasi
+              </Button>
+            </motion.div>
+
+            {/* Produk Card */}
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+              className="glow-card rounded-2xl border border-border bg-card p-8 flex flex-col"
+            >
+              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
+                <ShoppingBag className="w-6 h-6 text-accent" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-2">Produk Indonesia</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
+                25+ produk skincare lokal terkurasi berdasarkan ingredient — bukan popularitas. Semua sudah BPOM, ada info harga, dan penjelasan kenapa produk itu efektif.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                {["Sunscreen", "Cleanser", "Moisturizer", "Serum", "Treatment"].map((c) => (
+                  <Badge key={c} variant="outline" className="text-xs border-accent/20 text-accent/80 bg-accent/5">{c}</Badge>
+                ))}
+              </div>
+              <Button variant="outline" onClick={() => router.push("/produk")} className="border-accent/30 text-accent hover:bg-accent/10 gap-2">
+                <ShoppingBag className="w-4 h-4" /> Lihat Produk
+              </Button>
+            </motion.div>
+          </div>
         </div>
       </section>
 
