@@ -20,6 +20,7 @@ export function SiteFooter() {
               { href: "/panduan", label: "Panduan" },
               { href: "/edukasi", label: "Edukasi" },
               { href: "/produk", label: "Produk" },
+              { href: "/cek-konflik", label: "Cek Konflik" },
               { href: "/feedback", label: "Feedback" },
             ].map((link) => (
               <a key={link.href} href={link.href} className="hover:text-foreground transition-colors">

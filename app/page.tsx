@@ -95,6 +95,7 @@ const NAV_LINKS = [
   { href: "/panduan", label: "Panduan" },
   { href: "/edukasi", label: "Edukasi" },
   { href: "/produk", label: "Produk" },
+  { href: "/cek-konflik", label: "Cek Konflik" },
 ];
 
 export default function Home() {
@@ -601,7 +602,11 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="rounded-2xl border border-border bg-card overflow-hidden"
           >
-            <div className="p-6 border-b border-border">
+            <div className="px-6 pt-5 pb-3 flex items-center justify-between">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">Contoh Analisis:</p>
+              <button onClick={() => router.push("/cek-konflik")} className="text-xs text-primary hover:underline">Coba sendiri →</button>
+            </div>
+            <div className="p-6 border-t border-border">
               <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Produk yang diinput:</p>
               <div className="flex flex-wrap gap-2">
                 {conflictProducts.map((p) => (
