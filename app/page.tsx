@@ -193,7 +193,7 @@ export default function Home() {
           <motion.div variants={fadeUp} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
             {[
               { value: "39+", label: "Ingredient terdokumentasi" },
-              { value: "30+", label: "Produk terkurasi" },
+              { value: "38+", label: "Produk terkurasi" },
               { value: "3 dtk", label: "Waktu analisis" },
               { value: "100%", label: "Gratis selamanya" },
             ].map((stat) => (
@@ -751,7 +751,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-foreground mb-2">Produk Indonesia</h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
-                30+ produk skincare lokal terkurasi berdasarkan ingredient — bukan popularitas. Semua sudah BPOM, ada info harga, dan penjelasan kenapa produk itu efektif.
+                38+ produk skincare terkurasi berdasarkan ingredient — bukan popularitas. Semua sudah BPOM, ada info harga, dan penjelasan kenapa produk itu efektif.
               </p>
               <div className="flex flex-wrap gap-2 mb-5">
                 {["Sunscreen", "Cleanser", "Moisturizer", "Serum", "Treatment"].map((c) => (

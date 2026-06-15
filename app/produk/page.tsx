@@ -39,11 +39,13 @@ const ALL_CATEGORIES: (ProductCategory | "semua")[] = [
   "semua",
   "sunscreen",
   "cleanser",
+  "toner",
   "moisturizer",
   "serum_niacinamide",
   "serum_vitamin_c",
   "serum_aha_bha",
   "serum_retinol",
+  "serum_brightening",
   "treatment_jerawat",
 ];
 
