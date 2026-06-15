@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare } from "lucide-react";
+import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
@@ -190,11 +190,26 @@ function HasilContent() {
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground mb-2 leading-relaxed">{rec.reason}</p>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5 mb-3">
                   <Badge variant="outline" className="text-xs border-primary/20 text-primary/70">{rec.frequency}</Badge>
                   {rec.examples.map((ex, j) => (
                     <Badge key={j} variant="outline" className="text-xs border-border text-muted-foreground">{ex}</Badge>
                   ))}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => router.push("/produk")}
+                    className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors"
+                  >
+                    <ShoppingBag className="w-3 h-3" /> Lihat produk →
+                  </button>
+                  <span className="text-muted-foreground/30">·</span>
+                  <button
+                    onClick={() => router.push("/edukasi")}
+                    className="flex items-center gap-1 text-xs text-primary/70 hover:text-primary transition-colors"
+                  >
+                    <BookOpen className="w-3 h-3" /> Pelajari ingredient →
+                  </button>
                 </div>
               </div>
             ))}
@@ -269,6 +284,35 @@ function HasilContent() {
             </div>
           </motion.div>
         )}
+
+        {/* Quick Links */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.43 }}
+          className="rounded-xl border border-border bg-card p-4"
+        >
+          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Eksplorasi lebih lanjut</p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => router.push("/produk")}
+              className="flex items-center gap-2 p-3 rounded-lg bg-secondary/30 hover:bg-secondary/60 transition-colors text-left"
+            >
+              <ShoppingBag className="w-4 h-4 text-accent shrink-0" />
+              <div>
+                <p className="text-xs font-medium text-foreground">Produk Indonesia</p>
+                <p className="text-xs text-muted-foreground">25+ produk terkurasi</p>
+              </div>
+            </button>
+            <button
+              onClick={() => router.push("/edukasi")}
+              className="flex items-center gap-2 p-3 rounded-lg bg-secondary/30 hover:bg-secondary/60 transition-colors text-left"
+            >
+              <BookOpen className="w-4 h-4 text-purple-400 shrink-0" />
+              <div>
+                <p className="text-xs font-medium text-foreground">Edukasi Ingredient</p>
+                <p className="text-xs text-muted-foreground">20+ ingredient dijelaskan</p>
+              </div>
+            </button>
+          </div>
+        </motion.div>
 
         {/* CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="space-y-3 pb-6">
