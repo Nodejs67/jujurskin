@@ -17,6 +17,7 @@ import {
   INGREDIENTS,
   type Ingredient,
 } from "@/lib/ingredients";
+import { PRODUCTS } from "@/lib/products";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -59,6 +60,13 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
   const related = INGREDIENTS.filter((i) =>
     relatedIds.some((r) => i.name.toLowerCase().includes(r.toLowerCase()) || i.aliases.some(a => a.toLowerCase().includes(r.toLowerCase())))
   ).filter(i => i.id !== ing.id).slice(0, 3);
+
+  const matchedProducts = PRODUCTS.filter((p) =>
+    p.key_ingredients.some((ki) =>
+      ki.toLowerCase().includes(ing.name.toLowerCase()) ||
+      ing.aliases.some((al) => ki.toLowerCase().includes(al.toLowerCase().split(" ")[0]))
+    )
+  ).slice(0, 3);
 
   return (
     <main className="min-h-screen bg-background">
@@ -341,6 +349,49 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
             </div>
           </motion.div>
         )}
+
+        {/* Matched products from our database */}
+        {matchedProducts.length > 0 && (
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.52 }}>
+            <p className="text-sm font-semibold text-foreground mb-3">Produk dengan {ing.name} dari database kami</p>
+            <div className="space-y-2">
+              {matchedProducts.map((prod) => (
+                <div key={prod.id} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:border-primary/20 transition-colors">
+                  <span className="text-xl shrink-0">{prod.emoji}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-foreground truncate">{prod.name}</p>
+                    <p className="text-xs text-muted-foreground">{prod.brand} · Rp {prod.price_min.toLocaleString("id")}</p>
+                  </div>
+                  {prod.bpom_registered && (
+                    <Badge variant="outline" className="text-[10px] border-green-400/30 text-green-400 shrink-0">BPOM</Badge>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={() => router.push("/produk")}
+              className="mt-2 text-xs text-primary hover:underline"
+            >
+              Lihat semua produk →
+            </button>
+          </motion.div>
+        )}
+
+        {/* Check conflicts CTA */}
+        <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.53 }}
+          className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-4 flex items-start gap-3">
+          <AlertTriangle className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="text-xs font-medium text-yellow-400 mb-1">Kombinasi dengan produk lain?</p>
+            <p className="text-xs text-muted-foreground mb-2">Cek apakah {ing.name} aman dikombinasikan dengan ingredient lain yang kamu pakai.</p>
+            <button
+              onClick={() => router.push(`/cek-konflik`)}
+              className="text-xs text-yellow-400 hover:underline font-medium"
+            >
+              Cek Konflik Ingredient →
+            </button>
+          </div>
+        </motion.div>
 
         {/* CTA */}
         <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.55 }} className="pb-6 space-y-3">
