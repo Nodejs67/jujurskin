@@ -869,6 +869,51 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── FAQ ──────────────────────────────────────── */}
+      <section className="py-24 px-6">
+        <div className="max-w-3xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <p className="text-xs text-primary uppercase tracking-widest mb-3">FAQ</p>
+            <h2 className="text-3xl md:text-4xl font-bold">Pertanyaan yang sering ditanya</h2>
+          </motion.div>
+          <div className="space-y-3">
+            {[
+              {
+                q: "Apakah JujurSkin benar-benar gratis?",
+                a: "Ya, 100% gratis. Tidak ada biaya berlangganan, tidak ada fitur premium tersembunyi. Kami tidak punya model bisnis berbasis iklan atau komisi produk — kami dibuat untuk jujur.",
+              },
+              {
+                q: "Data kulitku aman? Apakah disimpan?",
+                a: "Data tersimpan secara anonim di database kami untuk meningkatkan akurasi rekomendasi. Kami tidak menjual atau berbagi data dengan pihak ketiga apapun.",
+              },
+              {
+                q: "Mengapa rekomendasinya bisa berbeda dengan yang di marketplace?",
+                a: "Karena rekomendasimu berdasarkan kondisi kulitmu yang spesifik — bukan yang paling laris atau yang bayar iklan terbesar. Kami justru akan bilang jika kamu tidak butuh produk tertentu.",
+              },
+              {
+                q: "Apakah cocok untuk pria juga?",
+                a: "Ya! Skin barrier, masalah jerawat, dan kebutuhan hidrasi tidak mengenal gender. Formulir analisis kami menyesuaikan rekomendasi untuk pria dan wanita.",
+              },
+              {
+                q: "Seberapa akurat rekomendasinya?",
+                a: "Akurasi bergantung pada seberapa lengkap data yang kamu isi. Rekomendasi kami berbasis literatur dermatologi dan tidak menggantikan konsultasi dokter kulit untuk kondisi medis serius.",
+              },
+              {
+                q: "Ingredient conflict checker bekerja bagaimana?",
+                a: "Kami mencocokkan nama ingredient yang kamu input dengan database 29+ ingredient dan mengecek konflik yang terdokumentasi secara ilmiah — seperti Retinol + AHA atau Benzoyl Peroxide + Retinol.",
+              },
+            ].map((item, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
+                className="rounded-xl border border-border bg-card p-5"
+              >
+                <p className="text-sm font-semibold text-foreground mb-2">❓ {item.q}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA ──────────────────────────────────────── */}
       <section className="py-24 px-6 bg-secondary/20">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-3xl mx-auto text-center">
@@ -913,7 +958,7 @@ export default function Home() {
               <div className="space-y-2">
                 {[
                   { label: "Analisis Kulit", href: "/analisis" },
-                  { label: "Lihat Hasil", href: "/hasil" },
+                  { label: "Cek Konflik Ingredient", href: "/cek-konflik" },
                   { label: "Beri Feedback", href: "/feedback" },
                 ].map((link) => (
                   <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
