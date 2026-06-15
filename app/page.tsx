@@ -976,6 +976,7 @@ export default function Home() {
                   { label: "Edukasi Ingredient", href: "/edukasi" },
                   { label: "Panduan Pemula", href: "/panduan" },
                   { label: "Produk Indonesia", href: "/produk" },
+                  { label: "Budget Planner", href: "/kalkulator" },
                 ].map((link) => (
                   <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
                     {link.label}
