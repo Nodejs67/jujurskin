@@ -107,9 +107,9 @@ export default function Home() {
             <a href="#demo" className="hover:text-foreground transition-colors">Demo</a>
             <a href="#score" className="hover:text-foreground transition-colors">Skin Score</a>
             <a href="#fitur" className="hover:text-foreground transition-colors">Fitur</a>
-            <a href="#iklim" className="hover:text-foreground transition-colors">Iklim</a>
+            <a href="/edukasi" className="hover:text-foreground transition-colors">Edukasi</a>
           </div>
-          <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-medium">
+          <Button size="sm" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-medium">
             Mulai Gratis
           </Button>
         </div>

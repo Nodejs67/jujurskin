@@ -84,25 +84,42 @@ export default function AnalisisPage() {
 
   const handleSubmit = async () => {
     setLoading(true);
+    const input = {
+      ...form,
+      usia: parseInt(form.usia),
+      jenis_kelamin: (form.jenis_kelamin || "wanita") as "pria" | "wanita",
+      tipe_kulit: (form.tipe_kulit || "normal") as import("@/lib/recommendations").SkinType,
+    };
+
     try {
       const res = await fetch("/api/analisis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          usia: parseInt(form.usia),
-          jenis_kelamin: form.jenis_kelamin || "wanita",
-          tipe_kulit: form.tipe_kulit || "normal",
-        }),
+        body: JSON.stringify(input),
       });
-      const data = await res.json();
-      if (data.id) {
-        router.push(`/hasil?id=${data.id}`);
-      } else {
-        // Fallback: simpan di localStorage dan redirect
-        localStorage.setItem("jujurskin_hasil", JSON.stringify(data.hasil));
-        router.push("/hasil");
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.id) {
+          router.push(`/hasil?id=${data.id}`);
+          return;
+        }
+        if (data.hasil) {
+          localStorage.setItem("jujurskin_hasil", JSON.stringify(data.hasil));
+          router.push("/hasil");
+          return;
+        }
       }
+    } catch {
+      // API unavailable — generate client-side
+    }
+
+    // Fallback: generate recommendations in browser
+    try {
+      const { generateRecommendations } = await import("@/lib/recommendations");
+      const hasil = generateRecommendations(input);
+      localStorage.setItem("jujurskin_hasil", JSON.stringify(hasil));
+      router.push("/hasil");
     } catch {
       setLoading(false);
     }
