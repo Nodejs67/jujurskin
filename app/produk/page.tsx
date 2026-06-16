@@ -16,7 +16,23 @@ import {
   type ProductCategory,
   type PriceRange,
   type Product,
+  type SkinTypeMatch,
 } from "@/lib/products";
+
+const SKIN_TYPES: (SkinTypeMatch | "semua")[] = [
+  "semua", "normal", "berminyak", "kering", "kombinasi", "sensitif", "berjerawat",
+];
+
+const SKIN_TYPE_LABELS: Record<SkinTypeMatch | "semua", string> = {
+  semua: "Semua Jenis Kulit",
+  normal: "Normal",
+  berminyak: "Berminyak",
+  kering: "Kering",
+  kombinasi: "Kombinasi",
+  sensitif: "Sensitif",
+  berjerawat: "Berjerawat",
+  "semua tipe": "Semua Tipe",
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -251,6 +267,7 @@ export default function ProdukPage() {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<ProductCategory | "semua">("semua");
   const [activePriceRange, setActivePriceRange] = useState<PriceRange | "semua">("semua");
+  const [activeSkinType, setActiveSkinType] = useState<SkinTypeMatch | "semua">("semua");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -261,6 +278,11 @@ export default function ProdukPage() {
     }
     if (activePriceRange !== "semua") {
       list = list.filter((p) => p.price_range === activePriceRange);
+    }
+    if (activeSkinType !== "semua") {
+      list = list.filter(
+        (p) => p.skin_types.includes("semua tipe") || p.skin_types.includes(activeSkinType)
+      );
     }
     if (query.trim()) {
       const q = query.toLowerCase();
@@ -273,7 +295,7 @@ export default function ProdukPage() {
       );
     }
     return list;
-  }, [query, activeCategory, activePriceRange]);
+  }, [query, activeCategory, activePriceRange, activeSkinType]);
 
   if (selectedProduct) {
     return <ProductDetail product={selectedProduct} onClose={() => setSelectedProduct(null)} />;
@@ -382,6 +404,26 @@ export default function ProdukPage() {
                 ))}
               </div>
             </div>
+
+            {/* Skin Type */}
+            <div>
+              <p className="text-xs text-muted-foreground mb-2 uppercase tracking-wide">Jenis Kulit</p>
+              <div className="flex flex-wrap gap-2">
+                {SKIN_TYPES.map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => setActiveSkinType(st)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+                      activeSkinType === st
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border bg-card text-muted-foreground hover:border-primary/30"
+                    }`}
+                  >
+                    {SKIN_TYPE_LABELS[st]}
+                  </button>
+                ))}
+              </div>
+            </div>
           </motion.div>
         )}
 
@@ -405,8 +447,16 @@ export default function ProdukPage() {
         )}
 
         {/* Results */}
-        {(query || activeCategory !== "semua" || activePriceRange !== "semua") && (
-          <p className="text-xs text-muted-foreground mb-4">{filtered.length} produk ditemukan</p>
+        {(query || activeCategory !== "semua" || activePriceRange !== "semua" || activeSkinType !== "semua") && (
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-xs text-muted-foreground">{filtered.length} produk ditemukan</p>
+            <button
+              onClick={() => { setQuery(""); setActiveCategory("semua"); setActivePriceRange("semua"); setActiveSkinType("semua"); }}
+              className="text-xs text-primary/70 hover:text-primary transition-colors"
+            >
+              Reset filter
+            </button>
+          </div>
         )}
 
         {filtered.length > 0 ? (
