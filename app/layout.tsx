@@ -13,14 +13,35 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JujurSkin — Platform Skincare Jujur Indonesia",
+  metadataBase: new URL("https://jujurskin.vercel.app"),
+  title: {
+    default: "JujurSkin — Platform Skincare Jujur Indonesia",
+    template: "%s | JujurSkin",
+  },
   description: "Platform skincare pertama Indonesia yang jujur bilang apa yang tidak perlu kamu beli. Rekomendasi berbasis kondisi kulit & budget — bukan iklan.",
-  keywords: ["skincare", "indonesia", "rekomendasi kulit", "ingredien skincare", "skincare jujur", "analisis kulit"],
+  keywords: ["skincare indonesia", "rekomendasi skincare", "ingredient skincare", "analisis kulit", "skincare jujur", "produk skincare lokal", "skincare pemula", "niacinamide", "retinol", "vitamin c skincare"],
+  authors: [{ name: "JujurSkin" }],
+  creator: "JujurSkin",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
   openGraph: {
     title: "JujurSkin — Platform Skincare Jujur Indonesia",
     description: "Rekomendasi skincare berbasis kondisi kulit & budget, bukan iklan. 100% gratis.",
+    url: "https://jujurskin.vercel.app",
+    siteName: "JujurSkin",
     locale: "id_ID",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "JujurSkin — Platform Skincare Jujur Indonesia",
+    description: "Rekomendasi skincare berbasis kondisi kulit & budget, bukan iklan. 100% gratis.",
+  },
+  alternates: {
+    canonical: "https://jujurskin.vercel.app",
   },
 };
 
