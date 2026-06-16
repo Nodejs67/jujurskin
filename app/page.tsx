@@ -10,6 +10,13 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { NumberTicker } from "@/components/magicui/number-ticker";
+import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { Marquee } from "@/components/magicui/marquee";
+import { BorderBeam } from "@/components/magicui/border-beam";
+import { WordRotate } from "@/components/magicui/word-rotate";
+import { SparklesText } from "@/components/magicui/sparkles-text";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -170,13 +177,23 @@ export default function Home() {
         </div>
 
         <motion.div className="relative z-10 max-w-4xl mx-auto text-center" variants={stagger} initial="hidden" animate="show">
-          <motion.div variants={fadeUp}>
-            <Badge variant="outline" className="mb-6 border-primary/30 text-primary bg-primary/10 text-xs px-4 py-1.5 gap-1.5">
-              <Sparkles className="w-3 h-3" /> Platform Kecantikan Jujur Indonesia
-            </Badge>
+          <motion.div variants={fadeUp} className="flex justify-center mb-6">
+            <AnimatedGradientText>
+              <Sparkles className="w-3 h-3 text-primary mr-1.5" />
+              <span className="text-primary font-medium">Platform Kecantikan Jujur Indonesia</span>
+            </AnimatedGradientText>
           </motion.div>
-          <motion.h1 variants={fadeUp} className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight mb-6">
-            Kulit Sehat,{" "}<span className="gradient-text">Bukan Kulit Putih</span>
+          <motion.h1 variants={fadeUp} className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight mb-4">
+            Kulit{" "}
+            <WordRotate
+              words={["Sehat", "Bersih", "Cerah", "Terlindungi"]}
+              className="gradient-text"
+              duration={2200}
+            />
+            <br />
+            <SparklesText className="gradient-text" sparklesCount={8}>
+              Bukan Kulit Putih
+            </SparklesText>
           </motion.h1>
           <motion.p variants={fadeUp} className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
             Platform skincare pertama Indonesia yang{" "}
@@ -187,22 +204,28 @@ export default function Home() {
             Untuk pria & wanita · Seluruh Indonesia · 100% Gratis
           </motion.p>
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button size="lg" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium gap-2 px-8">
+            <ShimmerButton
+              onClick={() => router.push("/analisis")}
+              className="px-8 py-3 rounded-xl font-medium gap-2"
+            >
               Analisis Kulit Saya <ArrowRight className="w-4 h-4" />
-            </Button>
+            </ShimmerButton>
             <Button size="lg" variant="outline" className="border-border hover:bg-secondary gap-2 px-8" onClick={() => document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" })}>
               Lihat Demo <ChevronDown className="w-4 h-4" />
             </Button>
           </motion.div>
           <motion.div variants={fadeUp} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
             {[
-              { value: "100+", label: "Ingredient terdokumentasi" },
-              { value: "38+", label: "Produk terkurasi" },
-              { value: "7 tanya", label: "Quiz personal mendalam" },
-              { value: "100%", label: "Gratis selamanya" },
+              { num: 100, suffix: "+", label: "Ingredient terdokumentasi" },
+              { num: 50, suffix: "+", label: "Produk terkurasi" },
+              { num: 7, suffix: " tanya", label: "Quiz personal mendalam" },
+              { num: 100, suffix: "%", label: "Gratis selamanya" },
             ].map((stat) => (
-              <div key={stat.label} className="text-center p-4 rounded-xl border border-border/50 bg-card/50">
-                <p className="text-2xl font-bold text-primary mb-0.5">{stat.value}</p>
+              <div key={stat.label} className="relative text-center p-4 rounded-xl border border-border/50 bg-card/50 overflow-hidden">
+                <BorderBeam size={100} duration={12} delay={Math.random() * 5} />
+                <p className="text-2xl font-bold text-primary mb-0.5">
+                  <NumberTicker value={stat.num} />{stat.suffix}
+                </p>
                 <p className="text-xs text-muted-foreground/70">{stat.label}</p>
               </div>
             ))}
@@ -220,6 +243,31 @@ export default function Home() {
           <ChevronDown className="w-5 h-5 text-muted-foreground/30" />
         </motion.div>
       </section>
+
+      {/* ── MARQUEE INGREDIENT SHOWCASE ─────────────── */}
+      <div className="relative py-4 border-y border-border/30 overflow-hidden bg-card/20">
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
+        <Marquee pauseOnHover className="[--duration:30s]">
+          {[
+            { emoji: "🌿", name: "Niacinamide" }, { emoji: "🍊", name: "Vitamin C" },
+            { emoji: "⭐", name: "Retinol" }, { emoji: "💧", name: "Hyaluronic Acid" },
+            { emoji: "🛡️", name: "Ceramide" }, { emoji: "🌸", name: "Centella Asiatica" },
+            { emoji: "✨", name: "Alpha Arbutin" }, { emoji: "🧴", name: "Salicylic Acid" },
+            { emoji: "🍑", name: "Bakuchiol" }, { emoji: "💚", name: "Azelaic Acid" },
+            { emoji: "🌙", name: "Tranexamic Acid" }, { emoji: "🔬", name: "Peptide" },
+            { emoji: "🐌", name: "Snail Mucin" }, { emoji: "☘️", name: "Mugwort" },
+          ].map((ing) => (
+            <a
+              key={ing.name}
+              href={`/edukasi/ingredient/${ing.name.toLowerCase().replace(/\s+/g, "-")}`}
+              className="mx-4 flex items-center gap-2 px-4 py-2 rounded-full border border-border/50 bg-card/50 text-xs text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors whitespace-nowrap"
+            >
+              <span>{ing.emoji}</span> {ing.name}
+            </a>
+          ))}
+        </Marquee>
+      </div>
 
       {/* ── 1. DEMO HASIL ANALISIS ────────────────────── */}
       <section id="demo" className="py-24 px-6">
@@ -804,8 +852,9 @@ export default function Home() {
             <p className="text-muted-foreground max-w-xl mx-auto">Setiap fitur dirancang untuk membantu kulitmu sehat dengan cara yang paling efisien.</p>
           </motion.div>
           <motion.div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
-            {features.map((f) => (
-              <motion.div key={f.title} variants={fadeUp} className="glow-card rounded-2xl border border-border bg-card p-6">
+            {features.map((f, i) => (
+              <motion.div key={f.title} variants={fadeUp} className="relative glow-card rounded-2xl border border-border bg-card p-6 overflow-hidden group">
+                <BorderBeam size={120} duration={10} delay={i * 1.2} colorFrom="#86efac" colorTo="#d4af37" />
                 <div className={`w-10 h-10 rounded-xl ${f.bg} flex items-center justify-center mb-4`}>
                   <f.icon className={`w-5 h-5 ${f.color}`} />
                 </div>
@@ -987,9 +1036,12 @@ export default function Home() {
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 Tidak perlu kartu kredit. Tidak ada biaya tersembunyi. Tidak ada agenda untuk menyuruhmu beli lebih banyak.
               </p>
-              <Button size="lg" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium gap-2 px-10 h-12">
+              <ShimmerButton
+                onClick={() => router.push("/analisis")}
+                className="px-10 h-12 rounded-xl font-medium gap-2 text-base"
+              >
                 Analisis Kulit Saya Sekarang <ArrowRight className="w-4 h-4" />
-              </Button>
+              </ShimmerButton>
               <p className="mt-4 text-xs text-muted-foreground/60">Untuk pria & wanita · Seluruh Indonesia</p>
             </div>
           </div>

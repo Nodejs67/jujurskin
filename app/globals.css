@@ -175,6 +175,53 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* ── Magic UI Animations ─────────────────────────── */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100% - var(--gap))); }
+  }
+  @keyframes marquee-vertical {
+    from { transform: translateY(0); }
+    to { transform: translateY(calc(-100% - var(--gap))); }
+  }
+  .animate-marquee {
+    animation: marquee var(--duration) linear infinite;
+  }
+  .animate-marquee-vertical {
+    animation: marquee-vertical var(--duration) linear infinite;
+  }
+
+  @keyframes gradient-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .animate-gradient {
+    animation: gradient-flow 4s linear infinite;
+  }
+
+  @keyframes shimmer-slide {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+  .animate-shimmer {
+    animation: shimmer-slide var(--shimmer-duration, 1.8s) linear infinite;
+    background-position: 200% 0;
+  }
+
+  @keyframes border-beam {
+    100% { offset-distance: 100%; }
+  }
+  .animate-border-beam {
+    animation: border-beam calc(var(--duration) * 1s) infinite linear;
+  }
+
+  @keyframes shine-pulse {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    to { background-position: 0% 0%; }
+  }
 }
 
 /* Custom scrollbar */
