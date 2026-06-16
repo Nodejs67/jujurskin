@@ -203,16 +203,71 @@ export default function Home() {
           <motion.p variants={fadeUp} className="text-sm text-muted-foreground/60 mb-10">
             Untuk pria & wanita · Seluruh Indonesia · 100% Gratis
           </motion.p>
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center">
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
             <ShimmerButton
               onClick={() => router.push("/analisis")}
-              className="px-8 py-3 rounded-xl font-medium gap-2"
+              className="px-8 py-3 rounded-xl font-medium gap-2 text-base"
             >
               Analisis Kulit Saya <ArrowRight className="w-4 h-4" />
             </ShimmerButton>
             <Button size="lg" variant="outline" className="border-border hover:bg-secondary gap-2 px-8" onClick={() => document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" })}>
               Lihat Demo <ChevronDown className="w-4 h-4" />
             </Button>
+          </motion.div>
+
+          {/* ── Hero Mockup Card ─── */}
+          <motion.div variants={fadeUp} className="relative max-w-sm mx-auto mb-10 animate-float">
+            <div className="relative rounded-2xl border border-primary/20 bg-card/80 backdrop-blur-md p-5 shadow-2xl shadow-primary/10 overflow-hidden">
+              <BorderBeam duration={5} colorFrom="#86efac" colorTo="#d4af37" />
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-sm">🌿</div>
+                <div className="text-left">
+                  <p className="text-xs font-semibold text-foreground">Rani A · 23 th · Jakarta</p>
+                  <p className="text-[10px] text-primary">Kulit Kombinasi · Berjerawat</p>
+                </div>
+                <div className="ml-auto text-right">
+                  <p className="text-2xl font-bold text-primary">87</p>
+                  <p className="text-[10px] text-muted-foreground">/100</p>
+                </div>
+              </div>
+              <div className="space-y-2 mb-4">
+                {[
+                  { label: "Barrier Health", score: 82, color: "bg-green-400" },
+                  { label: "Hydration", score: 76, color: "bg-blue-400" },
+                  { label: "UV Protection", score: 55, color: "bg-yellow-400" },
+                  { label: "Acne Control", score: 80, color: "bg-purple-400" },
+                ].map((m) => (
+                  <div key={m.label}>
+                    <div className="flex justify-between mb-0.5">
+                      <span className="text-[10px] text-muted-foreground">{m.label}</span>
+                      <span className="text-[10px] font-semibold text-foreground">{m.score}</span>
+                    </div>
+                    <div className="h-1 bg-secondary rounded-full overflow-hidden">
+                      <motion.div className={`h-full ${m.color} rounded-full`}
+                        initial={{ width: 0 }} whileInView={{ width: `${m.score}%` }}
+                        viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-1.5 mb-3">
+                {[
+                  { icon: "🛡️", text: "Sunscreen SPF50 — Prioritas Utama" },
+                  { icon: "🌿", text: "Niacinamide 5% — Kontrol minyak" },
+                  { icon: "💧", text: "Ceramide Moisturizer — Barrier" },
+                ].map((r) => (
+                  <div key={r.text} className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                    <span>{r.icon}</span><span>{r.text}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60">
+                <CheckCircle className="w-3 h-3 text-primary/50" />
+                Analisis selesai dalam 45 detik · Tidak perlu daftar
+              </div>
+            </div>
+            {/* Glow */}
+            <div className="absolute inset-0 rounded-2xl blur-2xl bg-primary/8 -z-10 scale-95" />
           </motion.div>
           <motion.div variants={fadeUp} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
             {[
@@ -222,7 +277,7 @@ export default function Home() {
               { num: 100, suffix: "%", label: "Gratis selamanya" },
             ].map((stat) => (
               <div key={stat.label} className="relative text-center p-4 rounded-xl border border-border/50 bg-card/50 overflow-hidden">
-                <BorderBeam size={100} duration={12} delay={Math.random() * 5} />
+                <BorderBeam duration={12} delay={Math.random() * 5} />
                 <p className="text-2xl font-bold text-primary mb-0.5">
                   <NumberTicker value={stat.num} />{stat.suffix}
                 </p>
@@ -854,7 +909,7 @@ export default function Home() {
           <motion.div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
             {features.map((f, i) => (
               <motion.div key={f.title} variants={fadeUp} className="relative glow-card rounded-2xl border border-border bg-card p-6 overflow-hidden group">
-                <BorderBeam size={120} duration={10} delay={i * 1.2} colorFrom="#86efac" colorTo="#d4af37" />
+                <BorderBeam duration={10} delay={i * 1.2} colorFrom="#86efac" colorTo="#d4af37" />
                 <div className={`w-10 h-10 rounded-xl ${f.bg} flex items-center justify-center mb-4`}>
                   <f.icon className={`w-5 h-5 ${f.color}`} />
                 </div>
@@ -1021,6 +1076,73 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ─────────────────────────────── */}
+      <section className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <p className="text-xs text-primary uppercase tracking-widest mb-3">Yang Mereka Rasakan</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ribuan pengguna sudah <span className="gradient-text">jujur ke kulitnya</span></h2>
+          </motion.div>
+          <motion.div className="grid md:grid-cols-3 gap-5" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
+            {[
+              {
+                name: "Rani A.", age: 23, city: "Jakarta", skin: "Kombinasi · Berjerawat",
+                text: "Akhirnya tahu kenapa skincare aku nggak works — ternyata aku pakai terlalu banyak produk yang fungsinya sama. JujurSkin bilang cut 3 produk dan hemat Rp 280rb/bulan. Kulit membaik setelah 3 minggu.",
+                stars: 5, emoji: "🌿",
+                badge: "Hemat Rp 280rb/bln",
+              },
+              {
+                name: "Dinda P.", age: 28, city: "Surabaya", skin: "Kering · Sensitif",
+                text: "Lagi hamil dan bingung produk mana yang aman. JujurSkin langsung filter otomatis yang berbahaya untuk kehamilan. Seneng banget ada yang perhatiin hal ini. Niacinamide dan ceramide jadi andalan.",
+                stars: 5, emoji: "🤰",
+                badge: "Aman untuk hamil",
+              },
+              {
+                name: "Rizky M.", age: 19, city: "Bandung", skin: "Berminyak · Pemula",
+                text: "Pertama kali coba skincare, bingung mulai dari mana. Ternyata cukup 3 produk dulu — cleanser, niacinamide, sunscreen. Pakai budget 120rb. Muka lebih bersih dan nggak kilap lagi.",
+                stars: 5, emoji: "✨",
+                badge: "Mulai dari Rp 120rb",
+              },
+            ].map((t) => (
+              <motion.div key={t.name} variants={fadeUp} className="relative rounded-2xl border border-border bg-card p-6 overflow-hidden">
+                <BorderBeam duration={8} delay={Math.random() * 4} />
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center text-lg">{t.emoji}</div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">{t.age} th · {t.city} · {t.skin}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: t.stars }).map((_, i) => (
+                      <Star key={i} className="w-3 h-3 fill-accent text-accent" />
+                    ))}
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">"{t.text}"</p>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+                  <CheckCircle className="w-3 h-3" /> {t.badge}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+          {/* Trust bar */}
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-10 flex flex-wrap justify-center gap-6 text-xs text-muted-foreground/60">
+            {[
+              { icon: "🔒", text: "Tidak menyimpan data sensitif" },
+              { icon: "📵", text: "Tidak ada iklan tersembunyi" },
+              { icon: "🤝", text: "Tidak terafiliasi brand apapun" },
+              { icon: "💚", text: "Selalu gratis" },
+            ].map((t) => (
+              <div key={t.text} className="flex items-center gap-1.5">
+                <span>{t.icon}</span> {t.text}
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 

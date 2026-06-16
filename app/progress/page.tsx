@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, TrendingUp, Plus, Calendar, CheckCircle,
   Sparkles, ChevronDown, ChevronUp, Droplets, Sun,
-  Zap, Heart, Edit3, Trash2, BarChart2, Info
+  Zap, Heart, Edit3, Trash2, BarChart2, Info, Camera, X, ImageIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,12 +16,13 @@ interface ProgressEntry {
   id: string;
   week: number;
   date: string;
-  kondisi_jerawat: number;   // 1-10 (10 = bebas jerawat)
-  kelembapan: number;        // 1-10 (10 = sangat lembap)
-  kecerahan: number;         // 1-10 (10 = sangat cerah)
-  iritasi: number;           // 1-10 (10 = tidak iritasi sama sekali)
+  kondisi_jerawat: number;
+  kelembapan: number;
+  kecerahan: number;
+  iritasi: number;
   catatan: string;
   produk_dipakai: string[];
+  photo?: string; // base64
 }
 
 const METRICS = [
@@ -103,7 +104,10 @@ export default function ProgressPage() {
     iritasi: 5,
     catatan: "",
     produk_dipakai_raw: "",
+    photo: "" as string,
   });
+  const [photoPreview, setPhotoPreview] = useState<string>("");
+  const [compareMode, setCompareMode] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -129,6 +133,7 @@ export default function ProgressPage() {
       iritasi: form.iritasi,
       catatan: form.catatan,
       produk_dipakai: form.produk_dipakai_raw.split(",").map(s => s.trim()).filter(Boolean),
+      photo: form.photo || undefined,
     };
 
     const updated = editingId
@@ -138,7 +143,20 @@ export default function ProgressPage() {
     saveEntries(updated);
     setShowForm(false);
     setEditingId(null);
-    setForm({ kondisi_jerawat: 5, kelembapan: 5, kecerahan: 5, iritasi: 5, catatan: "", produk_dipakai_raw: "" });
+    setPhotoPreview("");
+    setForm({ kondisi_jerawat: 5, kelembapan: 5, kecerahan: 5, iritasi: 5, catatan: "", produk_dipakai_raw: "", photo: "" });
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const result = ev.target?.result as string;
+      setPhotoPreview(result);
+      setForm(f => ({ ...f, photo: result }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleEdit = (entry: ProgressEntry) => {
@@ -149,7 +167,9 @@ export default function ProgressPage() {
       iritasi: entry.iritasi,
       catatan: entry.catatan,
       produk_dipakai_raw: entry.produk_dipakai.join(", "),
+      photo: entry.photo || "",
     });
+    setPhotoPreview(entry.photo || "");
     setEditingId(entry.id);
     setShowForm(true);
   };
@@ -192,7 +212,7 @@ export default function ProgressPage() {
           </div>
           <Button
             size="sm"
-            onClick={() => { setEditingId(null); setForm({ kondisi_jerawat: 5, kelembapan: 5, kecerahan: 5, iritasi: 5, catatan: "", produk_dipakai_raw: "" }); setShowForm(true); }}
+            onClick={() => { setEditingId(null); setForm({ kondisi_jerawat: 5, kelembapan: 5, kecerahan: 5, iritasi: 5, catatan: "", produk_dipakai_raw: "", photo: "" }); setShowForm(true); }}
             className="bg-primary text-primary-foreground text-xs gap-1"
           >
             <Plus className="w-3 h-3" /> Catat
@@ -359,6 +379,35 @@ export default function ProgressPage() {
                 />
               </div>
 
+              {/* Photo Upload */}
+              <div>
+                <label className="text-xs font-medium text-muted-foreground block mb-2 flex items-center gap-1.5">
+                  <Camera className="w-3.5 h-3.5" /> Foto Kulit Minggu Ini (opsional)
+                </label>
+                {photoPreview ? (
+                  <div className="relative">
+                    <img src={photoPreview} alt="preview" className="w-full h-40 object-cover rounded-xl border border-border" />
+                    <button
+                      onClick={() => { setPhotoPreview(""); setForm(f => ({ ...f, photo: "" })); }}
+                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-background/80 border border-border flex items-center justify-center hover:bg-background transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-dashed border-border bg-card/50 cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-colors">
+                    <ImageIcon className="w-6 h-6 text-muted-foreground/40" />
+                    <span className="text-xs text-muted-foreground/60">Klik untuk pilih foto · Max 2MB</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
+
               <Button onClick={handleSubmit} className="w-full gap-2">
                 <CheckCircle className="w-4 h-4" />
                 {editingId ? "Simpan Perubahan" : "Simpan Catatan Minggu Ini"}
@@ -468,6 +517,13 @@ export default function ProgressPage() {
                             </div>
                           )}
 
+                          {entry.photo && (
+                            <div>
+                              <p className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1"><Camera className="w-3 h-3" /> Foto minggu ini:</p>
+                              <img src={entry.photo} alt={`Foto minggu ${entry.week}`} className="w-full max-h-48 object-cover rounded-xl border border-border" />
+                            </div>
+                          )}
+
                           <div className="flex gap-2 pt-1">
                             <button
                               onClick={() => handleEdit(entry)}
@@ -490,6 +546,31 @@ export default function ProgressPage() {
               );
             })}
           </div>
+        )}
+
+        {/* Before / After Photo Comparison */}
+        {entries.filter(e => e.photo).length >= 2 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Camera className="w-4 h-4 text-primary" />
+                <p className="text-sm font-semibold">Perbandingan Foto</p>
+              </div>
+              <button onClick={() => setCompareMode(!compareMode)} className="text-xs text-primary border border-primary/30 px-3 py-1 rounded-full hover:bg-primary/10 transition-colors">
+                {compareMode ? "Sembunyikan" : "Lihat Before/After"}
+              </button>
+            </div>
+            {compareMode && (
+              <div className="grid grid-cols-2 gap-3">
+                {[entries.filter(e => e.photo)[0], entries.filter(e => e.photo)[entries.filter(e => e.photo).length - 1]].map((e, i) => (
+                  <div key={e.id}>
+                    <p className="text-xs text-muted-foreground mb-1.5 text-center">{i === 0 ? "📸 Awal" : "📸 Sekarang"} · Minggu {e.week}</p>
+                    <img src={e.photo} alt="" className="w-full h-36 object-cover rounded-xl border border-border" />
+                  </div>
+                ))}
+              </div>
+            )}
+          </motion.div>
         )}
 
         {/* Tips */}
@@ -528,7 +609,7 @@ export default function ProgressPage() {
             <Button variant="outline" className="flex-1" onClick={() => router.push("/rutinitas")}>
               Rutinitas AM/PM
             </Button>
-            <Button className="flex-1" onClick={() => { setEditingId(null); setForm({ kondisi_jerawat: 5, kelembapan: 5, kecerahan: 5, iritasi: 5, catatan: "", produk_dipakai_raw: "" }); setShowForm(true); }}>
+            <Button className="flex-1" onClick={() => { setEditingId(null); setForm({ kondisi_jerawat: 5, kelembapan: 5, kecerahan: 5, iritasi: 5, catatan: "", produk_dipakai_raw: "", photo: "" }); setShowForm(true); }}>
               <Plus className="w-4 h-4 mr-1" /> Catat Minggu Baru
             </Button>
           </div>

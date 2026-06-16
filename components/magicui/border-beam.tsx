@@ -1,47 +1,47 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import type { CSSProperties } from "react";
 
 interface BorderBeamProps {
   className?: string;
-  size?: number;
   duration?: number;
-  borderWidth?: number;
-  anchor?: number;
   colorFrom?: string;
   colorTo?: string;
+  borderWidth?: number;
   delay?: number;
 }
 
 export function BorderBeam({
   className,
-  size = 200,
-  duration = 15,
-  anchor = 90,
-  borderWidth = 1.5,
+  duration = 6,
   colorFrom = "#86efac",
   colorTo = "#d4af37",
+  borderWidth = 1,
   delay = 0,
 }: BorderBeamProps) {
   return (
     <div
-      style={
-        {
-          "--size": size,
-          "--duration": duration,
-          "--anchor": anchor,
-          "--border-width": borderWidth,
-          "--color-from": colorFrom,
-          "--color-to": colorTo,
-          "--delay": `-${delay}s`,
-        } as CSSProperties
-      }
       className={cn(
-        "pointer-events-none absolute inset-0 rounded-[inherit] [border:calc(var(--border-width)*1px)_solid_transparent]",
-        "[background:linear-gradient(transparent,transparent),linear-gradient(to_right,var(--color-from),var(--color-to))] [background-clip:padding-box,border-box] [background-origin:border-box]",
-        "[mask-clip:padding-box,border-box] [mask-composite:intersect] [mask-image:linear-gradient(transparent,transparent),linear-gradient(white,white)]",
-        "animate-border-beam",
-        className,
+        "pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden",
+        className
       )}
-    />
+      aria-hidden
+    >
+      <div
+        className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%]"
+        style={
+          {
+            background: `conic-gradient(from 0deg, transparent 0%, ${colorFrom} 20%, ${colorTo} 40%, transparent 50%)`,
+            animation: `border-spin ${duration}s linear infinite`,
+            animationDelay: `-${delay}s`,
+          } as CSSProperties
+        }
+      />
+      <div
+        className="absolute rounded-[inherit] bg-card"
+        style={{ inset: `${borderWidth}px` }}
+      />
+    </div>
   );
 }
