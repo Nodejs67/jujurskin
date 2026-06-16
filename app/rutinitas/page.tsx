@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
 import type { AnalysisResult, RoutineStep } from "@/lib/recommendations";
+import { ReminderSetup } from "@/components/reminder-setup";
 
 type RoutineMode = "pagi" | "malam";
 
@@ -427,6 +428,9 @@ function RutinitasContent() {
             </div>
           </motion.div>
         )}
+
+        {/* Reminder */}
+        <ReminderSetup />
 
         {/* CTA */}
         <div className="flex gap-3 pb-6">

@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info } from "lucide-react";
+import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
@@ -73,6 +73,7 @@ function HasilContent() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [expandedRec, setExpandedRec] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const id = params.get("id");
@@ -459,6 +460,58 @@ function HasilContent() {
           <div className="flex items-center gap-2 text-xs text-muted-foreground/60 justify-center pt-1">
             <CheckCircle className="w-3.5 h-3.5 text-primary/40" />
             Tidak ada iklan · Tidak terafiliasi brand apapun
+          </div>
+        </motion.div>
+
+        {/* Share Section */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+          className="rounded-2xl border border-primary/20 bg-primary/5 p-5 pb-6"
+        >
+          <div className="flex items-center gap-2 mb-1">
+            <Share2 className="w-4 h-4 text-primary" />
+            <p className="text-sm font-semibold text-foreground">Bagikan ke teman</p>
+          </div>
+          <p className="text-xs text-muted-foreground mb-4">Bantu teman kamu temukan skincare yang tepat — gratis dan jujur.</p>
+          <div className="grid grid-cols-3 gap-2">
+            {/* WhatsApp */}
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(
+                `Hei! Aku baru analisis kondisi kulit di JujurSkin — platform skincare Indonesia yang jujur (bukan iklan).\n\nKulit ${data.tipe_kulit || "normal"} dengan skor kesehatan ${h.score.total}/100 setelah pakai rutinitas yang direkomendasikan.\n\nCoba sendiri gratis → https://jujurskin.vercel.app/analisis`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-green-500/10 border border-green-500/20 hover:bg-green-500/20 transition-colors"
+            >
+              <span className="text-lg">💬</span>
+              <span className="text-xs font-medium text-green-400">WhatsApp</span>
+            </a>
+            {/* Twitter/X */}
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                `Baru analisis kondisi kulit di @JujurSkin — platform skincare Indonesia yang jujur, bukan iklan.\n\nSkor kulit ${data.tipe_kulit || ""}: ${h.score.total}/100 💚\n\nGratis → https://jujurskin.vercel.app/analisis`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-sky-500/10 border border-sky-500/20 hover:bg-sky-500/20 transition-colors"
+            >
+              <span className="text-lg">🐦</span>
+              <span className="text-xs font-medium text-sky-400">Twitter / X</span>
+            </a>
+            {/* Copy link */}
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`https://jujurskin.vercel.app/analisis`).then(() => {
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                });
+              }}
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-secondary/50 border border-border hover:bg-secondary transition-colors"
+            >
+              {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
+              <span className={`text-xs font-medium ${copied ? "text-primary" : "text-muted-foreground"}`}>
+                {copied ? "Tersalin!" : "Salin Link"}
+              </span>
+            </button>
           </div>
         </motion.div>
       </div>

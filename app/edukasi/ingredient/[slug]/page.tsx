@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import {
   ArrowLeft, CheckCircle, XCircle, AlertTriangle, Shield,
   FlaskConical, BookOpen, ShoppingBag, Sparkles, Baby, Clock,
+  Star, Zap, GitCompare,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -114,28 +115,66 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
           <p className="mt-3 text-primary font-medium text-sm">{ing.tagline}</p>
         </motion.div>
 
-        {/* Quick stats */}
+        {/* Quick stats — 5 metrik */}
         <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.1 }}
-          className="grid grid-cols-3 gap-3">
-          <div className={`rounded-xl border p-4 text-center ${safeStyle.bg} ${safeStyle.border}`}>
-            <SafeIcon className={`w-5 h-5 mx-auto mb-1 ${safeStyle.color}`} />
-            <p className={`text-xs font-semibold ${safeStyle.color}`}>{SAFETY_LABELS[ing.safety_rating]}</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Keamanan</p>
+          className="grid grid-cols-5 gap-2">
+          {/* Keamanan */}
+          <div className={`rounded-xl border p-3 text-center ${safeStyle.bg} ${safeStyle.border}`}>
+            <SafeIcon className={`w-4 h-4 mx-auto mb-1 ${safeStyle.color}`} />
+            <p className={`text-[10px] font-semibold ${safeStyle.color} leading-tight`}>{SAFETY_LABELS[ing.safety_rating]}</p>
+            <p className="text-[9px] text-muted-foreground mt-0.5">Keamanan</p>
           </div>
-          <div className="rounded-xl border border-border bg-card p-4 text-center">
-            <Shield className={`w-5 h-5 mx-auto mb-1 ${EVIDENCE_STYLES[ing.evidence_level]}`} />
-            <p className={`text-xs font-semibold ${EVIDENCE_STYLES[ing.evidence_level]}`}>
+          {/* Riset */}
+          <div className="rounded-xl border border-border bg-card p-3 text-center">
+            <Shield className={`w-4 h-4 mx-auto mb-1 ${EVIDENCE_STYLES[ing.evidence_level]}`} />
+            <p className={`text-[10px] font-semibold ${EVIDENCE_STYLES[ing.evidence_level]} leading-tight`}>
               {EVIDENCE_LABELS[ing.evidence_level]}
             </p>
-            <p className="text-xs text-muted-foreground mt-0.5">Riset Ilmiah</p>
+            <p className="text-[9px] text-muted-foreground mt-0.5">Riset</p>
           </div>
-          <div className={`rounded-xl border p-4 text-center ${ing.pregnancy_safe ? "bg-green-400/5 border-green-400/20" : "bg-destructive/5 border-destructive/15"}`}>
-            <Baby className={`w-5 h-5 mx-auto mb-1 ${ing.pregnancy_safe ? "text-green-400" : "text-destructive/60"}`} />
-            <p className={`text-xs font-semibold ${ing.pregnancy_safe ? "text-green-400" : "text-destructive/70"}`}>
+          {/* Kehamilan */}
+          <div className={`rounded-xl border p-3 text-center ${ing.pregnancy_safe ? "bg-rose-400/5 border-rose-400/20" : "bg-destructive/5 border-destructive/15"}`}>
+            <Baby className={`w-4 h-4 mx-auto mb-1 ${ing.pregnancy_safe ? "text-rose-400" : "text-destructive/60"}`} />
+            <p className={`text-[10px] font-semibold ${ing.pregnancy_safe ? "text-rose-400" : "text-destructive/70"} leading-tight`}>
               {ing.pregnancy_safe ? "Aman" : "Hindari"}
             </p>
-            <p className="text-xs text-muted-foreground mt-0.5">Kehamilan</p>
+            <p className="text-[9px] text-muted-foreground mt-0.5">Hamil</p>
           </div>
+          {/* Pemula */}
+          <div className={`rounded-xl border p-3 text-center ${ing.beginner_friendly ? "bg-amber-400/5 border-amber-400/20" : "bg-muted/30 border-border"}`}>
+            <Star className={`w-4 h-4 mx-auto mb-1 ${ing.beginner_friendly ? "text-amber-400" : "text-muted-foreground/40"}`} />
+            <p className={`text-[10px] font-semibold leading-tight ${ing.beginner_friendly ? "text-amber-400" : "text-muted-foreground/60"}`}>
+              {ing.beginner_friendly ? "Friendly" : "Advanced"}
+            </p>
+            <p className="text-[9px] text-muted-foreground mt-0.5">Pemula</p>
+          </div>
+          {/* Iritasi */}
+          {ing.irritation_risk && (
+            <div className={`rounded-xl border p-3 text-center ${
+              ing.irritation_risk === "rendah" ? "bg-green-400/5 border-green-400/20" :
+              ing.irritation_risk === "sedang" ? "bg-amber-400/5 border-amber-400/20" :
+              "bg-red-400/5 border-red-400/20"
+            }`}>
+              <Zap className={`w-4 h-4 mx-auto mb-1 ${
+                ing.irritation_risk === "rendah" ? "text-green-400" :
+                ing.irritation_risk === "sedang" ? "text-amber-400" : "text-red-400"
+              }`} />
+              <p className={`text-[10px] font-semibold leading-tight capitalize ${
+                ing.irritation_risk === "rendah" ? "text-green-400" :
+                ing.irritation_risk === "sedang" ? "text-amber-400" : "text-red-400"
+              }`}>{ing.irritation_risk}</p>
+              <p className="text-[9px] text-muted-foreground mt-0.5">Iritasi</p>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Compare CTA */}
+        <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.12 }}>
+          <a href={`/bandingkan?a=${ing.id}`}
+            className="flex items-center gap-2 text-xs text-primary/70 hover:text-primary transition-colors">
+            <GitCompare className="w-3.5 h-3.5" />
+            Bandingkan {ing.name} dengan ingredient lain →
+          </a>
         </motion.div>
 
         {/* Description */}

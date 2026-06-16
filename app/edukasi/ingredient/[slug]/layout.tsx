@@ -50,6 +50,47 @@ export async function generateMetadata({
   };
 }
 
-export default function IngredientLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+export default async function IngredientLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const ing = getIngredientById(slug);
+
+  const jsonLd = ing
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: `${ing.name} — Ingredient Skincare`,
+        description: ing.tagline,
+        keywords: [ing.name, ...ing.aliases, CATEGORY_LABELS[ing.category]].join(", "),
+        url: `https://jujurskin.vercel.app/edukasi/ingredient/${ing.id}`,
+        publisher: {
+          "@type": "Organization",
+          name: "JujurSkin",
+          url: "https://jujurskin.vercel.app",
+        },
+        about: {
+          "@type": "Thing",
+          name: ing.name,
+          description: ing.tagline,
+          alternateName: ing.aliases,
+        },
+      }
+    : null;
+
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      {children}
+    </>
+  );
 }
