@@ -21,6 +21,7 @@ export function SiteFooter() {
               { href: "/edukasi", label: "Edukasi" },
               { href: "/produk", label: "Produk" },
               { href: "/cek-konflik", label: "Cek Konflik" },
+              { href: "/rutinitas", label: "Rutinitas" },
               { href: "/kalkulator", label: "Budget Planner" },
               { href: "/feedback", label: "Feedback" },
             ].map((link) => (

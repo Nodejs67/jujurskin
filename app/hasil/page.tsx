@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag } from "lucide-react";
+import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
@@ -366,8 +366,48 @@ function HasilContent() {
           </motion.div>
         )}
 
+        {/* Lifestyle Notes */}
+        {h.lifestyle_notes && h.lifestyle_notes.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.42 }}
+            className="rounded-xl border border-primary/20 bg-primary/5 p-4"
+          >
+            <div className="flex items-center gap-2 mb-2.5">
+              <Info className="w-4 h-4 text-primary" />
+              <p className="text-xs font-semibold text-primary">Catatan Personal</p>
+            </div>
+            <ul className="space-y-1.5">
+              {h.lifestyle_notes.map((note, i) => (
+                <li key={i} className="text-xs text-muted-foreground flex gap-2">
+                  <CheckCircle className="w-3.5 h-3.5 text-primary/60 flex-shrink-0 mt-0.5" />
+                  <span>{note}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
+        {/* Pregnancy Warnings */}
+        {h.pregnancy_warnings && h.pregnancy_warnings.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.43 }}
+            className="rounded-xl border border-rose-500/30 bg-rose-500/5 p-4"
+          >
+            <div className="flex items-center gap-2 mb-2.5">
+              <Baby className="w-4 h-4 text-rose-400" />
+              <p className="text-xs font-semibold text-rose-400">Perhatian Kehamilan / Menyusui</p>
+            </div>
+            <ul className="space-y-1.5">
+              {h.pregnancy_warnings.map((w, i) => (
+                <li key={i} className="text-xs text-rose-300 flex gap-2">
+                  <span className="flex-shrink-0 mt-0.5">•</span>
+                  <span>{w}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
         {/* Quick Links */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.43 }}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.44 }}
           className="rounded-xl border border-border bg-card p-4"
         >
           <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Eksplorasi lebih lanjut</p>
@@ -383,21 +423,34 @@ function HasilContent() {
               </div>
             </button>
             <button
+              onClick={() => router.push("/rutinitas")}
+              className="flex items-center gap-2 p-3 rounded-lg bg-secondary/30 hover:bg-secondary/60 transition-colors text-left"
+            >
+              <Repeat className="w-4 h-4 text-primary shrink-0" />
+              <div>
+                <p className="text-xs font-medium text-foreground">Rutinitas AM/PM</p>
+                <p className="text-xs text-muted-foreground">Urutan produk optimal</p>
+              </div>
+            </button>
+            <button
               onClick={() => router.push("/edukasi")}
               className="flex items-center gap-2 p-3 rounded-lg bg-secondary/30 hover:bg-secondary/60 transition-colors text-left"
             >
               <BookOpen className="w-4 h-4 text-purple-400 shrink-0" />
               <div>
                 <p className="text-xs font-medium text-foreground">Edukasi Ingredient</p>
-                <p className="text-xs text-muted-foreground">20+ ingredient dijelaskan</p>
+                <p className="text-xs text-muted-foreground">100+ ingredient dijelaskan</p>
               </div>
             </button>
           </div>
         </motion.div>
 
         {/* CTA */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="space-y-3 pb-6">
-          <Button onClick={() => router.push("/analisis")} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.46 }} className="space-y-3 pb-6">
+          <Button onClick={() => router.push("/rutinitas")} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
+            <Repeat className="w-4 h-4" /> Lihat Rutinitas AM/PM Saya
+          </Button>
+          <Button variant="outline" onClick={() => router.push("/analisis")} className="w-full border-border gap-2">
             <Sparkles className="w-4 h-4" /> Analisis Ulang
           </Button>
           <Button variant="outline" onClick={() => router.push("/feedback")} className="w-full border-border gap-2">
