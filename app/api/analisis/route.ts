@@ -38,6 +38,17 @@ export async function POST(req: NextRequest) {
             masalah: input.masalah,
             budget: input.budget,
             produk_existing: input.produk_existing || null,
+            // Advanced lifestyle & history fields (quiz 7 langkah)
+            penggunaan_sunscreen: input.penggunaan_sunscreen || null,
+            paparan_matahari: input.paparan_matahari || null,
+            lingkungan: input.lingkungan || null,
+            kualitas_tidur: input.kualitas_tidur || null,
+            tingkat_stress: input.tingkat_stress || null,
+            riwayat_hormonal: input.riwayat_hormonal ?? null,
+            status_kehamilan: input.status_kehamilan || null,
+            riwayat_sensitif: input.riwayat_sensitif ?? null,
+            reaksi_produk: input.reaksi_produk || null,
+            pengalaman_retinoid: input.pengalaman_retinoid || null,
             hasil,
           })
           .select("id")

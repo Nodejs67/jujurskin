@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Search, ArrowLeft, BookOpen, Shield, FlaskConical, Sparkles, Droplets, Leaf, Sun, ChevronRight, CheckCircle, AlertTriangle } from "lucide-react";
+import { Search, ArrowLeft, BookOpen, Shield, FlaskConical, Sparkles, Droplets, Leaf, Sun, ChevronRight, CheckCircle, AlertTriangle, Baby, Star, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
@@ -88,6 +88,21 @@ function IngredientCard({ ingredient, onClick }: { ingredient: Ingredient; onCli
         <Badge variant="outline" className={`text-xs px-2 py-0.5 border-border ${EVIDENCE_COLORS[ingredient.evidence_level]}`}>
           {EVIDENCE_LABELS[ingredient.evidence_level]}
         </Badge>
+        {ingredient.pregnancy_safe && (
+          <Badge variant="outline" className="text-xs px-2 py-0.5 text-rose-400 border-rose-400/30 bg-rose-400/5">
+            🤰 Hamil OK
+          </Badge>
+        )}
+        {ingredient.beginner_friendly && (
+          <Badge variant="outline" className="text-xs px-2 py-0.5 text-amber-400 border-amber-400/30 bg-amber-400/5">
+            ⭐ Pemula
+          </Badge>
+        )}
+        {ingredient.irritation_risk === "tinggi" && (
+          <Badge variant="outline" className="text-xs px-2 py-0.5 text-red-400 border-red-400/30 bg-red-400/5">
+            ⚠️ Iritasi Tinggi
+          </Badge>
+        )}
       </div>
     </motion.button>
   );
@@ -103,16 +118,36 @@ const ALL_CATEGORIES: (IngredientCategory | "semua")[] = [
   "antioxidant",
 ];
 
+type SmartFilter = "aman_hamil" | "pemula" | "low_iritasi" | "bukti_kuat";
+
+const SMART_FILTERS: { id: SmartFilter; label: string; icon: React.ElementType; color: string }[] = [
+  { id: "aman_hamil", label: "Aman Hamil", icon: Baby, color: "text-rose-400 bg-rose-400/10 border-rose-400/30" },
+  { id: "pemula", label: "Pemula Friendly", icon: Star, color: "text-amber-400 bg-amber-400/10 border-amber-400/30" },
+  { id: "low_iritasi", label: "Low Iritasi", icon: Zap, color: "text-green-400 bg-green-400/10 border-green-400/30" },
+  { id: "bukti_kuat", label: "Bukti Kuat", icon: Shield, color: "text-blue-400 bg-blue-400/10 border-blue-400/30" },
+];
+
 export default function EdukasiPage() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<IngredientCategory | "semua">("semua");
+  const [smartFilters, setSmartFilters] = useState<SmartFilter[]>([]);
+
+  const toggleSmartFilter = (f: SmartFilter) => {
+    setSmartFilters(prev =>
+      prev.includes(f) ? prev.filter(x => x !== f) : [...prev, f]
+    );
+  };
 
   const filtered = useMemo(() => {
     let list = INGREDIENTS;
     if (activeCategory !== "semua") {
       list = list.filter((i) => i.category === activeCategory);
     }
+    if (smartFilters.includes("aman_hamil")) list = list.filter(i => i.pregnancy_safe === true);
+    if (smartFilters.includes("pemula")) list = list.filter(i => i.beginner_friendly === true);
+    if (smartFilters.includes("low_iritasi")) list = list.filter(i => i.irritation_risk === "rendah");
+    if (smartFilters.includes("bukti_kuat")) list = list.filter(i => i.evidence_level === "kuat");
     if (query.trim()) {
       const q = query.toLowerCase();
       list = list.filter(
@@ -123,7 +158,7 @@ export default function EdukasiPage() {
       );
     }
     return list;
-  }, [query, activeCategory]);
+  }, [query, activeCategory, smartFilters]);
 
   return (
     <main className="min-h-screen bg-background flex flex-col">
@@ -194,6 +229,30 @@ export default function EdukasiPage() {
           </div>
         </motion.div>
 
+        {/* Smart Filters */}
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="flex flex-wrap gap-2 mb-3">
+          <span className="text-xs text-muted-foreground/60 self-center mr-1">Filter cepat:</span>
+          {SMART_FILTERS.map((f) => {
+            const isActive = smartFilters.includes(f.id);
+            return (
+              <button
+                key={f.id}
+                onClick={() => toggleSmartFilter(f.id)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+                  isActive ? f.color : "border-border bg-card text-muted-foreground hover:border-border/80"
+                }`}
+              >
+                <f.icon className="w-3 h-3" /> {f.label}
+              </button>
+            );
+          })}
+          {smartFilters.length > 0 && (
+            <button onClick={() => setSmartFilters([])} className="text-xs text-muted-foreground/60 hover:text-foreground underline">
+              Reset
+            </button>
+          )}
+        </motion.div>
+
         {/* Category Filter */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex flex-wrap gap-2 mb-8">
           {ALL_CATEGORIES.map((cat) => {
@@ -217,7 +276,7 @@ export default function EdukasiPage() {
         </motion.div>
 
         {/* Results count */}
-        {(query || activeCategory !== "semua") && (
+        {(query || activeCategory !== "semua" || smartFilters.length > 0) && (
           <p className="text-xs text-muted-foreground mb-4">
             {filtered.length} ingredient ditemukan
           </p>
@@ -244,7 +303,7 @@ export default function EdukasiPage() {
             <p className="text-4xl mb-3">🔍</p>
             <p className="text-foreground font-medium">Ingredient tidak ditemukan</p>
             <p className="text-sm text-muted-foreground mt-1">Coba kata kunci lain seperti nama kimia atau nama populernya</p>
-            <button onClick={() => { setQuery(""); setActiveCategory("semua"); }} className="mt-4 text-xs text-primary hover:underline">
+            <button onClick={() => { setQuery(""); setActiveCategory("semua"); setSmartFilters([]); }} className="mt-4 text-xs text-primary hover:underline">
               Reset filter
             </button>
           </div>

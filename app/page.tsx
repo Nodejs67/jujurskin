@@ -4,8 +4,8 @@ import { motion, type Variants, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState as useNavState } from "react";
 import {
-  Shield, TrendingDown, BookOpen, MapPin, AlertTriangle, Sparkles,
-  ArrowRight, CheckCircle, XCircle, ChevronDown, Camera,
+  Shield, TrendingDown, TrendingUp, BookOpen, MapPin, AlertTriangle, Sparkles,
+  ArrowRight, CheckCircle, XCircle, ChevronDown, Camera, Repeat,
   FlaskConical, Brain, User, ShoppingBag, Menu, X, DollarSign, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,8 @@ const features = [
   { icon: BookOpen, title: "Edukasi Ingredient", desc: "Pahami apa yang kamu oleskan ke kulit — penjelasan sederhana tanpa jargon medis.", color: "text-purple-400", bg: "bg-purple-400/10" },
   { icon: MapPin, title: "Rekomendasi Berbasis Lokasi", desc: "Skincare di Kupang (UV 11) berbeda dengan di Bandung. Rekomendasiku menyesuaikan iklim kotamu.", color: "text-rose-400", bg: "bg-rose-400/10" },
   { icon: AlertTriangle, title: "Fake Claim Analyzer", desc: "'Memutihkan dalam 3 hari' — bohong. Kami analisis klaim marketing dan tunjukkan faktanya.", color: "text-orange-400", bg: "bg-orange-400/10" },
+  { icon: Repeat, title: "Rutinitas AM/PM Builder", desc: "Setelah analisis, dapatkan urutan produk yang tepat untuk pagi dan malam — dengan alasan ilmiah tiap langkah.", color: "text-teal-400", bg: "bg-teal-400/10" },
+  { icon: TrendingUp, title: "Skin Progress Tracker", desc: "Catat kondisi kulitmu setiap minggu dan lihat grafik perkembangannya. Skincare yang bekerja akan terlihat di sini.", color: "text-indigo-400", bg: "bg-indigo-400/10" },
 ];
 
 const compare = [
@@ -96,6 +98,8 @@ const NAV_LINKS = [
   { href: "/edukasi", label: "Edukasi" },
   { href: "/produk", label: "Produk" },
   { href: "/cek-konflik", label: "Cek Konflik" },
+  { href: "/rutinitas", label: "Rutinitas" },
+  { href: "/progress", label: "Progress" },
 ];
 
 export default function Home() {
@@ -192,9 +196,9 @@ export default function Home() {
           </motion.div>
           <motion.div variants={fadeUp} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
             {[
-              { value: "39+", label: "Ingredient terdokumentasi" },
+              { value: "100+", label: "Ingredient terdokumentasi" },
               { value: "38+", label: "Produk terkurasi" },
-              { value: "3 dtk", label: "Waktu analisis" },
+              { value: "7 tanya", label: "Quiz personal mendalam" },
               { value: "100%", label: "Gratis selamanya" },
             ].map((stat) => (
               <div key={stat.label} className="text-center p-4 rounded-xl border border-border/50 bg-card/50">
@@ -730,7 +734,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-foreground mb-2">Edukasi Ingredient</h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
-                Pahami 39+ ingredient skincare yang paling penting — cara kerja, cara pakai, apa yang bisa dikombinasikan, dan mitos yang harus dihapus. Dalam bahasa Indonesia yang sederhana.
+                Pahami 100+ ingredient skincare yang paling penting — cara kerja, cara pakai, apa yang bisa dikombinasikan, dan mitos yang harus dihapus. Dalam bahasa Indonesia yang sederhana.
               </p>
               <div className="flex flex-wrap gap-2 mb-5">
                 {["Niacinamide", "Retinol", "BHA/AHA", "Vitamin C", "Ceramide"].map((i) => (
@@ -957,7 +961,7 @@ export default function Home() {
               },
               {
                 q: "Ingredient conflict checker bekerja bagaimana?",
-                a: "Kami mencocokkan nama ingredient yang kamu input dengan database 39+ ingredient dan mengecek konflik yang terdokumentasi secara ilmiah — seperti Retinol + AHA atau Benzoyl Peroxide + Retinol.",
+                a: "Kami mencocokkan nama ingredient yang kamu input dengan database 100+ ingredient dan mengecek konflik yang terdokumentasi secara ilmiah — seperti Retinol + AHA atau Benzoyl Peroxide + Retinol.",
               },
             ].map((item, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
@@ -1015,6 +1019,8 @@ export default function Home() {
               <div className="space-y-2">
                 {[
                   { label: "Analisis Kulit", href: "/analisis" },
+                  { label: "Rutinitas AM/PM", href: "/rutinitas" },
+                  { label: "Progress Kulit", href: "/progress" },
                   { label: "Cek Konflik Ingredient", href: "/cek-konflik" },
                   { label: "Beri Feedback", href: "/feedback" },
                 ].map((link) => (
@@ -1034,6 +1040,8 @@ export default function Home() {
                   { label: "Panduan Pemula", href: "/panduan" },
                   { label: "Produk Indonesia", href: "/produk" },
                   { label: "Budget Planner", href: "/kalkulator" },
+                  { label: "Rutinitas AM/PM", href: "/rutinitas" },
+                  { label: "Progress Kulit", href: "/progress" },
                 ].map((link) => (
                   <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
                     {link.label}
