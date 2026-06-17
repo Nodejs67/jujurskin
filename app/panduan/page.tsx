@@ -78,27 +78,27 @@ const BEGINNER_MISTAKES = [
   {
     title: "Terlalu banyak produk sekaligus",
     desc: "Mulai dengan 3 produk dasar: cleanser, moisturizer, sunscreen. Tambahkan satu per satu agar tahu produk mana yang cocok atau tidak.",
-    color: "text-red-400 bg-red-400/10 border-red-400/20",
+    color: "text-red-600 bg-red-400/10 border-red-400/20",
   },
   {
     title: "Gonta-ganti produk terlalu cepat",
     desc: "Skincare butuh waktu. Sebagian besar produk perlu 4-8 minggu untuk menunjukkan hasil. Jika tidak ada reaksi buruk, tetap konsisten.",
-    color: "text-orange-400 bg-orange-400/10 border-orange-400/20",
+    color: "text-orange-600 bg-orange-400/10 border-orange-400/20",
   },
   {
     title: "Skip sunscreen karena berminyak",
     desc: "Ada sunscreen untuk semua tipe kulit. Cari yang 'lightweight', 'gel-based', atau 'non-comedogenic'. Sunscreen bukan pilihan — ini fondasi.",
-    color: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
+    color: "text-yellow-600 bg-yellow-400/10 border-yellow-400/20",
   },
   {
     title: "Pakai aktif terlalu banyak sekaligus",
     desc: "AHA + BHA + Retinol di malam yang sama = kulit rusak. Pilih satu aktif per malam dan bergantian di hari berbeda.",
-    color: "text-red-400 bg-red-400/10 border-red-400/20",
+    color: "text-red-600 bg-red-400/10 border-red-400/20",
   },
   {
     title: "Tidak patch test produk baru",
     desc: "Selalu coba produk baru di belakang telinga atau rahang selama 24 jam sebelum pakai di seluruh wajah.",
-    color: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
+    color: "text-yellow-600 bg-yellow-400/10 border-yellow-400/20",
   },
 ];
 
@@ -158,9 +158,9 @@ function MythCard({ myth, fact, icon, defaultOpen = false }: { myth: string; fac
             className="overflow-hidden"
           >
             <div className="flex items-start gap-3 p-4 pt-0 border-t border-border bg-green-400/5">
-              <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 shrink-0" />
+              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs text-green-400 font-medium mb-1">FAKTA</p>
+                <p className="text-xs text-green-600 font-medium mb-1">FAKTA</p>
                 <p className="text-sm text-foreground leading-relaxed">{fact}</p>
               </div>
             </div>
@@ -299,7 +299,7 @@ export default function PanduanPage() {
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
             className="mt-4 rounded-xl border border-amber-400/20 bg-amber-400/5 p-4"
           >
-            <p className="text-xs text-amber-400 font-medium mb-1">⚠️ Aturan Aktif di Malam Hari</p>
+            <p className="text-xs text-amber-600 font-medium mb-1">⚠️ Aturan Aktif di Malam Hari</p>
             <p className="text-xs text-muted-foreground">AHA di Senin, Rabu, Jumat. Retinol di Selasa, Kamis. Jangan pernah di malam yang sama. Hari lain: cukup cleanser + moisturizer untuk kulit istirahat.</p>
           </motion.div>
         </section>
@@ -343,7 +343,7 @@ export default function PanduanPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="rounded-xl border border-green-400/20 bg-green-400/5 p-3">
-                      <p className="text-xs text-green-400 font-semibold mb-2">✅ Dianjurkan</p>
+                      <p className="text-xs text-green-600 font-semibold mb-2">✅ Dianjurkan</p>
                       {skin.use.map((u, j) => <p key={j} className="text-xs text-foreground mb-1">• {u}</p>)}
                     </div>
                     <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-3">

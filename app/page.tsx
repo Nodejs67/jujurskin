@@ -29,13 +29,13 @@ const stagger: Variants = {
 
 // ─── DATA ───────────────────────────────────────────────
 const features = [
-  { icon: TrendingDown, title: "Skincare Priority Engine", desc: "Dengan budget Rp 100.000, kami tunjukkan beli produk apa dulu — berdasarkan kondisi kulitmu.", color: "text-green-400", bg: "bg-green-400/10" },
-  { icon: XCircle, title: "Produk Tidak Perlu Checker", desc: "Kami berani bilang jujur: 'Toner ini percuma karena serummu sudah punya fungsi yang sama.'", color: "text-amber-400", bg: "bg-amber-400/10" },
-  { icon: Shield, title: "Safety Checker & BPOM", desc: "Cek keamanan produk dan status BPOM. Deteksi kandungan berbahaya seperti merkuri secara otomatis.", color: "text-blue-400", bg: "bg-blue-400/10" },
+  { icon: TrendingDown, title: "Skincare Priority Engine", desc: "Dengan budget Rp 100.000, kami tunjukkan beli produk apa dulu — berdasarkan kondisi kulitmu.", color: "text-green-600", bg: "bg-green-400/10" },
+  { icon: XCircle, title: "Produk Tidak Perlu Checker", desc: "Kami berani bilang jujur: 'Toner ini percuma karena serummu sudah punya fungsi yang sama.'", color: "text-amber-600", bg: "bg-amber-400/10" },
+  { icon: Shield, title: "Safety Checker & BPOM", desc: "Cek keamanan produk dan status BPOM. Deteksi kandungan berbahaya seperti merkuri secara otomatis.", color: "text-blue-600", bg: "bg-blue-400/10" },
   { icon: BookOpen, title: "Edukasi Ingredient", desc: "Pahami apa yang kamu oleskan ke kulit — penjelasan sederhana tanpa jargon medis.", color: "text-purple-400", bg: "bg-purple-400/10" },
-  { icon: MapPin, title: "Rekomendasi Berbasis Lokasi", desc: "Skincare di Kupang (UV 11) berbeda dengan di Bandung. Rekomendasiku menyesuaikan iklim kotamu.", color: "text-rose-400", bg: "bg-rose-400/10" },
-  { icon: AlertTriangle, title: "Fake Claim Analyzer", desc: "'Memutihkan dalam 3 hari' — bohong. Kami analisis klaim marketing dan tunjukkan faktanya.", color: "text-orange-400", bg: "bg-orange-400/10" },
-  { icon: Repeat, title: "Rutinitas AM/PM Builder", desc: "Setelah analisis, dapatkan urutan produk yang tepat untuk pagi dan malam — dengan alasan ilmiah tiap langkah.", color: "text-teal-400", bg: "bg-teal-400/10" },
+  { icon: MapPin, title: "Rekomendasi Berbasis Lokasi", desc: "Skincare di Kupang (UV 11) berbeda dengan di Bandung. Rekomendasiku menyesuaikan iklim kotamu.", color: "text-rose-600", bg: "bg-rose-400/10" },
+  { icon: AlertTriangle, title: "Fake Claim Analyzer", desc: "'Memutihkan dalam 3 hari' — bohong. Kami analisis klaim marketing dan tunjukkan faktanya.", color: "text-orange-600", bg: "bg-orange-400/10" },
+  { icon: Repeat, title: "Rutinitas AM/PM Builder", desc: "Setelah analisis, dapatkan urutan produk yang tepat untuk pagi dan malam — dengan alasan ilmiah tiap langkah.", color: "text-teal-600", bg: "bg-teal-400/10" },
   { icon: TrendingUp, title: "Skin Progress Tracker", desc: "Catat kondisi kulitmu setiap minggu dan lihat grafik perkembangannya. Skincare yang bekerja akan terlihat di sini.", color: "text-indigo-400", bg: "bg-indigo-400/10" },
 ];
 
@@ -56,9 +56,9 @@ const steps = [
 ];
 
 const skinScoreBreakdown = [
-  { label: "Barrier Health", score: 82, color: "bg-green-400", text: "text-green-400" },
-  { label: "Hydration", score: 71, color: "bg-blue-400", text: "text-blue-400" },
-  { label: "UV Protection", score: 55, color: "bg-yellow-400", text: "text-yellow-400" },
+  { label: "Barrier Health", score: 82, color: "bg-green-400", text: "text-green-600" },
+  { label: "Hydration", score: 71, color: "bg-blue-400", text: "text-blue-600" },
+  { label: "UV Protection", score: 55, color: "bg-yellow-400", text: "text-yellow-600" },
   { label: "Acne Control", score: 80, color: "bg-purple-400", text: "text-purple-400" },
 ];
 
@@ -67,19 +67,19 @@ const cities = [
     name: "Medan", province: "Sumatera Utara", emoji: "☀️",
     humidity: 82, uv: 10, temp: 32,
     tips: ["Lightweight gel moisturizer", "Sunscreen SPF 50+ wajib", "Oil-control gentle cleanser"],
-    warn: "UV Ekstrem", warnColor: "text-red-400 bg-red-400/10 border-red-400/20",
+    warn: "UV Ekstrem", warnColor: "text-red-600 bg-red-400/10 border-red-400/20",
   },
   {
     name: "Bandung", province: "Jawa Barat", emoji: "⛅",
     humidity: 60, uv: 8, temp: 22,
     tips: ["Moisturizer rich boleh dipakai", "SPF 30+ sudah cukup", "Hydrating toner sangat dianjurkan"],
-    warn: "Fokus Hidrasi", warnColor: "text-blue-400 bg-blue-400/10 border-blue-400/20",
+    warn: "Fokus Hidrasi", warnColor: "text-blue-600 bg-blue-400/10 border-blue-400/20",
   },
   {
     name: "Surabaya", province: "Jawa Timur", emoji: "🌤️",
     humidity: 70, uv: 9, temp: 30,
     tips: ["Water-based moisturizer", "Sunscreen SPF 40+ reapply siang", "Niacinamide untuk oil control"],
-    warn: "UV Tinggi", warnColor: "text-orange-400 bg-orange-400/10 border-orange-400/20",
+    warn: "UV Tinggi", warnColor: "text-orange-600 bg-orange-400/10 border-orange-400/20",
   },
 ];
 
@@ -518,7 +518,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-4 mb-8">
             {[
               { icon: DollarSign, label: "Potensi penghematan bulan ini", value: "Rp 235.000", sub: "Dari 3 produk tidak perlu", color: "text-accent", bg: "bg-accent/10", border: "border-accent/20" },
-              { icon: XCircle, label: "Produk yang tidak kamu butuhkan", value: "3 produk", sub: "Fungsinya sudah ada di produkmu", color: "text-rose-400", bg: "bg-rose-400/10", border: "border-rose-400/20" },
+              { icon: XCircle, label: "Produk yang tidak kamu butuhkan", value: "3 produk", sub: "Fungsinya sudah ada di produkmu", color: "text-rose-600", bg: "bg-rose-400/10", border: "border-rose-400/20" },
               { icon: Star, label: "Efisiensi routine", value: "89%", sub: "Setiap produk punya fungsi jelas", color: "text-primary", bg: "bg-primary/10", border: "border-primary/20" },
             ].map((stat, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.12 }}
@@ -992,7 +992,7 @@ export default function Home() {
                 name: "Rania, 22",
                 city: "Jakarta",
                 avatar: "R",
-                avatarColor: "bg-rose-400/20 text-rose-400",
+                avatarColor: "bg-rose-400/20 text-rose-600",
                 text: "\"Saya sudah buang uang beli 5 produk serum yang ternyata fungsinya sama semua. JujurSkin yang bilang saya cuma butuh 2. Sejak pakai rekomendasinya, kulit lebih bersih dan dompet lebih tebal.\"",
                 saving: "Hemat Rp 180.000/bulan",
               },
@@ -1000,7 +1000,7 @@ export default function Home() {
                 name: "Bima, 28",
                 city: "Surabaya",
                 avatar: "B",
-                avatarColor: "bg-blue-400/20 text-blue-400",
+                avatarColor: "bg-blue-400/20 text-blue-600",
                 text: "\"Sebagai cowok yang baru mulai skincare, saya bingung mau mulai dari mana. JujurSkin kasih urutan yang jelas dan tidak berlebihan. 3 produk, kulit mending dalam 6 minggu.\"",
                 saving: "Routine 3 produk saja",
               },

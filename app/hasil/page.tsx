@@ -54,9 +54,9 @@ const scoreColors: Record<string, string> = {
   acne_control: "bg-purple-400",
 };
 const scoreTextColors: Record<string, string> = {
-  uv_protection: "text-yellow-400",
-  barrier: "text-green-400",
-  hydration: "text-blue-400",
+  uv_protection: "text-yellow-600",
+  barrier: "text-green-600",
+  hydration: "text-blue-600",
   acne_control: "text-purple-400",
 };
 const scoreLabels: Record<string, string> = {
@@ -263,7 +263,7 @@ function HasilContent() {
                                 <div className="flex items-center gap-1.5 mb-0.5">
                                   <p className="text-xs font-semibold text-foreground truncate">{prod.name}</p>
                                   {prod.bpom_registered && (
-                                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-green-400/40 text-green-400 shrink-0">BPOM</Badge>
+                                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-green-400/40 text-green-600 shrink-0">BPOM</Badge>
                                   )}
                                 </div>
                                 <p className="text-[11px] text-muted-foreground">{prod.brand}</p>
@@ -393,8 +393,8 @@ function HasilContent() {
             className="rounded-xl border border-rose-500/30 bg-rose-500/5 p-4"
           >
             <div className="flex items-center gap-2 mb-2.5">
-              <Baby className="w-4 h-4 text-rose-400" />
-              <p className="text-xs font-semibold text-rose-400">Perhatian Kehamilan / Menyusui</p>
+              <Baby className="w-4 h-4 text-rose-600" />
+              <p className="text-xs font-semibold text-rose-600">Perhatian Kehamilan / Menyusui</p>
             </div>
             <ul className="space-y-1.5">
               {h.pregnancy_warnings.map((w, i) => (
@@ -483,7 +483,7 @@ function HasilContent() {
               className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-green-500/10 border border-green-500/20 hover:bg-green-500/20 transition-colors"
             >
               <span className="text-lg">💬</span>
-              <span className="text-xs font-medium text-green-400">WhatsApp</span>
+              <span className="text-xs font-medium text-green-600">WhatsApp</span>
             </a>
             {/* Twitter/X */}
             <a
@@ -495,7 +495,7 @@ function HasilContent() {
               className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-sky-500/10 border border-sky-500/20 hover:bg-sky-500/20 transition-colors"
             >
               <span className="text-lg">🐦</span>
-              <span className="text-xs font-medium text-sky-400">Twitter / X</span>
+              <span className="text-xs font-medium text-sky-600">Twitter / X</span>
             </a>
             {/* Copy link */}
             <button

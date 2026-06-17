@@ -46,8 +46,8 @@ const PRICE_LABELS: Record<PriceRange, string> = {
 };
 
 const PRICE_COLORS: Record<PriceRange, string> = {
-  budget: "text-green-400 bg-green-400/10 border-green-400/20",
-  mid: "text-blue-400 bg-blue-400/10 border-blue-400/20",
+  budget: "text-green-600 bg-green-400/10 border-green-400/20",
+  mid: "text-blue-600 bg-blue-400/10 border-blue-400/20",
   premium: "text-purple-400 bg-purple-400/10 border-purple-400/20",
 };
 
@@ -99,7 +99,7 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
           </div>
         </div>
         {product.bpom_registered && (
-          <Badge variant="outline" className="text-xs border-green-400/30 text-green-400 bg-green-400/10 shrink-0">
+          <Badge variant="outline" className="text-xs border-green-400/30 text-green-600 bg-green-400/10 shrink-0">
             BPOM ✓
           </Badge>
         )}
@@ -124,7 +124,7 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
           {PRICE_LABELS[product.price_range]}
         </Badge>
         {product.spf && (
-          <Badge variant="outline" className="text-xs px-2 py-0.5 text-yellow-400 bg-yellow-400/10 border-yellow-400/20">
+          <Badge variant="outline" className="text-xs px-2 py-0.5 text-yellow-600 bg-yellow-400/10 border-yellow-400/20">
             SPF {product.spf}
           </Badge>
         )}
@@ -154,7 +154,7 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
                 {CATEGORY_LABELS[product.category]}
               </Badge>
               {product.bpom_registered && (
-                <Badge variant="outline" className="text-xs border-green-400/30 text-green-400 bg-green-400/10">
+                <Badge variant="outline" className="text-xs border-green-400/30 text-green-600 bg-green-400/10">
                   <CheckCircle className="w-2.5 h-2.5 mr-1" /> BPOM
                 </Badge>
               )}
@@ -207,7 +207,7 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
           {/* Who it's for */}
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-green-400/20 bg-green-400/5 p-4">
-              <p className="text-xs text-green-400 font-semibold mb-2">✅ Cocok untuk</p>
+              <p className="text-xs text-green-600 font-semibold mb-2">✅ Cocok untuk</p>
               <div className="space-y-1.5">
                 {product.skin_types.map((st) => (
                   <p key={st} className="text-xs text-foreground capitalize">• Kulit {st}</p>
@@ -216,14 +216,14 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
             </div>
             {product.who_should_skip ? (
               <div className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-4">
-                <p className="text-xs text-yellow-400 font-semibold mb-2">⚠️ Skip jika</p>
+                <p className="text-xs text-yellow-600 font-semibold mb-2">⚠️ Skip jika</p>
                 <p className="text-xs text-foreground leading-relaxed">{product.who_should_skip}</p>
               </div>
             ) : (
               <div className="rounded-xl border border-green-400/20 bg-green-400/5 p-4 flex items-center justify-center">
                 <div className="text-center">
-                  <CheckCircle className="w-5 h-5 text-green-400 mx-auto mb-1" />
-                  <p className="text-xs text-green-400">Aman untuk semua</p>
+                  <CheckCircle className="w-5 h-5 text-green-600 mx-auto mb-1" />
+                  <p className="text-xs text-green-600">Aman untuk semua</p>
                 </div>
               </div>
             )}

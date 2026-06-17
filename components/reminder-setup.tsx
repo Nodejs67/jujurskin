@@ -92,7 +92,7 @@ export function ReminderSetup() {
           <span className="text-xs text-muted-foreground">Browser tidak support notifikasi</span>
         )}
         {notifSupported && permission === "denied" && (
-          <span className="text-xs text-red-400">Notifikasi diblokir di browser</span>
+          <span className="text-xs text-red-600">Notifikasi diblokir di browser</span>
         )}
         {notifSupported && permission === "default" && (
           <button
@@ -103,7 +103,7 @@ export function ReminderSetup() {
           </button>
         )}
         {notifSupported && permission === "granted" && (
-          <span className="flex items-center gap-1 text-xs text-green-400">
+          <span className="flex items-center gap-1 text-xs text-green-600">
             <Check className="w-3 h-3" /> Aktif
           </span>
         )}
@@ -113,7 +113,7 @@ export function ReminderSetup() {
       <div className="rounded-xl border border-border bg-card/60 p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Sun className="w-4 h-4 text-amber-400" />
+            <Sun className="w-4 h-4 text-amber-600" />
             <p className="text-sm font-medium">Rutinitas Pagi (AM)</p>
           </div>
           <button
@@ -183,7 +183,7 @@ export function ReminderSetup() {
         onClick={handleSave}
         className={`w-full py-2.5 rounded-xl text-sm font-medium transition-all ${
           saved
-            ? "bg-green-500/20 text-green-400 border border-green-500/30"
+            ? "bg-green-500/20 text-green-600 border border-green-500/30"
             : "bg-primary text-primary-foreground hover:bg-primary/90"
         }`}
       >

@@ -355,7 +355,7 @@ export default function CekKonflikPage() {
                             {c.severity === "high" ? (
                               <XCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
                             ) : (
-                              <AlertTriangle className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
+                              <AlertTriangle className="w-4 h-4 text-yellow-600 shrink-0 mt-0.5" />
                             )}
                             <div className="flex-1">
                               <div className="flex flex-wrap items-center gap-2 mb-1.5">
@@ -371,7 +371,7 @@ export default function CekKonflikPage() {
                                   className={`text-[10px] px-1.5 py-0 ${
                                     c.severity === "high"
                                       ? "border-destructive/40 text-destructive"
-                                      : "border-yellow-400/40 text-yellow-400"
+                                      : "border-yellow-400/40 text-yellow-600"
                                   }`}
                                 >
                                   {c.severity === "high" ? "Hindari" : "Hati-hati"}
@@ -390,7 +390,7 @@ export default function CekKonflikPage() {
                       animate="show"
                       className="p-5 rounded-xl border border-green-400/25 bg-green-400/5 flex items-start gap-3"
                     >
-                      <CheckCircle className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
+                      <CheckCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
                       <div>
                         <p className="text-sm font-semibold text-foreground mb-1">Tidak ada konflik yang diketahui ✅</p>
                         <p className="text-xs text-muted-foreground leading-relaxed">
@@ -403,10 +403,10 @@ export default function CekKonflikPage() {
                   {/* Safe ingredients */}
                   {safeIngredients.length > 0 && conflicts.length > 0 && (
                     <div className="rounded-xl border border-green-400/20 bg-green-400/5 p-4">
-                      <p className="text-xs text-green-400 font-semibold mb-2">Aman dikombinasikan:</p>
+                      <p className="text-xs text-green-600 font-semibold mb-2">Aman dikombinasikan:</p>
                       <div className="flex flex-wrap gap-2">
                         {safeIngredients.map((ing) => (
-                          <span key={ing.id} className="text-xs text-green-400/80">{ing.emoji} {ing.name}</span>
+                          <span key={ing.id} className="text-xs text-green-600/80">{ing.emoji} {ing.name}</span>
                         ))}
                       </div>
                     </div>

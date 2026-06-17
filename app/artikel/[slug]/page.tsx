@@ -118,14 +118,14 @@ export default function ArtikelDetailPage({
 
               {section.tip && (
                 <div className="mt-4 rounded-lg border border-green-500/20 bg-green-500/5 p-4 flex gap-3">
-                  <Lightbulb className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <Lightbulb className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-green-300/90">{section.tip}</p>
                 </div>
               )}
 
               {section.warning && (
                 <div className="mt-4 rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-4 flex gap-3">
-                  <AlertTriangle className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
+                  <AlertTriangle className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-yellow-300/90">{section.warning}</p>
                 </div>
               )}

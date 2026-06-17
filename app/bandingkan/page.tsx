@@ -124,16 +124,16 @@ function irritationScore(i: Ingredient) {
 }
 
 function SafetyBadge({ ing }: { ing: Ingredient }) {
-  const c = ing.safety_rating === "sangat_aman" ? "text-green-400" : ing.safety_rating === "aman" ? "text-blue-400" : "text-amber-400";
+  const c = ing.safety_rating === "sangat_aman" ? "text-green-600" : ing.safety_rating === "aman" ? "text-blue-600" : "text-amber-600";
   return <span className={`text-xs font-semibold ${c}`}>{SAFETY_LABELS[ing.safety_rating]}</span>;
 }
 function EvidenceBadge({ ing }: { ing: Ingredient }) {
-  const c = ing.evidence_level === "kuat" ? "text-green-400" : ing.evidence_level === "sedang" ? "text-amber-400" : "text-muted-foreground";
+  const c = ing.evidence_level === "kuat" ? "text-green-600" : ing.evidence_level === "sedang" ? "text-amber-600" : "text-muted-foreground";
   return <span className={`text-xs font-semibold ${c}`}>{EVIDENCE_LABELS[ing.evidence_level]}</span>;
 }
 function IrritationBadge({ ing }: { ing: Ingredient }) {
   if (!ing.irritation_risk) return <span className="text-xs text-muted-foreground">—</span>;
-  const c = ing.irritation_risk === "rendah" ? "text-green-400" : ing.irritation_risk === "sedang" ? "text-amber-400" : "text-red-400";
+  const c = ing.irritation_risk === "rendah" ? "text-green-600" : ing.irritation_risk === "sedang" ? "text-amber-600" : "text-red-600";
   return <span className={`text-xs font-semibold ${c} capitalize`}>{ing.irritation_risk}</span>;
 }
 
@@ -155,8 +155,8 @@ function ConflictCheck({ a, b }: { a: Ingredient; b: Ingredient }) {
     return (
       <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-4">
         <div className="flex items-center gap-2 mb-2">
-          <XCircle className="w-4 h-4 text-red-400" />
-          <p className="text-sm font-semibold text-red-400">Konflik — Jangan Dipakai Bersamaan!</p>
+          <XCircle className="w-4 h-4 text-red-600" />
+          <p className="text-sm font-semibold text-red-600">Konflik — Jangan Dipakai Bersamaan!</p>
         </div>
         {conflictEntry && (
           <p className="text-xs text-muted-foreground leading-relaxed">{conflictEntry.reason}</p>
@@ -169,8 +169,8 @@ function ConflictCheck({ a, b }: { a: Ingredient; b: Ingredient }) {
     return (
       <div className="rounded-xl border border-green-500/30 bg-green-500/5 p-4">
         <div className="flex items-center gap-2 mb-1">
-          <CheckCircle className="w-4 h-4 text-green-400" />
-          <p className="text-sm font-semibold text-green-400">Kompatibel — Bagus Dipakai Bersama!</p>
+          <CheckCircle className="w-4 h-4 text-green-600" />
+          <p className="text-sm font-semibold text-green-600">Kompatibel — Bagus Dipakai Bersama!</p>
         </div>
         <p className="text-xs text-muted-foreground">{a.name} dan {b.name} bekerja sinergis.</p>
       </div>
@@ -180,7 +180,7 @@ function ConflictCheck({ a, b }: { a: Ingredient; b: Ingredient }) {
   return (
     <div className="rounded-xl border border-border/60 bg-card/50 p-4">
       <div className="flex items-center gap-2">
-        <AlertTriangle className="w-4 h-4 text-amber-400" />
+        <AlertTriangle className="w-4 h-4 text-amber-600" />
         <p className="text-sm font-medium text-muted-foreground">Tidak ada konflik yang terdokumentasi — aman dipakai bersama.</p>
       </div>
     </div>
@@ -219,20 +219,20 @@ function CompareTable({ a, b }: { a: Ingredient; b: Ingredient }) {
     {
       label: "Aman Hamil",
       getA: (i) => i.pregnancy_safe
-        ? <span className="text-xs text-rose-400 font-semibold">✓ Aman</span>
+        ? <span className="text-xs text-rose-600 font-semibold">✓ Aman</span>
         : <span className="text-xs text-muted-foreground">Hindari</span>,
       getB: (i) => i.pregnancy_safe
-        ? <span className="text-xs text-rose-400 font-semibold">✓ Aman</span>
+        ? <span className="text-xs text-rose-600 font-semibold">✓ Aman</span>
         : <span className="text-xs text-muted-foreground">Hindari</span>,
       winner: (a, b) => a.pregnancy_safe && !b.pregnancy_safe ? "a" : !a.pregnancy_safe && b.pregnancy_safe ? "b" : "tie",
     },
     {
       label: "Ramah Pemula",
       getA: (i) => i.beginner_friendly
-        ? <span className="text-xs text-amber-400 font-semibold">⭐ Ya</span>
+        ? <span className="text-xs text-amber-600 font-semibold">⭐ Ya</span>
         : <span className="text-xs text-muted-foreground">Advanced</span>,
       getB: (i) => i.beginner_friendly
-        ? <span className="text-xs text-amber-400 font-semibold">⭐ Ya</span>
+        ? <span className="text-xs text-amber-600 font-semibold">⭐ Ya</span>
         : <span className="text-xs text-muted-foreground">Advanced</span>,
       winner: (a, b) => (a.beginner_friendly ? 1 : 0) > (b.beginner_friendly ? 1 : 0) ? "a" : (b.beginner_friendly ? 1 : 0) > (a.beginner_friendly ? 1 : 0) ? "b" : "tie",
     },

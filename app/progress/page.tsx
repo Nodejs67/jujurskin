@@ -26,10 +26,10 @@ interface ProgressEntry {
 }
 
 const METRICS = [
-  { key: "kondisi_jerawat" as const, label: "Kondisi Jerawat", icon: Zap, color: "text-blue-400", desc: "10 = bebas jerawat" },
-  { key: "kelembapan" as const, label: "Kelembapan", icon: Droplets, color: "text-cyan-400", desc: "10 = sangat lembap" },
-  { key: "kecerahan" as const, label: "Kecerahan", icon: Sun, color: "text-amber-400", desc: "10 = sangat cerah & glowing" },
-  { key: "iritasi" as const, label: "Bebas Iritasi", icon: Heart, color: "text-green-400", desc: "10 = tidak ada iritasi" },
+  { key: "kondisi_jerawat" as const, label: "Kondisi Jerawat", icon: Zap, color: "text-blue-600", desc: "10 = bebas jerawat" },
+  { key: "kelembapan" as const, label: "Kelembapan", icon: Droplets, color: "text-cyan-600", desc: "10 = sangat lembap" },
+  { key: "kecerahan" as const, label: "Kecerahan", icon: Sun, color: "text-amber-600", desc: "10 = sangat cerah & glowing" },
+  { key: "iritasi" as const, label: "Bebas Iritasi", icon: Heart, color: "text-green-600", desc: "10 = tidak ada iritasi" },
 ];
 
 function ScoreSlider({ value, onChange, color, disabled }: { value: number; onChange: (v: number) => void; color: string; disabled?: boolean }) {
@@ -72,15 +72,15 @@ function TrendArrow({ entries, metricKey }: { entries: ProgressEntry[]; metricKe
   const diff = last - prev;
   if (diff === 0) return <span className="text-xs text-muted-foreground">→</span>;
   return diff > 0
-    ? <span className="text-xs text-green-400">↑ +{diff}</span>
-    : <span className="text-xs text-red-400">↓ {diff}</span>;
+    ? <span className="text-xs text-green-600">↑ +{diff}</span>
+    : <span className="text-xs text-red-600">↓ {diff}</span>;
 }
 
 const LINE_COLORS: Record<string, string> = {
-  kondisi_jerawat: "#60a5fa",
-  kelembapan: "#22d3ee",
-  kecerahan: "#fbbf24",
-  iritasi: "#4ade80",
+  kondisi_jerawat: "#2563eb", // blue-600 (kontras di latar terang)
+  kelembapan: "#0891b2",      // cyan-600
+  kecerahan: "#d97706",       // amber-600
+  iritasi: "#16a34a",         // green-600
 };
 
 function ProgressLineChart({ entries }: { entries: ProgressEntry[] }) {
@@ -103,9 +103,9 @@ function ProgressLineChart({ entries }: { entries: ProgressEntry[] }) {
         <g key={v}>
           <line
             x1={PL} y1={yOf(v)} x2={W - PR} y2={yOf(v)}
-            stroke="rgba(255,255,255,0.07)" strokeWidth="1"
+            stroke="rgba(0,0,0,0.09)" strokeWidth="1"
           />
-          <text x={PL - 4} y={yOf(v) + 3.5} textAnchor="end" fontSize="8" fill="rgba(255,255,255,0.22)">
+          <text x={PL - 4} y={yOf(v) + 3.5} textAnchor="end" fontSize="8" fill="rgba(0,0,0,0.42)">
             {v}
           </text>
         </g>
@@ -118,7 +118,7 @@ function ProgressLineChart({ entries }: { entries: ProgressEntry[] }) {
           y={H - 5}
           textAnchor="middle"
           fontSize="8"
-          fill="rgba(255,255,255,0.28)"
+          fill="rgba(0,0,0,0.5)"
         >
           W{entry.week}
         </text>
@@ -322,7 +322,7 @@ export default function ProgressPage() {
               <p className="text-3xl font-bold text-primary mb-0.5">{overallScore}</p>
               <p className="text-xs text-muted-foreground">Skor Minggu Ini <span className="text-xs">(dari 100)</span></p>
               {entries.length > 1 && (
-                <p className={`text-xs font-medium mt-1 ${improvement >= 0 ? "text-green-400" : "text-red-400"}`}>
+                <p className={`text-xs font-medium mt-1 ${improvement >= 0 ? "text-green-600" : "text-red-600"}`}>
                   {improvement >= 0 ? `↑ Naik ${improvement} poin` : `↓ Turun ${Math.abs(improvement)} poin`} dari awal
                 </p>
               )}
@@ -608,7 +608,7 @@ export default function ProgressPage() {
                             </button>
                             <button
                               onClick={() => handleDelete(entry.id)}
-                              className="flex items-center gap-1.5 text-xs text-red-400 hover:underline"
+                              className="flex items-center gap-1.5 text-xs text-red-600 hover:underline"
                             >
                               <Trash2 className="w-3 h-3" /> Hapus
                             </button>
