@@ -275,9 +275,9 @@ export default function Home() {
               { num: 50, suffix: "+", label: "Produk terkurasi" },
               { num: 7, suffix: " tanya", label: "Quiz personal mendalam" },
               { num: 100, suffix: "%", label: "Gratis selamanya" },
-            ].map((stat) => (
+            ].map((stat, i) => (
               <div key={stat.label} className="relative text-center p-4 rounded-xl border border-border/50 bg-card/50 overflow-hidden">
-                <BorderBeam duration={12} delay={Math.random() * 5} />
+                <BorderBeam duration={12} delay={i * 1.5} />
                 <p className="text-2xl font-bold text-primary mb-0.5">
                   <NumberTicker value={stat.num} />{stat.suffix}
                 </p>
@@ -1106,9 +1106,9 @@ export default function Home() {
                 stars: 5, emoji: "✨",
                 badge: "Mulai dari Rp 120rb",
               },
-            ].map((t) => (
+            ].map((t, i) => (
               <motion.div key={t.name} variants={fadeUp} className="relative rounded-2xl border border-border bg-card p-6 overflow-hidden">
-                <BorderBeam duration={8} delay={Math.random() * 4} />
+                <BorderBeam duration={8} delay={i * 1.3} />
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center text-lg">{t.emoji}</div>

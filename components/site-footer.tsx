@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Sparkles } from "lucide-react";
 
 export function SiteFooter() {
@@ -7,12 +8,12 @@ export function SiteFooter() {
     <footer className="border-t border-border/50 py-8 px-6 mt-auto">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-5">
-          <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="w-5 h-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
               <Sparkles className="w-2.5 h-2.5 text-primary" />
             </div>
             <span className="text-xs font-medium">JujurSkin</span>
-          </a>
+          </Link>
 
           <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground/60">
             {[

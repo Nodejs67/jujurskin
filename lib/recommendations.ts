@@ -534,7 +534,7 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   }
 
   // ── SCORE
-  let uvScore = recs.some(r => r.category === "Sun Protection") ? (neverUsesSunscreen ? 45 : 78) : 20;
+  const uvScore = recs.some(r => r.category === "Sun Protection") ? (neverUsesSunscreen ? 45 : 78) : 20;
   let barrierScore = recs.some(r => r.category === "Cleansing") ? 72 : 50;
   if (recs.some(r => r.category === "Moisturizing")) barrierScore += 10;
   if (isSensitive) barrierScore -= 5;
