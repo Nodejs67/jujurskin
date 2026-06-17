@@ -111,6 +111,7 @@ export interface AnalysisResult {
   recs: Recommendation[];
   skips: SkipItem[];
   score: SkinScore;
+  score_current?: SkinScore;
   budget_used: number;
   budget_left: number;
   summary: string;
@@ -641,6 +642,24 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
 
   const total = Math.round((uvScore + barrierScore + hydrationScore + acneScore) / 4);
 
+  // ── SKOR SEKARANG (estimasi kondisi saat ini, SEBELUM mengikuti rekomendasi)
+  const clamp = (n: number) => Math.max(10, Math.min(100, n));
+  let uvCurrent = neverUsesSunscreen ? 30 : input.penggunaan_sunscreen === "selalu" ? 70 : input.penggunaan_sunscreen === "kadang" ? 52 : 42;
+  if (highUV && !neverUsesSunscreen) uvCurrent -= 5;
+  let barrierCurrent = 62;
+  if (isSensitive) barrierCurrent -= 12;
+  if (isStressed || poorSleep) barrierCurrent -= 10;
+  if (isDry) barrierCurrent -= 6;
+  if (smokes) barrierCurrent -= 4;
+  let hydrationCurrent = isDry ? 45 : isOily ? 58 : 66;
+  if (dryEnvironment) hydrationCurrent -= 10;
+  if (lowWater) hydrationCurrent -= 5;
+  let acneCurrent = has("jerawat") ? (severeAcne ? 38 : 52) : 72;
+  if (isHormonal || irregularCycle || diagnosedHormonal) acneCurrent -= 5;
+  if (has("bekas_jerawat") || hasPIH) acneCurrent -= 3;
+  uvCurrent = clamp(uvCurrent); barrierCurrent = clamp(barrierCurrent); hydrationCurrent = clamp(hydrationCurrent); acneCurrent = clamp(acneCurrent);
+  const totalCurrent = Math.round((uvCurrent + barrierCurrent + hydrationCurrent + acneCurrent) / 4);
+
   const mainMasalah = input.masalah.length > 0
     ? `masalah utamamu (${input.masalah.slice(0, 2).map(m => m.replace("_", " ")).join(" & ")})`
     : "kondisi kulitmu";
@@ -782,6 +801,13 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
       hydration: Math.min(100, hydrationScore),
       uv_protection: Math.min(100, uvScore),
       acne_control: Math.min(100, acneScore),
+    },
+    score_current: {
+      total: totalCurrent,
+      barrier: barrierCurrent,
+      hydration: hydrationCurrent,
+      uv_protection: uvCurrent,
+      acne_control: acneCurrent,
     },
     budget_used: budgetUsed,
     budget_left: Math.max(0, input.budget - budgetUsed),

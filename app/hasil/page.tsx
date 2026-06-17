@@ -181,33 +181,55 @@ function HasilContent() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
           className="rounded-2xl border border-border bg-card p-6"
         >
-          <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center justify-between mb-5 gap-3">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wide mb-0.5">Healthy Skin Score</p>
-              <p className="text-xs text-muted-foreground">Potensi setelah ikuti rekomendasi ini</p>
+              <p className="text-xs text-muted-foreground">{h.score_current ? "Kondisi sekarang → potensi jika konsisten" : "Potensi setelah ikuti rekomendasi ini"}</p>
             </div>
-            <div className="text-right">
-              <span className="text-4xl font-bold text-foreground">{h.score.total}</span>
-              <span className="text-lg text-muted-foreground">/100</span>
+            <div className="text-right shrink-0">
+              {h.score_current ? (
+                <div className="flex items-end gap-1.5">
+                  <div className="text-center">
+                    <span className="text-2xl font-bold text-foreground">{h.score_current.total}</span>
+                    <p className="text-[10px] text-muted-foreground -mt-0.5">sekarang</p>
+                  </div>
+                  <span className="text-muted-foreground text-lg pb-3">→</span>
+                  <div className="text-center">
+                    <span className="text-3xl font-bold text-primary">{h.score.total}</span>
+                    <p className="text-[10px] text-primary -mt-0.5">potensi</p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <span className="text-4xl font-bold text-foreground">{h.score.total}</span>
+                  <span className="text-lg text-muted-foreground">/100</span>
+                </>
+              )}
             </div>
           </div>
           <div className="space-y-3">
             {(["uv_protection", "barrier", "hydration", "acne_control"] as const).map((key) => {
-              const score = h.score[key];
+              const pot = h.score[key];
+              const curV = h.score_current ? h.score_current[key] : pot;
               return (
                 <div key={key}>
                   <div className="flex justify-between mb-1">
                     <span className="text-xs text-muted-foreground">{scoreLabels[key]}</span>
-                    <span className={`text-xs font-semibold ${scoreTextColors[key]}`}>{score}</span>
+                    <span className={`text-xs font-semibold ${scoreTextColors[key]}`}>{h.score_current ? `${curV} → ${pot}` : pot}</span>
                   </div>
-                  <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-                    <motion.div className={`h-full ${scoreColors[key]} rounded-full`}
-                      initial={{ width: 0 }} animate={{ width: `${score}%` }} transition={{ duration: 1, delay: 0.3 }} />
+                  <div className="h-1.5 bg-secondary rounded-full overflow-hidden relative">
+                    <motion.div className={`h-full ${scoreColors[key]} opacity-30 rounded-full absolute inset-y-0 left-0`}
+                      initial={{ width: 0 }} animate={{ width: `${pot}%` }} transition={{ duration: 1, delay: 0.3 }} />
+                    <motion.div className={`h-full ${scoreColors[key]} rounded-full absolute inset-y-0 left-0`}
+                      initial={{ width: 0 }} animate={{ width: `${curV}%` }} transition={{ duration: 1, delay: 0.5 }} />
                   </div>
                 </div>
               );
             })}
           </div>
+          {h.score_current && (
+            <p className="text-[11px] text-muted-foreground mt-3">Bar terang = potensi; bar pekat = kondisi sekarang. Konsistensi 8–12 minggu mendekatkanmu ke potensi.</p>
+          )}
         </motion.div>
 
         {/* Summary */}
