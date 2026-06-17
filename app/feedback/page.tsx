@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowLeft, Sparkles, CheckCircle, Star, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -181,7 +181,7 @@ export default function FeedbackPage() {
           </Button>
 
           {form.pengguna_aktif === null && (
-            <p className="text-xs text-center text-muted-foreground/80">Isi "Pengguna skincare aktif?" untuk lanjut</p>
+            <p className="text-xs text-center text-muted-foreground/80">Isi “Pengguna skincare aktif?” untuk lanjut</p>
           )}
 
           <p className="text-xs text-center text-muted-foreground/80 pb-6">

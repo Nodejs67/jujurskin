@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, TrendingUp, Plus, Calendar, CheckCircle,
+  ArrowLeft, TrendingUp, Plus, CheckCircle,
   Sparkles, ChevronDown, ChevronUp, Droplets, Sun,
   Zap, Heart, Edit3, Trash2, BarChart2, Info, Camera, X, ImageIcon
 } from "lucide-react";

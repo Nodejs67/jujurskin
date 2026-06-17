@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   ArrowLeft, GitCompare, Search, CheckCircle, XCircle,
-  AlertTriangle, Baby, Shield, Star, Zap, Sparkles, ArrowRight,
+  AlertTriangle, Sparkles, ArrowRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

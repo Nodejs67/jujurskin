@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Bell, BellOff, Check, Clock, Sun, Moon } from "lucide-react";
+import { Bell, Check, Clock, Sun, Moon } from "lucide-react";
 
 type ReminderSettings = {
   am_enabled: boolean;

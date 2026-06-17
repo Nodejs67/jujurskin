@@ -438,7 +438,7 @@ export default function CekKonflikPage() {
                   <p className="text-2xl mb-2">🔍</p>
                   <p className="text-sm font-medium text-foreground mb-1">Ingredient tidak dikenali</p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    Coba ketik nama ingredient umum seperti "Retinol", "Niacinamide", "AHA", "BHA", "Vitamin C", "Benzoyl Peroxide", dsb.
+                    Coba ketik nama ingredient umum seperti “Retinol”, “Niacinamide”, “AHA”, “BHA”, “Vitamin C”, “Benzoyl Peroxide”, dsb.
                   </p>
                   <div className="mt-4 flex flex-wrap justify-center gap-2">
                     {["Retinol", "Niacinamide", "BHA", "Vitamin C", "Ceramide"].map((s) => (
@@ -467,7 +467,7 @@ export default function CekKonflikPage() {
           >
             <p className="text-xs text-primary font-semibold mb-2">💡 Cara pakai:</p>
             <ul className="text-xs text-muted-foreground space-y-1.5">
-              <li>• Ketik nama ingredient (misal: "Retinol" atau "AHA") di tiap kotak</li>
+              <li>• Ketik nama ingredient (misal: “Retinol” atau “AHA”) di tiap kotak</li>
               <li>• Atau klik tombol preset untuk langsung cek kombinasi populer</li>
               <li>• Database kami mencakup 29+ ingredient skincare umum Indonesia</li>
             </ul>

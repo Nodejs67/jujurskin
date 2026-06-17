@@ -438,7 +438,7 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <p className="text-xs text-primary uppercase tracking-widest mb-3">Healthy Skin Score</p>
             <h2 className="text-3xl md:text-4xl font-bold mb-3">Satu angka untuk kesehatan kulitmu</h2>
-            <p className="text-muted-foreground">Bukan sekedar "kulitmu bagus/jelek" — tapi breakdown detail yang bisa kamu perbaiki.</p>
+            <p className="text-muted-foreground">Bukan sekedar “kulitmu bagus/jelek” — tapi breakdown detail yang bisa kamu perbaiki.</p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6 items-center">
@@ -1123,7 +1123,7 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4">"{t.text}"</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">“{t.text}”</p>
                 <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
                   <CheckCircle className="w-3 h-3" /> {t.badge}
                 </span>

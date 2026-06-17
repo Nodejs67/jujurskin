@@ -3,13 +3,12 @@
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowLeft, Sparkles, DollarSign, ShoppingBag, CheckCircle, TrendingDown } from "lucide-react";
+import { ArrowLeft, Sparkles, DollarSign, CheckCircle, TrendingDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { PRODUCTS } from "@/lib/products";
 
-type Category = "sunscreen" | "cleanser" | "moisturizer" | "treatment" | "serum";
 
 const STARTER_KITS: {
   name: string;
@@ -180,7 +179,7 @@ export default function KalkulatorPage() {
 
               {affordableKits.length > 0 ? (
                 <div className="space-y-3">
-                  {affordableKits.map((k, i) => {
+                  {affordableKits.map((k) => {
                     const total = k.items.reduce((acc, item) => acc + item.price, 0);
                     const isSelected = selectedKit === STARTER_KITS.indexOf(k);
                     const isAffordable = total <= budget;

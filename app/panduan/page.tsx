@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SiteFooter } from "@/components/site-footer";
 import {
-  ArrowLeft, Sparkles, BookOpen, CheckCircle, XCircle, AlertTriangle,
-  Sun, Droplets, Shield, ArrowRight, ChevronDown, ChevronUp
+  ArrowLeft, Sparkles, BookOpen, CheckCircle, AlertTriangle,
+  Sun, Droplets, Shield, ChevronDown, ChevronUp
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
