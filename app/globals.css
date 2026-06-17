@@ -49,38 +49,43 @@
 }
 
 :root {
-  --background: oklch(0.13 0.03 155);
-  --foreground: oklch(0.94 0.01 80);
-  --card: oklch(0.16 0.03 155);
-  --card-foreground: oklch(0.94 0.01 80);
-  --popover: oklch(0.16 0.03 155);
-  --popover-foreground: oklch(0.94 0.01 80);
-  --primary: oklch(0.75 0.18 145);
-  --primary-foreground: oklch(0.13 0.03 155);
-  --secondary: oklch(0.22 0.04 155);
-  --secondary-foreground: oklch(0.75 0.07 145);
-  --muted: oklch(0.19 0.03 155);
-  --muted-foreground: oklch(0.72 0.06 150);
-  --accent: oklch(0.76 0.12 75);
-  --accent-foreground: oklch(0.13 0.03 155);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.25 0.04 155);
-  --input: oklch(0.22 0.04 155);
-  --ring: oklch(0.75 0.18 145);
-  --chart-1: oklch(0.75 0.18 145);
-  --chart-2: oklch(0.76 0.12 75);
-  --chart-3: oklch(0.60 0.07 145);
-  --chart-4: oklch(0.40 0.05 155);
-  --chart-5: oklch(0.25 0.04 155);
+  /* ── LIGHT THEME (evidence-based) ──────────────────────────────
+     Latar terang ber-tint hijau lembut (bukan putih murni) → riset
+     Frontiers 2025: lebih sedikit kelelahan mata & glare dari putih.
+     Teks gelap hijau-keabuan (bukan hitam) → positive polarity, baca
+     lebih tajam. Sage green = SATU aksen, emas = sentuhan. */
+  --background: oklch(0.972 0.012 150);   /* off-white hangat ber-tint hijau */
+  --foreground: oklch(0.27 0.03 155);     /* deep green-charcoal, bukan hitam */
+  --card: oklch(0.995 0.004 150);         /* hampir putih → kartu "mengambang" lembut */
+  --card-foreground: oklch(0.27 0.03 155);
+  --popover: oklch(0.995 0.004 150);
+  --popover-foreground: oklch(0.27 0.03 155);
+  --primary: oklch(0.52 0.13 150);        /* sage green pekat → tombol, teks putih lulus kontras */
+  --primary-foreground: oklch(0.99 0.01 150);
+  --secondary: oklch(0.93 0.02 150);
+  --secondary-foreground: oklch(0.40 0.08 150);
+  --muted: oklch(0.95 0.015 150);
+  --muted-foreground: oklch(0.47 0.04 155); /* cukup gelap utk lulus WCAG di latar terang */
+  --accent: oklch(0.70 0.11 75);          /* emas */
+  --accent-foreground: oklch(0.28 0.04 75);
+  --destructive: oklch(0.55 0.22 27);
+  --border: oklch(0.90 0.015 150);
+  --input: oklch(0.92 0.015 150);
+  --ring: oklch(0.52 0.13 150);
+  --chart-1: oklch(0.52 0.13 150);
+  --chart-2: oklch(0.68 0.12 75);
+  --chart-3: oklch(0.62 0.11 150);
+  --chart-4: oklch(0.75 0.07 150);
+  --chart-5: oklch(0.85 0.04 150);
   --radius: 0.75rem;
-  --sidebar: oklch(0.16 0.03 155);
-  --sidebar-foreground: oklch(0.94 0.01 80);
-  --sidebar-primary: oklch(0.75 0.18 145);
-  --sidebar-primary-foreground: oklch(0.13 0.03 155);
-  --sidebar-accent: oklch(0.22 0.04 155);
-  --sidebar-accent-foreground: oklch(0.75 0.07 145);
-  --sidebar-border: oklch(0.25 0.04 155);
-  --sidebar-ring: oklch(0.75 0.18 145);
+  --sidebar: oklch(0.995 0.004 150);
+  --sidebar-foreground: oklch(0.27 0.03 155);
+  --sidebar-primary: oklch(0.52 0.13 150);
+  --sidebar-primary-foreground: oklch(0.99 0.01 150);
+  --sidebar-accent: oklch(0.93 0.02 150);
+  --sidebar-accent-foreground: oklch(0.40 0.08 150);
+  --sidebar-border: oklch(0.90 0.015 150);
+  --sidebar-ring: oklch(0.52 0.13 150);
 }
 
 .dark {
@@ -133,37 +138,37 @@
 
 @layer utilities {
   .gradient-text {
-    background: linear-gradient(135deg, #f8f3e8 0%, #d4a853 50%, #86efac 100%);
+    background: linear-gradient(135deg, #1f7a4d 0%, #c79338 50%, #2e9e63 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .gold-text {
-    background: linear-gradient(135deg, #d4a853 0%, #f0c060 100%);
+    background: linear-gradient(135deg, #a8761f 0%, #c79338 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .glow-card {
-    box-shadow: 0 0 0 1px oklch(0.25 0.04 155), 0 20px 60px -10px oklch(0 0 0 / 0.5);
+    box-shadow: 0 0 0 1px oklch(0.90 0.015 150), 0 18px 50px -12px oklch(0.45 0.06 155 / 0.18);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
   .glow-card:hover {
-    box-shadow: 0 0 0 1px oklch(0.40 0.10 145), 0 20px 60px -10px oklch(0 0 0 / 0.6), 0 0 40px -10px oklch(0.75 0.18 145 / 0.15);
+    box-shadow: 0 0 0 1px oklch(0.52 0.13 150 / 0.4), 0 24px 60px -12px oklch(0.45 0.06 155 / 0.22), 0 0 40px -10px oklch(0.52 0.13 150 / 0.12);
     transform: translateY(-4px);
   }
   .glass-card {
-    background: oklch(0.18 0.03 155 / 0.7);
+    background: oklch(0.995 0.004 150 / 0.72);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid oklch(0.35 0.05 155 / 0.5);
+    border: 1px solid oklch(0.90 0.015 150 / 0.8);
   }
   .shimmer {
     background: linear-gradient(
       90deg,
-      oklch(0.22 0.03 155) 0%,
-      oklch(0.28 0.04 155) 50%,
-      oklch(0.22 0.03 155) 100%
+      oklch(0.95 0.012 150) 0%,
+      oklch(0.90 0.02 150) 50%,
+      oklch(0.95 0.012 150) 100%
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
@@ -242,18 +247,18 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: oklch(0.16 0.03 155);
+  background: oklch(0.95 0.012 150);
 }
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.30 0.06 155);
+  background: oklch(0.82 0.04 150);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.40 0.10 145);
+  background: oklch(0.65 0.10 150);
 }
 
 /* Text selection */
 ::selection {
-  background: oklch(0.75 0.18 145 / 0.25);
-  color: oklch(0.94 0.01 80);
+  background: oklch(0.52 0.13 150 / 0.18);
+  color: oklch(0.27 0.03 155);
 }
