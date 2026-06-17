@@ -117,6 +117,7 @@ const NAV_LINKS = [
   { href: "/tidak-perlu", label: "Tidak Perlu" },
   { href: "/simulasi", label: "Simulasi" },
   { href: "/cek-klaim", label: "Cek Klaim" },
+  { href: "/mitos-fakta", label: "Mitos/Fakta" },
   { href: "/rutinitas", label: "Rutinitas" },
   { href: "/progress", label: "Progress" },
 ];
