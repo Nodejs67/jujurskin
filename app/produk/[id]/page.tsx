@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   ArrowLeft, Star, CheckCircle, XCircle, FlaskConical,
-  Users, Send, MapPin, Sparkles, ShieldCheck,
+  Users, Send, MapPin, Sparkles, ShieldCheck, ExternalLink,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -303,18 +303,31 @@ export default function ProdukDetailPage({
         {/* Where to buy */}
         <motion.div variants={fadeUp} initial="hidden" animate="show">
           <h2 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-primary" /> Beli Di
+            <MapPin className="w-4 h-4 text-primary" /> Cari & Bandingkan Harga
           </h2>
-          <div className="flex flex-wrap gap-2">
-            {product.where_to_buy.map((store) => (
-              <span
-                key={store}
-                className="px-3 py-1 rounded-lg border border-border/50 text-xs text-muted-foreground"
-              >
-                {store}
-              </span>
-            ))}
+          <div className="grid grid-cols-2 gap-2 mb-3">
+            <a
+              href={`https://shopee.co.id/search?keyword=${encodeURIComponent(`${product.brand} ${product.name}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-orange-400/30 bg-orange-400/10 text-sm font-medium text-orange-700 hover:bg-orange-400/20 transition-colors"
+            >
+              Cari di Shopee <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href={`https://www.tokopedia.com/search?st=product&q=${encodeURIComponent(`${product.brand} ${product.name}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-green-400/30 bg-green-400/10 text-sm font-medium text-green-700 hover:bg-green-400/20 transition-colors"
+            >
+              Cari di Tokopedia <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
+          {product.where_to_buy.length > 0 && (
+            <p className="text-xs text-muted-foreground">
+              Umumnya tersedia di: {product.where_to_buy.join(", ")}. Harga bisa beda tiap toko — bandingkan dulu sebelum beli.
+            </p>
+          )}
         </motion.div>
 
         {/* Reviews */}
