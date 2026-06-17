@@ -275,7 +275,7 @@ export default function CekKonflikPage() {
                 />
               </div>
               {inputs.length > 2 && (
-                <button onClick={() => removeInput(i)} className="p-3 rounded-xl border border-border bg-card text-muted-foreground/60 hover:text-destructive hover:border-destructive/30 transition-colors">
+                <button onClick={() => removeInput(i)} className="p-3 rounded-xl border border-border bg-card text-muted-foreground/80 hover:text-destructive hover:border-destructive/30 transition-colors">
                   <Trash2 className="w-4 h-4" />
                 </button>
               )}
@@ -362,7 +362,7 @@ export default function CekKonflikPage() {
                                 <span className="text-sm font-semibold text-foreground">
                                   {c.ingredient1.name}
                                 </span>
-                                <span className="text-muted-foreground/50 text-xs">+</span>
+                                <span className="text-muted-foreground/75 text-xs">+</span>
                                 <span className="text-sm font-semibold text-foreground">
                                   {c.ingredient2.name}
                                 </span>

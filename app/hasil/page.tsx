@@ -267,11 +267,11 @@ function HasilContent() {
                                   )}
                                 </div>
                                 <p className="text-[11px] text-muted-foreground">{prod.brand}</p>
-                                <p className="text-[11px] text-muted-foreground/60 line-clamp-1 mt-0.5">{prod.tagline}</p>
+                                <p className="text-[11px] text-muted-foreground/80 line-clamp-1 mt-0.5">{prod.tagline}</p>
                               </div>
                               <div className="text-right shrink-0">
                                 <p className="text-xs font-bold text-accent">Rp {prod.price_min.toLocaleString("id")}</p>
-                                <p className="text-[10px] text-muted-foreground/60">– {prod.price_max.toLocaleString("id")}</p>
+                                <p className="text-[10px] text-muted-foreground/80">– {prod.price_max.toLocaleString("id")}</p>
                               </div>
                             </div>
                           ))}
@@ -457,7 +457,7 @@ function HasilContent() {
           <Button variant="outline" onClick={() => router.push("/feedback")} className="w-full border-border gap-2">
             <MessageSquare className="w-4 h-4" /> Beri Feedback
           </Button>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground/60 justify-center pt-1">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground/80 justify-center pt-1">
             <CheckCircle className="w-3.5 h-3.5 text-primary/40" />
             Tidak ada iklan · Tidak terafiliasi brand apapun
           </div>

@@ -143,7 +143,7 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
           {/* Pemula */}
           <div className={`rounded-xl border p-3 text-center ${ing.beginner_friendly ? "bg-amber-400/5 border-amber-400/20" : "bg-muted/30 border-border"}`}>
             <Star className={`w-4 h-4 mx-auto mb-1 ${ing.beginner_friendly ? "text-amber-400" : "text-muted-foreground/40"}`} />
-            <p className={`text-[10px] font-semibold leading-tight ${ing.beginner_friendly ? "text-amber-400" : "text-muted-foreground/60"}`}>
+            <p className={`text-[10px] font-semibold leading-tight ${ing.beginner_friendly ? "text-amber-400" : "text-muted-foreground/80"}`}>
               {ing.beginner_friendly ? "Friendly" : "Advanced"}
             </p>
             <p className="text-[9px] text-muted-foreground mt-0.5">Pemula</p>
@@ -324,7 +324,7 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-muted-foreground/50 mt-3">
+            <p className="text-xs text-muted-foreground/75 mt-3">
               * Harga estimasi, bisa berbeda di tiap platform
             </p>
           </motion.div>
@@ -382,7 +382,7 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
                   <p className="text-xs font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {rel.name}
                   </p>
-                  <p className="text-xs text-muted-foreground/60 mt-0.5 line-clamp-1">{rel.tagline}</p>
+                  <p className="text-xs text-muted-foreground/80 mt-0.5 line-clamp-1">{rel.tagline}</p>
                 </button>
               ))}
             </div>

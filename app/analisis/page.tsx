@@ -197,20 +197,20 @@ export default function AnalisisPage() {
                   <div>
                     <label className="text-sm font-medium text-foreground mb-1.5 block">Nama / Inisial <span className="text-muted-foreground font-normal">(opsional)</span></label>
                     <input value={form.nama} onChange={e => update("nama", e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary"
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/75 focus:outline-none focus:ring-1 focus:ring-primary"
                       placeholder="Nama atau inisial kamu" />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-sm font-medium text-foreground mb-1.5 block">Usia <span className="text-destructive">*</span></label>
                       <input type="number" value={form.usia} onChange={e => update("usia", e.target.value)} min={10} max={80}
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary"
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/75 focus:outline-none focus:ring-1 focus:ring-primary"
                         placeholder="Umur kamu" />
                     </div>
                     <div>
                       <label className="text-sm font-medium text-foreground mb-1.5 block">Kota <span className="text-destructive">*</span></label>
                       <input value={form.kota} onChange={e => update("kota", e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary"
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/75 focus:outline-none focus:ring-1 focus:ring-primary"
                         placeholder="Kota tempat tinggal" />
                     </div>
                   </div>
@@ -461,7 +461,7 @@ export default function AnalisisPage() {
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Ada reaksi/alergi produk tertentu? <span className="text-muted-foreground font-normal">(opsional)</span></label>
                   <input value={form.reaksi_produk} onChange={e => update("reaksi_produk", e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/75 focus:outline-none focus:ring-1 focus:ring-primary"
                     placeholder="Contoh: iritasi dari BHA, alergi fragrance..." />
                 </div>
               </motion.div>
@@ -502,7 +502,7 @@ export default function AnalisisPage() {
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Produk skincare saat ini <span className="text-muted-foreground font-normal">(opsional)</span></label>
                   <textarea value={form.produk_existing} onChange={e => update("produk_existing", e.target.value)}
                     rows={4}
-                    className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/75 focus:outline-none focus:ring-1 focus:ring-primary resize-none"
                     placeholder="Contoh: Cetaphil cleanser, toner brightening X, moisturizer Y, sunscreen Z..." />
                   <p className="text-xs text-muted-foreground mt-2">Sebutkan nama produk atau kandungan aktif yang kamu tahu.</p>
                 </div>

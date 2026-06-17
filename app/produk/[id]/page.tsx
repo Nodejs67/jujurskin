@@ -157,20 +157,20 @@ export default function ProdukDetailPage({
 
             <div className="mt-4 pt-4 border-t border-border/30 grid grid-cols-3 gap-3">
               <div className="text-center">
-                <p className="text-xs text-muted-foreground/60 mb-1">Harga</p>
+                <p className="text-xs text-muted-foreground/80 mb-1">Harga</p>
                 <p className="text-sm font-semibold text-foreground">
                   Rp{Math.round(product.price_min / 1000)}k–{Math.round(product.price_max / 1000)}k
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-muted-foreground/60 mb-1">Rating</p>
+                <p className="text-xs text-muted-foreground/80 mb-1">Rating</p>
                 <p className="text-sm font-semibold text-primary flex items-center justify-center gap-1">
                   <Star className="w-3 h-3 fill-primary" />
                   {communityAvg}
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-muted-foreground/60 mb-1">BPOM</p>
+                <p className="text-xs text-muted-foreground/80 mb-1">BPOM</p>
                 <p
                   className={`text-sm font-semibold flex items-center justify-center gap-1 ${
                     product.bpom_registered ? "text-green-400" : "text-yellow-400"

@@ -12,7 +12,7 @@ interface ShimmerButtonProps {
 export function ShimmerButton({
   children,
   className,
-  background = "oklch(0.55 0.18 145)",
+  background = "oklch(0.50 0.17 145)",
   onClick,
   ...props
 }: ShimmerButtonProps) {

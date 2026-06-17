@@ -68,7 +68,7 @@ function IngredientCard({ ingredient, onClick }: { ingredient: Ingredient; onCli
               {ingredient.name}
             </h3>
             {ingredient.aliases.length > 0 && (
-              <p className="text-xs text-muted-foreground/60">{ingredient.aliases[0]}</p>
+              <p className="text-xs text-muted-foreground/80">{ingredient.aliases[0]}</p>
             )}
           </div>
         </div>
@@ -219,7 +219,7 @@ export default function EdukasiPage() {
         {/* Search */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-5">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/75" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -231,7 +231,7 @@ export default function EdukasiPage() {
 
         {/* Smart Filters */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="flex flex-wrap gap-2 mb-3">
-          <span className="text-xs text-muted-foreground/60 self-center mr-1">Filter cepat:</span>
+          <span className="text-xs text-muted-foreground/80 self-center mr-1">Filter cepat:</span>
           {SMART_FILTERS.map((f) => {
             const isActive = smartFilters.includes(f.id);
             return (
@@ -247,7 +247,7 @@ export default function EdukasiPage() {
             );
           })}
           {smartFilters.length > 0 && (
-            <button onClick={() => setSmartFilters([])} className="text-xs text-muted-foreground/60 hover:text-foreground underline">
+            <button onClick={() => setSmartFilters([])} className="text-xs text-muted-foreground/80 hover:text-foreground underline">
               Reset
             </button>
           )}

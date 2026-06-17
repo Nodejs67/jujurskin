@@ -181,7 +181,7 @@ export default function FeedbackPage() {
           </Button>
 
           {form.pengguna_aktif === null && (
-            <p className="text-xs text-center text-muted-foreground/60">Isi "Pengguna skincare aktif?" untuk lanjut</p>
+            <p className="text-xs text-center text-muted-foreground/80">Isi "Pengguna skincare aktif?" untuk lanjut</p>
           )}
 
           <p className="text-xs text-center text-muted-foreground/40 pb-6">

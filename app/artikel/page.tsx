@@ -100,7 +100,7 @@ export default function ArtikelPage() {
                     {article.excerpt}
                   </p>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground/60">
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground/80">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {article.read_time} menit baca

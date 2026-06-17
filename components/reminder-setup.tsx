@@ -190,7 +190,7 @@ export function ReminderSetup() {
         {saved ? "✓ Tersimpan!" : "Simpan Pengingat"}
       </button>
 
-      <p className="text-xs text-muted-foreground/60 text-center">
+      <p className="text-xs text-muted-foreground/80 text-center">
         Notifikasi hanya muncul saat browser terbuka. Untuk pengingat background, tambah JujurSkin ke home screen.
       </p>
     </div>

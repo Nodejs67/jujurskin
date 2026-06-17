@@ -209,7 +209,7 @@ export default function KalkulatorPage() {
                           </div>
                           <div className="text-right shrink-0">
                             <p className="text-sm font-bold text-accent">{formatRp(total)}</p>
-                            <p className="text-xs text-muted-foreground/60">{k.items.length} produk</p>
+                            <p className="text-xs text-muted-foreground/80">{k.items.length} produk</p>
                           </div>
                         </div>
 

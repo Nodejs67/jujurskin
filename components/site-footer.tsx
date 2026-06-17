@@ -15,7 +15,7 @@ export function SiteFooter() {
             <span className="text-xs font-medium">JujurSkin</span>
           </Link>
 
-          <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground/60">
+          <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground/80">
             {[
               { href: "/analisis", label: "Analisis Kulit" },
               { href: "/panduan", label: "Panduan" },

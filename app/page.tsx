@@ -200,7 +200,7 @@ export default function Home() {
             <span className="text-foreground font-medium">jujur bilang apa yang tidak kamu butuhkan.</span>{" "}
             Rekomendasi berbasis kondisi kulit & budget — bukan iklan.
           </motion.p>
-          <motion.p variants={fadeUp} className="text-sm text-muted-foreground/60 mb-10">
+          <motion.p variants={fadeUp} className="text-sm text-muted-foreground/80 mb-10">
             Untuk pria & wanita · Seluruh Indonesia · 100% Gratis
           </motion.p>
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
@@ -261,7 +261,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60">
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/80">
                 <CheckCircle className="w-3 h-3 text-primary/50" />
                 Analisis selesai dalam 45 detik · Tidak perlu daftar
               </div>
@@ -281,7 +281,7 @@ export default function Home() {
                 <p className="text-2xl font-bold text-primary mb-0.5">
                   <NumberTicker value={stat.num} />{stat.suffix}
                 </p>
-                <p className="text-xs text-muted-foreground/70">{stat.label}</p>
+                <p className="text-xs text-muted-foreground/85">{stat.label}</p>
               </div>
             ))}
           </motion.div>
@@ -528,7 +528,7 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-muted-foreground mb-2">{stat.label}</p>
                 <p className={`text-2xl font-bold ${stat.color} mb-1`}>{stat.value}</p>
-                <p className="text-xs text-muted-foreground/60">{stat.sub}</p>
+                <p className="text-xs text-muted-foreground/80">{stat.sub}</p>
               </motion.div>
             ))}
           </div>
@@ -677,7 +677,7 @@ export default function Home() {
                   ].map((stat) => (
                     <div key={stat.label} className="rounded-lg bg-secondary/50 p-2 text-center">
                       <p className="text-xs font-semibold text-foreground">{stat.value}</p>
-                      <p className="text-xs text-muted-foreground/60">{stat.label}</p>
+                      <p className="text-xs text-muted-foreground/80">{stat.label}</p>
                     </div>
                   ))}
                 </div>
@@ -1131,7 +1131,7 @@ export default function Home() {
             ))}
           </motion.div>
           {/* Trust bar */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-10 flex flex-wrap justify-center gap-6 text-xs text-muted-foreground/60">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-10 flex flex-wrap justify-center gap-6 text-xs text-muted-foreground/80">
             {[
               { icon: "🔒", text: "Tidak menyimpan data sensitif" },
               { icon: "📵", text: "Tidak ada iklan tersembunyi" },
@@ -1164,7 +1164,7 @@ export default function Home() {
               >
                 Analisis Kulit Saya Sekarang <ArrowRight className="w-4 h-4" />
               </ShimmerButton>
-              <p className="mt-4 text-xs text-muted-foreground/60">Untuk pria & wanita · Seluruh Indonesia</p>
+              <p className="mt-4 text-xs text-muted-foreground/80">Untuk pria & wanita · Seluruh Indonesia</p>
             </div>
           </div>
         </motion.div>
@@ -1182,7 +1182,7 @@ export default function Home() {
                 </div>
                 <span className="text-sm font-semibold">JujurSkin</span>
               </div>
-              <p className="text-xs text-muted-foreground/60 leading-relaxed">
+              <p className="text-xs text-muted-foreground/80 leading-relaxed">
                 Platform skincare pertama Indonesia yang jujur bilang apa yang tidak kamu butuhkan.
               </p>
             </div>
@@ -1198,7 +1198,7 @@ export default function Home() {
                   { label: "Cek Konflik Ingredient", href: "/cek-konflik" },
                   { label: "Beri Feedback", href: "/feedback" },
                 ].map((link) => (
-                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
+                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/80 hover:text-foreground transition-colors">
                     {link.label}
                   </a>
                 ))}
@@ -1217,7 +1217,7 @@ export default function Home() {
                   { label: "Rutinitas AM/PM", href: "/rutinitas" },
                   { label: "Progress Kulit", href: "/progress" },
                 ].map((link) => (
-                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
+                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/80 hover:text-foreground transition-colors">
                     {link.label}
                   </a>
                 ))}
@@ -1228,10 +1228,10 @@ export default function Home() {
             <div>
               <p className="text-xs font-semibold text-foreground mb-3 uppercase tracking-wide">Tentang</p>
               <div className="space-y-2">
-                <p className="text-xs text-muted-foreground/60">Tidak ada iklan</p>
-                <p className="text-xs text-muted-foreground/60">Tidak terafiliasi brand</p>
-                <p className="text-xs text-muted-foreground/60">Berbasis data & sains</p>
-                <p className="text-xs text-muted-foreground/60">100% Gratis</p>
+                <p className="text-xs text-muted-foreground/80">Tidak ada iklan</p>
+                <p className="text-xs text-muted-foreground/80">Tidak terafiliasi brand</p>
+                <p className="text-xs text-muted-foreground/80">Berbasis data & sains</p>
+                <p className="text-xs text-muted-foreground/80">100% Gratis</p>
               </div>
             </div>
           </div>

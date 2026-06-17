@@ -330,7 +330,7 @@ export default function ProgressPage() {
             <div className="rounded-xl border border-border/60 bg-card/80 p-4 text-center">
               <p className="text-3xl font-bold text-primary mb-0.5">{entries.length}</p>
               <p className="text-xs text-muted-foreground">Minggu Tercatat</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">
+              <p className="text-xs text-muted-foreground/80 mt-1">
                 {entries.length < 4 ? "Konsistenlah selama 4 minggu" : entries.length < 8 ? "Bagus! Terus lanjutkan" : "Luar biasa konsisten!"}
               </p>
             </div>
@@ -423,7 +423,7 @@ export default function ProgressPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <m.icon className={`w-3.5 h-3.5 ${m.color}`} />
                     <p className="text-sm font-medium">{m.label}</p>
-                    <span className="text-xs text-muted-foreground/60">({m.desc})</span>
+                    <span className="text-xs text-muted-foreground/80">({m.desc})</span>
                   </div>
                   <ScoreSlider
                     value={form[m.key]}
@@ -472,7 +472,7 @@ export default function ProgressPage() {
                 ) : (
                   <label className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-dashed border-border bg-card/50 cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-colors">
                     <ImageIcon className="w-6 h-6 text-muted-foreground/40" />
-                    <span className="text-xs text-muted-foreground/60">Klik untuk pilih foto · Max 2MB</span>
+                    <span className="text-xs text-muted-foreground/80">Klik untuk pilih foto · Max 2MB</span>
                     <input
                       type="file"
                       accept="image/*"

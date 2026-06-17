@@ -57,7 +57,7 @@ export default function ArtikelDetailPage({
           >
             <ArrowLeft className="w-4 h-4" /> Artikel
           </button>
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground/60">
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground/80">
             <Clock className="w-3 h-3" />
             {article.read_time} menit baca
           </div>
@@ -81,7 +81,7 @@ export default function ArtikelDetailPage({
           <p className="text-muted-foreground text-sm leading-relaxed mb-4">
             {article.excerpt}
           </p>
-          <p className="text-xs text-muted-foreground/50">
+          <p className="text-xs text-muted-foreground/75">
             {new Date(article.date).toLocaleDateString("id-ID", {
               day: "numeric",
               month: "long",
@@ -173,7 +173,7 @@ export default function ArtikelDetailPage({
                     <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                       {rel.title}
                     </p>
-                    <p className="text-xs text-muted-foreground/60 flex items-center gap-1 mt-0.5">
+                    <p className="text-xs text-muted-foreground/80 flex items-center gap-1 mt-0.5">
                       <Clock className="w-3 h-3" /> {rel.read_time} menit
                     </p>
                   </div>
