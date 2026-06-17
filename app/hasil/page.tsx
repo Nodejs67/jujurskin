@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info, Copy, Check, Clock, AlertTriangle, ListChecks, Wallet, GraduationCap } from "lucide-react";
+import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info, Copy, Check, Clock, AlertTriangle, ListChecks, Wallet, GraduationCap, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
@@ -330,6 +330,67 @@ function HasilContent() {
             })}
           </div>
         </motion.div>
+
+        {/* Cara & urutan pemakaian (AM/PM) */}
+        {((h.morning_routine && h.morning_routine.length > 0) || (h.night_routine && h.night_routine.length > 0)) && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24 }}
+            className="rounded-2xl border border-border bg-card p-5"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <Repeat className="w-4 h-4 text-primary" />
+              <p className="text-sm font-semibold text-foreground">Cara & urutan pemakaian</p>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">Urutan yang benar membuat tiap produk bekerja optimal. Perkenalkan produk aktif baru satu per satu (jeda 2–4 minggu).</p>
+
+            {h.morning_routine && h.morning_routine.length > 0 && (
+              <div className="mb-5">
+                <div className="flex items-center gap-1.5 mb-2.5">
+                  <Sun className="w-4 h-4 text-yellow-700" />
+                  <p className="text-sm font-semibold text-yellow-800">Pagi (AM)</p>
+                </div>
+                <div className="space-y-2.5">
+                  {h.morning_routine.map((s) => (
+                    <div key={s.order} className="flex gap-3">
+                      <div className="w-5 h-5 rounded-full bg-primary/15 border border-primary/40 text-primary text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">{s.order}</div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-foreground">{s.product}</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{s.why}</p>
+                        {s.wait_before_next && <p className="text-[11px] text-primary mt-0.5">⏱ {s.wait_before_next}</p>}
+                        {s.warning && <p className="text-[11px] text-yellow-800 mt-0.5">⚠️ {s.warning}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {h.night_routine && h.night_routine.length > 0 && (
+              <div>
+                <div className="flex items-center gap-1.5 mb-2.5">
+                  <Moon className="w-4 h-4 text-indigo-700" />
+                  <p className="text-sm font-semibold text-indigo-800">Malam (PM)</p>
+                </div>
+                <div className="space-y-2.5">
+                  {h.night_routine.map((s) => (
+                    <div key={s.order} className="flex gap-3">
+                      <div className="w-5 h-5 rounded-full bg-primary/15 border border-primary/40 text-primary text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">{s.order}</div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-foreground">{s.product}</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{s.why}</p>
+                        {s.wait_before_next && <p className="text-[11px] text-primary mt-0.5">⏱ {s.wait_before_next}</p>}
+                        {s.warning && <p className="text-[11px] text-yellow-800 mt-0.5">⚠️ {s.warning}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <button onClick={() => router.push("/rutinitas")} className="text-xs text-primary hover:underline mt-4">
+              Buka Routine Builder lengkap →
+            </button>
+          </motion.div>
+        )}
 
         {/* Estimasi waktu hasil */}
         {h.result_timeline && h.result_timeline.length > 0 && (
