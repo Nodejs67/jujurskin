@@ -327,7 +327,7 @@ export default function ProdukDetailPage({
                   {review.komentar && (
                     <p className="text-sm text-muted-foreground">{review.komentar}</p>
                   )}
-                  <p className="text-xs text-muted-foreground/40 mt-2">
+                  <p className="text-xs text-muted-foreground/80 mt-2">
                     {new Date(review.created_at).toLocaleDateString("id-ID", {
                       day: "numeric",
                       month: "long",
@@ -384,7 +384,7 @@ export default function ProdukDetailPage({
                   placeholder="Pengguna Anonim"
                   value={form.nama}
                   onChange={(e) => setForm((f) => ({ ...f, nama: e.target.value }))}
-                  className="w-full rounded-lg border border-border/50 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
+                  className="w-full rounded-lg border border-border/50 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus:border-primary/50"
                 />
               </div>
 
@@ -412,7 +412,7 @@ export default function ProdukDetailPage({
                   value={form.komentar}
                   onChange={(e) => setForm((f) => ({ ...f, komentar: e.target.value }))}
                   rows={3}
-                  className="w-full rounded-lg border border-border/50 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50 resize-none"
+                  className="w-full rounded-lg border border-border/50 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus:border-primary/50 resize-none"
                 />
               </div>
 

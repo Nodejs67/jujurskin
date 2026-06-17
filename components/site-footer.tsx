@@ -37,8 +37,8 @@ export function SiteFooter() {
         </div>
 
         <div className="border-t border-border/30 pt-4 flex flex-col md:flex-row items-center justify-between gap-2">
-          <p className="text-xs text-muted-foreground/40">© 2026 JujurSkin Indonesia</p>
-          <p className="text-xs text-muted-foreground/40 text-center">
+          <p className="text-xs text-muted-foreground/80">© 2026 JujurSkin Indonesia</p>
+          <p className="text-xs text-muted-foreground/80 text-center">
             Tidak terafiliasi brand · Berbasis data & ilmu pengetahuan · 100% Gratis
           </p>
         </div>

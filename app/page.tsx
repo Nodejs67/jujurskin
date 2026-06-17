@@ -285,7 +285,7 @@ export default function Home() {
               </div>
             ))}
           </motion.div>
-          <motion.div variants={fadeUp} className="mt-6 flex flex-wrap justify-center gap-5 text-xs text-muted-foreground/55">
+          <motion.div variants={fadeUp} className="mt-6 flex flex-wrap justify-center gap-5 text-xs text-muted-foreground/80">
             {["Tidak ada iklan berbayar", "Tidak terafiliasi brand apapun", "Data pribadimu aman", "Bahasa Indonesia"].map((t) => (
               <div key={t} className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-primary/50" /> {t}
@@ -969,7 +969,7 @@ export default function Home() {
                   {row.us ? <CheckCircle className="w-5 h-5 text-primary" /> : <XCircle className="w-5 h-5 text-muted-foreground/25" />}
                 </div>
                 <div className="flex justify-center">
-                  {row.them ? <CheckCircle className="w-5 h-5 text-muted-foreground/35" /> : <XCircle className="w-5 h-5 text-destructive/45" />}
+                  {row.them ? <CheckCircle className="w-5 h-5 text-muted-foreground/80" /> : <XCircle className="w-5 h-5 text-destructive/45" />}
                 </div>
               </motion.div>
             ))}
@@ -1237,8 +1237,8 @@ export default function Home() {
           </div>
 
           <div className="border-t border-border/50 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-muted-foreground/40">© 2026 JujurSkin Indonesia</p>
-            <p className="text-xs text-muted-foreground/40 text-center">Rekomendasi berbasis data & ilmu pengetahuan, bukan endorsement berbayar</p>
+            <p className="text-xs text-muted-foreground/80">© 2026 JujurSkin Indonesia</p>
+            <p className="text-xs text-muted-foreground/80 text-center">Rekomendasi berbasis data & ilmu pengetahuan, bukan endorsement berbayar</p>
           </div>
         </div>
       </footer>

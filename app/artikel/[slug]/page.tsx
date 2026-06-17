@@ -81,7 +81,7 @@ export default function ArtikelDetailPage({
           <p className="text-muted-foreground text-sm leading-relaxed mb-4">
             {article.excerpt}
           </p>
-          <p className="text-xs text-muted-foreground/75">
+          <p className="text-xs text-muted-foreground/80">
             {new Date(article.date).toLocaleDateString("id-ID", {
               day: "numeric",
               month: "long",

@@ -72,7 +72,7 @@ function IngredientCard({ ingredient, onClick }: { ingredient: Ingredient; onCli
             )}
           </div>
         </div>
-        <ChevronRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors shrink-0 mt-0.5" />
+        <ChevronRight className="w-4 h-4 text-muted-foreground/80 group-hover:text-primary transition-colors shrink-0 mt-0.5" />
       </div>
 
       <p className="text-xs text-muted-foreground leading-relaxed mb-3 line-clamp-2">{ingredient.tagline}</p>
@@ -219,12 +219,12 @@ export default function EdukasiPage() {
         {/* Search */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-5">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/75" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Cari ingredient... (contoh: niacinamide, retinol, BHA)"
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
         </motion.div>

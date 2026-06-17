@@ -439,7 +439,7 @@ export default function ProgressPage() {
                   value={form.produk_dipakai_raw}
                   onChange={e => setForm(f => ({ ...f, produk_dipakai_raw: e.target.value }))}
                   placeholder="Misal: Azarine SPF45, COSRX Snail, Somethinc Niacinamide..."
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
 
@@ -450,7 +450,7 @@ export default function ProgressPage() {
                   onChange={e => setForm(f => ({ ...f, catatan: e.target.value }))}
                   placeholder="Kondisi jerawat, reaksi produk baru, perubahan cuaca, hormon, stress, dll..."
                   rows={3}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary resize-none"
                 />
               </div>
 
@@ -471,7 +471,7 @@ export default function ProgressPage() {
                   </div>
                 ) : (
                   <label className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-dashed border-border bg-card/50 cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-colors">
-                    <ImageIcon className="w-6 h-6 text-muted-foreground/40" />
+                    <ImageIcon className="w-6 h-6 text-muted-foreground/80" />
                     <span className="text-xs text-muted-foreground/80">Klik untuk pilih foto · Max 2MB</span>
                     <input
                       type="file"
