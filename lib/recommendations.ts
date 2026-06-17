@@ -30,6 +30,21 @@ export interface AnalysisInput {
   riwayat_sensitif?: boolean;
   reaksi_produk?: string;
   pengalaman_retinoid?: "belum" | "pernah_gagal" | "toleran";
+  // Lifestyle tambahan
+  konsumsi_air?: "kurang" | "cukup" | "banyak";
+  merokok?: boolean;
+  olahraga?: "jarang" | "kadang" | "rutin";
+  // Modul jerawat (muncul jika masalah termasuk "jerawat")
+  jerawat_jenis?: string[]; // komedo_putih, komedo_hitam, papula, pustula, nodul, kistik, tidak_yakin
+  jerawat_jumlah?: "sedikit" | "sedang" | "banyak" | "sangat_banyak";
+  jerawat_durasi?: "baru" | "beberapa_bulan" | "setengah_tahun" | "menahun";
+  jerawat_lokasi?: string[]; // dahi, pipi, dagu, rahang, seluruh
+  jerawat_pih?: boolean;
+  pernah_ke_dokter?: boolean;
+  sedang_obat_jerawat?: boolean;
+  // Faktor hormonal perempuan tambahan
+  siklus_haid?: "teratur" | "tidak_teratur" | "tidak_yakin";
+  diagnosis_hormonal?: boolean;
 }
 
 export interface Recommendation {
@@ -189,6 +204,16 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   const retinoidFailed = input.pengalaman_retinoid === "pernah_gagal";
   const retinoidTolerant = input.pengalaman_retinoid === "toleran";
   const neverUsesSunscreen = input.penggunaan_sunscreen === "tidak_pernah" || input.penggunaan_sunscreen === "jarang";
+  // Modul jerawat & lifestyle tambahan
+  const acneTypes = input.jerawat_jenis ?? [];
+  const severeAcne = acneTypes.includes("nodul") || acneTypes.includes("kistik") || input.jerawat_jumlah === "sangat_banyak";
+  const onAcneMeds = input.sedang_obat_jerawat === true;
+  const hasPIH = input.jerawat_pih === true;
+  const smokes = input.merokok === true;
+  const lowWater = input.konsumsi_air === "kurang";
+  const exercisesOften = input.olahraga === "rutin";
+  const irregularCycle = input.siklus_haid === "tidak_teratur";
+  const diagnosedHormonal = input.diagnosis_hormonal === true;
 
   // ── Lifestyle notes
   if (isStressed || poorSleep) {
@@ -205,6 +230,29 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   }
   if (isPregnant) {
     pregnancyWarnings.push("Status kehamilan/menyusui terdeteksi. Rekomendasi disesuaikan: retinol, BHA dosis tinggi, benzoyl peroxide, dan hydroquinone DIHILANGKAN dari daftar.");
+  }
+
+  // ── Catatan edukatif dari modul jerawat & lifestyle (BUKAN diagnosis medis)
+  if (severeAcne) {
+    lifestyleNotes.push("Kamu menandai jerawat nodul/kistik atau jumlah sangat banyak. Jenis ini sering butuh penanganan dokter kulit (mis. resep), bukan hanya produk OTC. Ini saran edukatif, bukan diagnosis medis — pertimbangkan konsultasi ke dokter kulit.");
+  }
+  if (onAcneMeds) {
+    lifestyleNotes.push("Kamu sedang memakai obat jerawat. Hati-hati menumpuk terlalu banyak bahan aktif (retinoid + exfoliant + BHA) bersamaan dengan obatmu — risiko iritasi & over-treatment naik. Utamakan pelembap + sunscreen, dan ikuti arahan dokter/produkmu.");
+  }
+  if (hasPIH) {
+    lifestyleNotes.push("Noda gelap setelah jerawat (PIH) memudar paling cepat dengan kombinasi Niacinamide/Vitamin C + sunscreen disiplin. Tanpa sunscreen, noda justru makin gelap dan lama hilang.");
+  }
+  if (smokes) {
+    lifestyleNotes.push("Merokok mempercepat penuaan kulit dan memperlambat penyembuhan jerawat & luka (mengurangi aliran oksigen ke kulit). Mengurangi rokok memberi dampak nyata ke kesehatan kulit.");
+  }
+  if (lowWater) {
+    lifestyleNotes.push("Asupan air yang kurang membuat kulit lebih mudah dehidrasi. Targetkan minum cukup air harian — efeknya mendukung kerja moisturizer.");
+  }
+  if (exercisesOften) {
+    lifestyleNotes.push("Rutin olahraga bagus untuk sirkulasi & kulit, tapi langsung bersihkan keringat setelahnya (cleanser lembut) agar keringat + sebum tidak menyumbat pori dan memicu jerawat.");
+  }
+  if (irregularCycle || diagnosedHormonal) {
+    lifestyleNotes.push("Siklus haid tidak teratur / kondisi hormonal yang kamu tandai bisa berkaitan dengan jerawat hormonal yang membandel. Niacinamide + Zinc dan konsistensi membantu, tapi untuk kasus menetap sebaiknya cek ke dokter (edukatif, bukan diagnosis).");
   }
 
   // ── 1. SUNSCREEN — selalu prioritas 1

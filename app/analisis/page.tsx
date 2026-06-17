@@ -29,6 +29,21 @@ type FormData = {
   riwayat_sensitif: boolean | null;
   reaksi_produk: string;
   pengalaman_retinoid: "belum" | "pernah_gagal" | "toleran" | "";
+  // Lifestyle tambahan
+  konsumsi_air: "kurang" | "cukup" | "banyak" | "";
+  merokok: boolean | null;
+  olahraga: "jarang" | "kadang" | "rutin" | "";
+  // Modul jerawat (kondisional)
+  jerawat_jenis: string[];
+  jerawat_jumlah: "sedikit" | "sedang" | "banyak" | "sangat_banyak" | "";
+  jerawat_durasi: "baru" | "beberapa_bulan" | "setengah_tahun" | "menahun" | "";
+  jerawat_lokasi: string[];
+  jerawat_pih: boolean | null;
+  pernah_ke_dokter: boolean | null;
+  sedang_obat_jerawat: boolean | null;
+  // Faktor perempuan tambahan
+  siklus_haid: "teratur" | "tidak_teratur" | "tidak_yakin" | "";
+  diagnosis_hormonal: boolean | null;
 };
 
 const BUDGET_OPTIONS = [
@@ -75,6 +90,38 @@ function OptionCard({
   );
 }
 
+function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`px-3 py-2 rounded-lg border text-xs font-medium transition-all ${active ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-foreground hover:border-primary/40"}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function YesNo({ label, value, onChange }: { label: string; value: boolean | null; onChange: (v: boolean) => void }) {
+  return (
+    <div className="flex items-center justify-between gap-3 py-1">
+      <span className="text-sm text-foreground">{label}</span>
+      <div className="flex gap-2 shrink-0">
+        {([["Ya", true], ["Tidak", false]] as const).map(([l, v]) => (
+          <button
+            key={l}
+            type="button"
+            onClick={() => onChange(v)}
+            className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${value === v ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground hover:border-primary/40"}`}
+          >
+            {l}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function StepLabel({ step, label }: { step: number; label: string }) {
   return (
     <div className="mb-6">
@@ -95,7 +142,13 @@ export default function AnalisisPage() {
     kualitas_tidur: "", tingkat_stress: "",
     riwayat_hormonal: null, status_kehamilan: "",
     riwayat_sensitif: null, reaksi_produk: "", pengalaman_retinoid: "",
+    konsumsi_air: "", merokok: null, olahraga: "",
+    jerawat_jenis: [], jerawat_jumlah: "", jerawat_durasi: "", jerawat_lokasi: [],
+    jerawat_pih: null, pernah_ke_dokter: null, sedang_obat_jerawat: null,
+    siklus_haid: "", diagnosis_hormonal: null,
   });
+
+  const isWanita = form.jenis_kelamin === "wanita";
 
   const update = (field: keyof FormData, value: unknown) =>
     setForm(prev => ({ ...prev, [field]: value }));
@@ -109,12 +162,21 @@ export default function AnalisisPage() {
     }));
   };
 
+  const toggleArray = (field: "jerawat_jenis" | "jerawat_lokasi", value: string) => {
+    setForm(prev => {
+      const arr = prev[field];
+      return { ...prev, [field]: arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value] };
+    });
+  };
+
+  const hasJerawat = form.masalah.includes("jerawat");
+
   const canNext = () => {
     if (step === 1) return form.usia && form.kota && form.jenis_kelamin;
     if (step === 2) return form.tipe_kulit !== "";
     if (step === 3) return form.masalah.length > 0;
     if (step === 4) return form.penggunaan_sunscreen && form.paparan_matahari && form.lingkungan && form.kualitas_tidur && form.tingkat_stress;
-    if (step === 5) return form.status_kehamilan !== "" && form.pengalaman_retinoid !== "";
+    if (step === 5) return (!isWanita || form.status_kehamilan !== "") && form.pengalaman_retinoid !== "";
     if (step === 6) return form.budget > 0;
     return true;
   };
@@ -135,6 +197,16 @@ export default function AnalisisPage() {
       lingkungan: (form.lingkungan || undefined) as "kering_ac" | "lembab" | "campuran" | undefined,
       kualitas_tidur: (form.kualitas_tidur || undefined) as "buruk" | "cukup" | "baik" | undefined,
       tingkat_stress: (form.tingkat_stress || undefined) as "rendah" | "sedang" | "tinggi" | undefined,
+      konsumsi_air: (form.konsumsi_air || undefined) as "kurang" | "cukup" | "banyak" | undefined,
+      merokok: form.merokok ?? undefined,
+      olahraga: (form.olahraga || undefined) as "jarang" | "kadang" | "rutin" | undefined,
+      jerawat_jumlah: (form.jerawat_jumlah || undefined) as "sedikit" | "sedang" | "banyak" | "sangat_banyak" | undefined,
+      jerawat_durasi: (form.jerawat_durasi || undefined) as "baru" | "beberapa_bulan" | "setengah_tahun" | "menahun" | undefined,
+      jerawat_pih: form.jerawat_pih ?? undefined,
+      pernah_ke_dokter: form.pernah_ke_dokter ?? undefined,
+      sedang_obat_jerawat: form.sedang_obat_jerawat ?? undefined,
+      siklus_haid: (form.siklus_haid || undefined) as "teratur" | "tidak_teratur" | "tidak_yakin" | undefined,
+      diagnosis_hormonal: form.diagnosis_hormonal ?? undefined,
     };
 
     try {
@@ -277,6 +349,97 @@ export default function AnalisisPage() {
                 {form.masalah.length > 0 && (
                   <p className="text-xs text-primary">{form.masalah.length} masalah dipilih</p>
                 )}
+
+                {/* ── Modul Jerawat dinamis ── */}
+                <AnimatePresence>
+                  {hasJerawat && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 space-y-5 mt-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">😤</span>
+                          <p className="text-sm font-semibold text-foreground">Sedikit lebih detail soal jerawatmu</p>
+                          <span className="text-[10px] text-muted-foreground">(opsional, tapi bikin lebih akurat)</span>
+                        </div>
+
+                        {/* Jenis */}
+                        <div>
+                          <label className="text-xs font-semibold text-foreground mb-2 block">Jenis jerawat (pilih yang ada)</label>
+                          <div className="flex flex-wrap gap-2">
+                            {([
+                              ["komedo_putih", "Komedo putih"],
+                              ["komedo_hitam", "Komedo hitam"],
+                              ["papula", "Papula (bentol merah)"],
+                              ["pustula", "Pustula (bernanah)"],
+                              ["nodul", "Nodul (benjolan keras)"],
+                              ["kistik", "Kistik (besar & sakit)"],
+                              ["tidak_yakin", "Tidak yakin"],
+                            ] as const).map(([v, l]) => (
+                              <Chip key={v} active={form.jerawat_jenis.includes(v)} onClick={() => toggleArray("jerawat_jenis", v)}>{l}</Chip>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Jumlah */}
+                        <div>
+                          <label className="text-xs font-semibold text-foreground mb-2 block">Perkiraan jumlah jerawat aktif sekarang</label>
+                          <div className="flex flex-wrap gap-2">
+                            {([
+                              ["sedikit", "1–5"],
+                              ["sedang", "5–15"],
+                              ["banyak", "15–30"],
+                              ["sangat_banyak", "Lebih dari 30"],
+                            ] as const).map(([v, l]) => (
+                              <Chip key={v} active={form.jerawat_jumlah === v} onClick={() => update("jerawat_jumlah", v)}>{l}</Chip>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Durasi */}
+                        <div>
+                          <label className="text-xs font-semibold text-foreground mb-2 block">Sudah berapa lama mengalami jerawat?</label>
+                          <div className="flex flex-wrap gap-2">
+                            {([
+                              ["baru", "< 1 bulan"],
+                              ["beberapa_bulan", "1–6 bulan"],
+                              ["setengah_tahun", "6–12 bulan"],
+                              ["menahun", "> 1 tahun"],
+                            ] as const).map(([v, l]) => (
+                              <Chip key={v} active={form.jerawat_durasi === v} onClick={() => update("jerawat_durasi", v)}>{l}</Chip>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Lokasi */}
+                        <div>
+                          <label className="text-xs font-semibold text-foreground mb-2 block">Lokasi jerawat (pilih yang ada)</label>
+                          <div className="flex flex-wrap gap-2">
+                            {([
+                              ["dahi", "Dahi"],
+                              ["pipi", "Pipi"],
+                              ["dagu", "Dagu"],
+                              ["rahang", "Rahang"],
+                              ["seluruh", "Seluruh wajah"],
+                            ] as const).map(([v, l]) => (
+                              <Chip key={v} active={form.jerawat_lokasi.includes(v)} onClick={() => toggleArray("jerawat_lokasi", v)}>{l}</Chip>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Toggles */}
+                        <div className="space-y-1 border-t border-primary/15 pt-3">
+                          <YesNo label="Ada noda gelap bekas jerawat (PIH)?" value={form.jerawat_pih} onChange={v => update("jerawat_pih", v)} />
+                          <YesNo label="Pernah konsultasi ke dokter kulit?" value={form.pernah_ke_dokter} onChange={v => update("pernah_ke_dokter", v)} />
+                          <YesNo label="Sedang pakai obat jerawat (resep)?" value={form.sedang_obat_jerawat} onChange={v => update("sedang_obat_jerawat", v)} />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             )}
 
@@ -377,9 +540,46 @@ export default function AnalisisPage() {
                   </div>
                 </div>
 
+                {/* Air & Olahraga */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-semibold text-foreground mb-2 block">Konsumsi air harian?</label>
+                    <div className="space-y-2">
+                      {([
+                        { v: "kurang", l: "Kurang (< 1 L)" },
+                        { v: "cukup", l: "Cukup (1–2 L)" },
+                        { v: "banyak", l: "Banyak (> 2 L)" },
+                      ] as const).map(o => (
+                        <OptionCard key={o.v} selected={form.konsumsi_air === o.v} onClick={() => update("konsumsi_air", o.v)}>
+                          <span className={`text-sm font-medium ${form.konsumsi_air === o.v ? "text-primary" : "text-foreground"}`}>{o.l}</span>
+                        </OptionCard>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold text-foreground mb-2 block">Seberapa sering olahraga?</label>
+                    <div className="space-y-2">
+                      {([
+                        { v: "jarang", l: "Jarang" },
+                        { v: "kadang", l: "Kadang-kadang" },
+                        { v: "rutin", l: "Rutin (3x+/minggu)" },
+                      ] as const).map(o => (
+                        <OptionCard key={o.v} selected={form.olahraga === o.v} onClick={() => update("olahraga", o.v)}>
+                          <span className={`text-sm font-medium ${form.olahraga === o.v ? "text-primary" : "text-foreground"}`}>{o.l}</span>
+                        </OptionCard>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Merokok */}
+                <div className="rounded-xl border border-border bg-card p-3">
+                  <YesNo label="Apakah kamu merokok?" value={form.merokok} onChange={v => update("merokok", v)} />
+                </div>
+
                 <div className="flex items-start gap-2 rounded-xl border border-primary/20 bg-primary/5 p-3">
                   <Info className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                  <p className="text-xs text-muted-foreground">Data ini membantu kami menghindari merekomendasikan produk yang terlalu aktif saat kulit sedang stres.</p>
+                  <p className="text-xs text-muted-foreground">Gaya hidup (tidur, stres, air, olahraga, rokok) sangat mempengaruhi kondisi kulit. Data ini membantu kami memberi saran yang lebih menyeluruh — dan menghindari produk yang terlalu aktif saat kulit sedang stres.</p>
                 </div>
               </motion.div>
             )}
@@ -393,6 +593,8 @@ export default function AnalisisPage() {
                   <p className="text-sm text-muted-foreground">Ini membantu kami memilih bahan yang aman dan sesuai kondisimu.</p>
                 </div>
 
+                {isWanita && (
+                  <>
                 {/* Kehamilan */}
                 <div>
                   <label className="text-sm font-semibold text-foreground mb-1 flex items-center gap-1.5">
@@ -425,6 +627,27 @@ export default function AnalisisPage() {
                     </OptionCard>
                   </div>
                 </div>
+
+                {/* Siklus haid */}
+                <div>
+                  <label className="text-sm font-semibold text-foreground mb-2 block">Siklus haid kamu?</label>
+                  <div className="flex flex-wrap gap-2">
+                    {([
+                      ["teratur", "Teratur"],
+                      ["tidak_teratur", "Tidak teratur"],
+                      ["tidak_yakin", "Tidak yakin"],
+                    ] as const).map(([v, l]) => (
+                      <Chip key={v} active={form.siklus_haid === v} onClick={() => update("siklus_haid", v)}>{l}</Chip>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Diagnosis hormonal */}
+                <div className="rounded-xl border border-border bg-card p-3">
+                  <YesNo label="Pernah didiagnosis kondisi hormonal (mis. PCOS)?" value={form.diagnosis_hormonal} onChange={v => update("diagnosis_hormonal", v)} />
+                </div>
+                  </>
+                )}
 
                 {/* Sensitif history */}
                 <div>
