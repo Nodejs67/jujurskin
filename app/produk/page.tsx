@@ -93,9 +93,9 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
           <span className="text-2xl">{product.emoji}</span>
           <div className="text-left">
             <p className="text-xs text-muted-foreground font-medium">{product.brand}</p>
-            <h3 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+            <h2 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
               {product.name}
-            </h3>
+            </h2>
           </div>
         </div>
         {product.bpom_registered && (

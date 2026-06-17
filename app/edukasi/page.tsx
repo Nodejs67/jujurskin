@@ -64,9 +64,9 @@ function IngredientCard({ ingredient, onClick }: { ingredient: Ingredient; onCli
         <div className="flex items-center gap-2">
           <span className="text-xl">{ingredient.emoji}</span>
           <div>
-            <h3 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors">
+            <h2 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors">
               {ingredient.name}
-            </h3>
+            </h2>
             {ingredient.aliases.length > 0 && (
               <p className="text-xs text-muted-foreground">{ingredient.aliases[0]}</p>
             )}

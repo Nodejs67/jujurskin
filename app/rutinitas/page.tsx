@@ -114,23 +114,23 @@ function RutinitasContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
           <p className="text-sm text-muted-foreground">Memuat rutinitas...</p>
         </div>
-      </div>
+      </main>
     );
   }
 
   if (!hasil) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6">
+      <main className="min-h-screen flex items-center justify-center px-6">
         <div className="text-center max-w-sm">
           <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
             <Repeat className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h2 className="text-lg font-bold mb-2">Belum Ada Analisis</h2>
+          <h1 className="text-lg font-bold mb-2">Belum Ada Analisis</h1>
           <p className="text-sm text-muted-foreground mb-6">
             Lakukan analisis kulit terlebih dahulu untuk mendapatkan rutinitas perawatan yang dipersonalisasi.
           </p>
@@ -138,7 +138,7 @@ function RutinitasContent() {
             Mulai Analisis Kulit
           </Button>
         </div>
-      </div>
+      </main>
     );
   }
 

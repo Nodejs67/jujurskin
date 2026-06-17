@@ -405,9 +405,9 @@ export default function ProgressPage() {
               className="rounded-xl border border-primary/30 bg-card p-5 space-y-4"
             >
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-sm">
+                <h2 className="font-semibold text-sm">
                   {editingId ? "Edit Catatan" : `Catatan Minggu ${entries.length + 1}`}
-                </h3>
+                </h2>
                 <button onClick={() => { setShowForm(false); setEditingId(null); }} className="text-muted-foreground hover:text-foreground">✕</button>
               </div>
 
@@ -497,7 +497,7 @@ export default function ProgressPage() {
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <TrendingUp className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="font-semibold text-base mb-2">Mulai Tracking Kulitmu</h3>
+            <h2 className="font-semibold text-base mb-2">Mulai Tracking Kulitmu</h2>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto mb-6">
               Catat kondisi kulitmu setiap minggu — dalam 4–8 minggu, kamu akan tahu apakah rutinitas benar-benar bekerja.
             </p>
