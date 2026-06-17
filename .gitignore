@@ -47,3 +47,4 @@ next-env.d.ts
 # Lighthouse audit artifacts
 lighthouse-report.json
 lh.json
+lh-a11y.json
