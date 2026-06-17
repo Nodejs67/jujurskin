@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { href: "/panduan", label: "Panduan" },
   { href: "/edukasi", label: "Edukasi" },
   { href: "/produk", label: "Produk" },
+  { href: "/tidak-perlu", label: "Tidak Perlu" },
 ];
 
 export function SiteHeader() {

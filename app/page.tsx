@@ -105,6 +105,7 @@ const NAV_LINKS = [
   { href: "/edukasi", label: "Edukasi" },
   { href: "/produk", label: "Produk" },
   { href: "/cek-konflik", label: "Cek Konflik" },
+  { href: "/tidak-perlu", label: "Tidak Perlu" },
   { href: "/rutinitas", label: "Rutinitas" },
   { href: "/progress", label: "Progress" },
 ];
@@ -1196,6 +1197,7 @@ export default function Home() {
                   { label: "Rutinitas AM/PM", href: "/rutinitas" },
                   { label: "Progress Kulit", href: "/progress" },
                   { label: "Cek Konflik Ingredient", href: "/cek-konflik" },
+                  { label: "Produk Tidak Perlu", href: "/tidak-perlu" },
                   { label: "Beri Feedback", href: "/feedback" },
                 ].map((link) => (
                   <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/80 hover:text-foreground transition-colors">

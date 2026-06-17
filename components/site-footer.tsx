@@ -22,6 +22,7 @@ export function SiteFooter() {
               { href: "/edukasi", label: "Edukasi" },
               { href: "/produk", label: "Produk" },
               { href: "/cek-konflik", label: "Cek Konflik" },
+              { href: "/tidak-perlu", label: "Produk Tidak Perlu" },
               { href: "/bandingkan", label: "Bandingkan" },
               { href: "/rutinitas", label: "Rutinitas" },
               { href: "/progress", label: "Progress Kulit" },
