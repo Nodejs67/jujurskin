@@ -164,6 +164,27 @@ export default function KalkulatorPage() {
               </button>
             ))}
           </div>
+
+          {/* Input budget manual — ketik angka, otomatis diformat */}
+          <div className="mt-3">
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">Rp</span>
+              <input
+                inputMode="numeric"
+                value={budget ? budget.toLocaleString("id") : ""}
+                onChange={e => {
+                  const digits = e.target.value.replace(/\D/g, "");
+                  setBudget(digits ? parseInt(digits, 10) : null);
+                  setSelectedKit(null);
+                }}
+                placeholder="atau ketik sendiri, contoh: 150.000"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Contoh: ketik <span className="text-foreground font-medium">150000</span> → otomatis jadi <span className="text-primary font-medium">Rp 150.000</span>.
+            </p>
+          </div>
         </motion.div>
 
         {budget && (

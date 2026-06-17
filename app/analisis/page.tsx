@@ -484,6 +484,28 @@ export default function AnalisisPage() {
                     </button>
                   ))}
                 </div>
+
+                {/* Input budget manual — ketik angka, otomatis diformat */}
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Atau ketik budget sendiri</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">Rp</span>
+                    <input
+                      inputMode="numeric"
+                      value={form.budget ? form.budget.toLocaleString("id") : ""}
+                      onChange={e => {
+                        const digits = e.target.value.replace(/\D/g, "");
+                        update("budget", digits ? parseInt(digits, 10) : 0);
+                      }}
+                      placeholder="150.000"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Contoh: ketik <span className="text-foreground font-medium">150000</span> → otomatis jadi <span className="text-primary font-medium">Rp 150.000</span>. Bisa juga 75000, 250000, dst.
+                  </p>
+                </div>
+
                 <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
                   <p className="text-xs text-muted-foreground">💡 Tidak perlu beli semua sekaligus. Kami akan tunjukkan produk mana yang paling dulu diprioritaskan.</p>
                 </div>
