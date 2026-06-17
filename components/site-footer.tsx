@@ -24,6 +24,7 @@ export function SiteFooter() {
               { href: "/cek-konflik", label: "Cek Konflik" },
               { href: "/tidak-perlu", label: "Produk Tidak Perlu" },
               { href: "/simulasi", label: "Simulasi What-If" },
+              { href: "/cek-klaim", label: "Cek Klaim Iklan" },
               { href: "/bandingkan", label: "Bandingkan" },
               { href: "/rutinitas", label: "Rutinitas" },
               { href: "/progress", label: "Progress Kulit" },

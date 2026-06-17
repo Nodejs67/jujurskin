@@ -31,7 +31,7 @@ const stagger: Variants = {
 const features = [
   { icon: TrendingDown, title: "Skincare Priority Engine", desc: "Dengan budget Rp 100.000, kami tunjukkan beli produk apa dulu — berdasarkan kondisi kulitmu.", color: "text-green-700", bg: "bg-green-400/10" },
   { icon: XCircle, title: "Produk Tidak Perlu Checker", desc: "Kami berani bilang jujur: 'Toner ini percuma karena serummu sudah punya fungsi yang sama.'", color: "text-amber-700", bg: "bg-amber-400/10" },
-  { icon: Shield, title: "Safety Checker & BPOM", desc: "Cek keamanan produk dan status BPOM. Deteksi kandungan berbahaya seperti merkuri secara otomatis.", color: "text-blue-700", bg: "bg-blue-400/10" },
+  { icon: Shield, title: "Skor Keamanan Produk", desc: "Skor keamanan tiap produk dari status BPOM, transparansi ingredient, dan perkiraan risiko iritasi.", color: "text-blue-700", bg: "bg-blue-400/10" },
   { icon: BookOpen, title: "Edukasi Ingredient", desc: "Pahami apa yang kamu oleskan ke kulit — penjelasan sederhana tanpa jargon medis.", color: "text-purple-700", bg: "bg-purple-400/10" },
   { icon: MapPin, title: "Rekomendasi Berbasis Lokasi", desc: "Skincare di Kupang (UV 11) berbeda dengan di Bandung. Rekomendasiku menyesuaikan iklim kotamu.", color: "text-rose-700", bg: "bg-rose-400/10" },
   { icon: AlertTriangle, title: "Fake Claim Analyzer", desc: "'Memutihkan dalam 3 hari' — bohong. Kami analisis klaim marketing dan tunjukkan faktanya.", color: "text-orange-700", bg: "bg-orange-400/10" },
@@ -116,6 +116,7 @@ const NAV_LINKS = [
   { href: "/cek-konflik", label: "Cek Konflik" },
   { href: "/tidak-perlu", label: "Tidak Perlu" },
   { href: "/simulasi", label: "Simulasi" },
+  { href: "/cek-klaim", label: "Cek Klaim" },
   { href: "/rutinitas", label: "Rutinitas" },
   { href: "/progress", label: "Progress" },
 ];
