@@ -57,7 +57,7 @@ const scoreTextColors: Record<string, string> = {
   uv_protection: "text-yellow-700",
   barrier: "text-green-700",
   hydration: "text-blue-700",
-  acne_control: "text-purple-400",
+  acne_control: "text-purple-700",
 };
 const scoreLabels: Record<string, string> = {
   uv_protection: "UV Protection",
@@ -437,7 +437,7 @@ function HasilContent() {
               onClick={() => router.push("/edukasi")}
               className="flex items-center gap-2 p-3 rounded-lg bg-secondary/30 hover:bg-secondary/60 transition-colors text-left"
             >
-              <BookOpen className="w-4 h-4 text-purple-400 shrink-0" />
+              <BookOpen className="w-4 h-4 text-purple-700 shrink-0" />
               <div>
                 <p className="text-xs font-medium text-foreground">Edukasi Ingredient</p>
                 <p className="text-xs text-muted-foreground">100+ ingredient dijelaskan</p>

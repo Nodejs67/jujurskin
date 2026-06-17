@@ -32,11 +32,11 @@ const features = [
   { icon: TrendingDown, title: "Skincare Priority Engine", desc: "Dengan budget Rp 100.000, kami tunjukkan beli produk apa dulu — berdasarkan kondisi kulitmu.", color: "text-green-700", bg: "bg-green-400/10" },
   { icon: XCircle, title: "Produk Tidak Perlu Checker", desc: "Kami berani bilang jujur: 'Toner ini percuma karena serummu sudah punya fungsi yang sama.'", color: "text-amber-700", bg: "bg-amber-400/10" },
   { icon: Shield, title: "Safety Checker & BPOM", desc: "Cek keamanan produk dan status BPOM. Deteksi kandungan berbahaya seperti merkuri secara otomatis.", color: "text-blue-700", bg: "bg-blue-400/10" },
-  { icon: BookOpen, title: "Edukasi Ingredient", desc: "Pahami apa yang kamu oleskan ke kulit — penjelasan sederhana tanpa jargon medis.", color: "text-purple-400", bg: "bg-purple-400/10" },
+  { icon: BookOpen, title: "Edukasi Ingredient", desc: "Pahami apa yang kamu oleskan ke kulit — penjelasan sederhana tanpa jargon medis.", color: "text-purple-700", bg: "bg-purple-400/10" },
   { icon: MapPin, title: "Rekomendasi Berbasis Lokasi", desc: "Skincare di Kupang (UV 11) berbeda dengan di Bandung. Rekomendasiku menyesuaikan iklim kotamu.", color: "text-rose-700", bg: "bg-rose-400/10" },
   { icon: AlertTriangle, title: "Fake Claim Analyzer", desc: "'Memutihkan dalam 3 hari' — bohong. Kami analisis klaim marketing dan tunjukkan faktanya.", color: "text-orange-700", bg: "bg-orange-400/10" },
   { icon: Repeat, title: "Rutinitas AM/PM Builder", desc: "Setelah analisis, dapatkan urutan produk yang tepat untuk pagi dan malam — dengan alasan ilmiah tiap langkah.", color: "text-teal-700", bg: "bg-teal-400/10" },
-  { icon: TrendingUp, title: "Skin Progress Tracker", desc: "Catat kondisi kulitmu setiap minggu dan lihat grafik perkembangannya. Skincare yang bekerja akan terlihat di sini.", color: "text-indigo-400", bg: "bg-indigo-400/10" },
+  { icon: TrendingUp, title: "Skin Progress Tracker", desc: "Catat kondisi kulitmu setiap minggu dan lihat grafik perkembangannya. Skincare yang bekerja akan terlihat di sini.", color: "text-indigo-700", bg: "bg-indigo-400/10" },
 ];
 
 const compare = [
@@ -59,7 +59,7 @@ const skinScoreBreakdown = [
   { label: "Barrier Health", score: 82, color: "bg-green-400", text: "text-green-700" },
   { label: "Hydration", score: 71, color: "bg-blue-400", text: "text-blue-700" },
   { label: "UV Protection", score: 55, color: "bg-yellow-400", text: "text-yellow-700" },
-  { label: "Acne Control", score: 80, color: "bg-purple-400", text: "text-purple-400" },
+  { label: "Acne Control", score: 80, color: "bg-purple-400", text: "text-purple-700" },
 ];
 
 const cities = [
@@ -834,7 +834,7 @@ export default function Home() {
               className="glow-card rounded-2xl border border-border bg-card p-8 flex flex-col"
             >
               <div className="w-12 h-12 rounded-xl bg-purple-400/10 flex items-center justify-center mb-5">
-                <BookOpen className="w-6 h-6 text-purple-400" />
+                <BookOpen className="w-6 h-6 text-purple-700" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-2">Edukasi Ingredient</h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
@@ -842,10 +842,10 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap gap-2 mb-5">
                 {["Niacinamide", "Retinol", "BHA/AHA", "Vitamin C", "Ceramide"].map((i) => (
-                  <Badge key={i} variant="outline" className="text-xs border-purple-400/20 text-purple-400/80 bg-purple-400/5">{i}</Badge>
+                  <Badge key={i} variant="outline" className="text-xs border-purple-400/20 text-purple-700/80 bg-purple-400/5">{i}</Badge>
                 ))}
               </div>
-              <Button variant="outline" onClick={() => router.push("/edukasi")} className="border-purple-400/30 text-purple-400 hover:bg-purple-400/10 gap-2">
+              <Button variant="outline" onClick={() => router.push("/edukasi")} className="border-purple-400/30 text-purple-700 hover:bg-purple-400/10 gap-2">
                 <BookOpen className="w-4 h-4" /> Buka Edukasi
               </Button>
             </motion.div>
@@ -1008,7 +1008,7 @@ export default function Home() {
                 name: "Lestari, 31",
                 city: "Bandung",
                 avatar: "L",
-                avatarColor: "bg-purple-400/20 text-purple-400",
+                avatarColor: "bg-purple-400/20 text-purple-700",
                 text: "\"Cek Konflik Ingredient-nya super berguna. Saya tidak tahu retinol saya konflik dengan toner AHA. Sekarang saya jadwalkan dengan benar dan kulit tidak iritasi lagi.\"",
                 saving: "Tidak ada lagi iritasi",
               },

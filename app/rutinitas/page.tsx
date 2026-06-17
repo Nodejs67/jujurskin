@@ -232,7 +232,7 @@ function RutinitasContent() {
             onClick={() => setMode("malam")}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border text-sm font-semibold transition-all ${
               mode === "malam"
-                ? "bg-indigo-500/10 border-indigo-500/50 text-indigo-400"
+                ? "bg-indigo-500/10 border-indigo-500/50 text-indigo-700"
                 : "border-border/60 text-muted-foreground hover:border-indigo-500/30"
             }`}
           >
@@ -261,8 +261,8 @@ function RutinitasContent() {
               <div className="flex items-center gap-2">
                 {mode === "pagi"
                   ? <Sun className="w-4 h-4 text-amber-700" />
-                  : <Moon className="w-4 h-4 text-indigo-400" />}
-                <p className={`text-sm font-semibold ${mode === "pagi" ? "text-amber-700" : "text-indigo-400"}`}>
+                  : <Moon className="w-4 h-4 text-indigo-700" />}
+                <p className={`text-sm font-semibold ${mode === "pagi" ? "text-amber-700" : "text-indigo-700"}`}>
                   {mode === "pagi" ? "Rutinitas Pagi — Setelah Bangun Tidur" : "Rutinitas Malam — Sebelum Tidur"}
                 </p>
               </div>

@@ -17,8 +17,8 @@ import {
 } from "@/lib/ingredients";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+  hidden: { y: 22 },
+  show: { y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
 };
 
 const CATEGORY_ICONS: Record<IngredientCategory, React.ElementType> = {
@@ -34,7 +34,7 @@ const CATEGORY_COLORS: Record<IngredientCategory, string> = {
   treatment: "text-blue-700 bg-blue-400/10 border-blue-400/20",
   sunscreen: "text-yellow-700 bg-yellow-400/10 border-yellow-400/20",
   moisturizer: "text-cyan-700 bg-cyan-400/10 border-cyan-400/20",
-  brightening: "text-purple-400 bg-purple-400/10 border-purple-400/20",
+  brightening: "text-purple-700 bg-purple-400/10 border-purple-400/20",
   soothing: "text-green-700 bg-green-400/10 border-green-400/20",
   antioxidant: "text-orange-700 bg-orange-400/10 border-orange-400/20",
 };

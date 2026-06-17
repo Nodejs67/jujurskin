@@ -148,7 +148,7 @@ export function ReminderSetup() {
       <div className="rounded-xl border border-border bg-card/60 p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Moon className="w-4 h-4 text-indigo-400" />
+            <Moon className="w-4 h-4 text-indigo-700" />
             <p className="text-sm font-medium">Rutinitas Malam (PM)</p>
           </div>
           <button

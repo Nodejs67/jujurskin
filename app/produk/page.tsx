@@ -35,8 +35,8 @@ const SKIN_TYPE_LABELS: Record<SkinTypeMatch | "semua", string> = {
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+  hidden: { y: 18 },
+  show: { y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
 };
 
 const PRICE_LABELS: Record<PriceRange, string> = {
@@ -48,7 +48,7 @@ const PRICE_LABELS: Record<PriceRange, string> = {
 const PRICE_COLORS: Record<PriceRange, string> = {
   budget: "text-green-700 bg-green-400/10 border-green-400/20",
   mid: "text-blue-700 bg-blue-400/10 border-blue-400/20",
-  premium: "text-purple-400 bg-purple-400/10 border-purple-400/20",
+  premium: "text-purple-700 bg-purple-400/10 border-purple-400/20",
 };
 
 const ALL_CATEGORIES: (ProductCategory | "semua")[] = [

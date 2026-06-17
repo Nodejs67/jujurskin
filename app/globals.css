@@ -66,7 +66,7 @@
   --secondary-foreground: oklch(0.38 0.08 150);
   --muted: oklch(0.95 0.015 150);
   --muted-foreground: oklch(0.42 0.04 155); /* full opacity, cukup gelap utk teks-xs di latar terang */
-  --accent: oklch(0.56 0.13 70);          /* deep gold/amber → lulus sbg teks; bg pakai tint /10 */
+  --accent: oklch(0.50 0.12 65);          /* deep amber-gold → lulus sbg teks kecil; bg pakai tint /10 */
   --accent-foreground: oklch(0.99 0.01 75);
   --destructive: oklch(0.55 0.22 27);
   --border: oklch(0.90 0.015 150);
