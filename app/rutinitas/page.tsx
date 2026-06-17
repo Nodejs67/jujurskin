@@ -45,8 +45,8 @@ function RoutineStepCard({ step, index }: { step: RoutineStep; index: number }) 
               <p className="text-xs text-muted-foreground mt-0.5">{step.category}</p>
               {step.warning && (
                 <div className="flex items-center gap-1 mt-1.5">
-                  <AlertTriangle className="w-3 h-3 text-amber-600 flex-shrink-0" />
-                  <p className="text-xs text-amber-600 font-medium">{step.warning}</p>
+                  <AlertTriangle className="w-3 h-3 text-amber-700 flex-shrink-0" />
+                  <p className="text-xs text-amber-700 font-medium">{step.warning}</p>
                 </div>
               )}
             </div>
@@ -198,8 +198,8 @@ function RutinitasContent() {
             className="rounded-xl border border-rose-500/40 bg-rose-500/5 p-4"
           >
             <div className="flex items-center gap-2 mb-2">
-              <Baby className="w-4 h-4 text-rose-600" />
-              <p className="text-sm font-semibold text-rose-600">Perhatian Kehamilan/Menyusui</p>
+              <Baby className="w-4 h-4 text-rose-700" />
+              <p className="text-sm font-semibold text-rose-700">Perhatian Kehamilan/Menyusui</p>
             </div>
             <ul className="space-y-1">
               {hasil.pregnancy_warnings.map((w, i) => (
@@ -218,7 +218,7 @@ function RutinitasContent() {
             onClick={() => setMode("pagi")}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border text-sm font-semibold transition-all ${
               mode === "pagi"
-                ? "bg-amber-500/10 border-amber-500/50 text-amber-600"
+                ? "bg-amber-500/10 border-amber-500/50 text-amber-700"
                 : "border-border/60 text-muted-foreground hover:border-amber-500/30"
             }`}
           >
@@ -260,9 +260,9 @@ function RutinitasContent() {
             }`}>
               <div className="flex items-center gap-2">
                 {mode === "pagi"
-                  ? <Sun className="w-4 h-4 text-amber-600" />
+                  ? <Sun className="w-4 h-4 text-amber-700" />
                   : <Moon className="w-4 h-4 text-indigo-400" />}
-                <p className={`text-sm font-semibold ${mode === "pagi" ? "text-amber-600" : "text-indigo-400"}`}>
+                <p className={`text-sm font-semibold ${mode === "pagi" ? "text-amber-700" : "text-indigo-400"}`}>
                   {mode === "pagi" ? "Rutinitas Pagi — Setelah Bangun Tidur" : "Rutinitas Malam — Sebelum Tidur"}
                 </p>
               </div>
@@ -317,7 +317,7 @@ function RutinitasContent() {
               <span className="font-semibold text-primary">
                 Rp {hasil.budget_used.toLocaleString("id-ID")}
               </span>
-              <span className="text-emerald-600 font-semibold">
+              <span className="text-emerald-700 font-semibold">
                 +Rp {hasil.budget_left.toLocaleString("id-ID")} hemat
               </span>
             </div>
@@ -333,20 +333,20 @@ function RutinitasContent() {
             className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4"
           >
             <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle className="w-4 h-4 text-amber-600" />
-              <p className="text-sm font-semibold text-amber-600">Produk yang Bisa Dilewati</p>
+              <AlertTriangle className="w-4 h-4 text-amber-700" />
+              <p className="text-sm font-semibold text-amber-700">Produk yang Bisa Dilewati</p>
             </div>
             <div className="space-y-2.5">
               {unnecessary.map((skip, i) => (
                 <div key={i} className="flex gap-2.5">
                   <div className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-[10px] font-bold text-amber-600">{i + 1}</span>
+                    <span className="text-[10px] font-bold text-amber-700">{i + 1}</span>
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-foreground">{skip.product}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">{skip.reason}</p>
                     {skip.saving_estimate > 0 && (
-                      <p className="text-xs text-emerald-600 font-medium mt-0.5">
+                      <p className="text-xs text-emerald-700 font-medium mt-0.5">
                         Hemat ±Rp {skip.saving_estimate.toLocaleString("id-ID")}/bulan
                       </p>
                     )}
@@ -420,9 +420,9 @@ function RutinitasContent() {
             className="rounded-xl border border-border/60 bg-card/50 p-4"
           >
             <div className="flex gap-2.5">
-              <Heart className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
+              <Heart className="w-4 h-4 text-rose-700 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-rose-600 mb-1">Tip Khusus Iklim & Kota Kamu</p>
+                <p className="text-xs font-semibold text-rose-700 mb-1">Tip Khusus Iklim & Kota Kamu</p>
                 <p className="text-sm text-muted-foreground leading-relaxed">{hasil.climate_tip}</p>
               </div>
             </div>

@@ -173,7 +173,7 @@ export default function ProdukDetailPage({
                 <p className="text-xs text-muted-foreground mb-1">BPOM</p>
                 <p
                   className={`text-sm font-semibold flex items-center justify-center gap-1 ${
-                    product.bpom_registered ? "text-green-600" : "text-yellow-600"
+                    product.bpom_registered ? "text-green-700" : "text-yellow-700"
                   }`}
                 >
                   {product.bpom_registered ? (
@@ -208,7 +208,7 @@ export default function ProdukDetailPage({
             ))}
           </div>
           {product.who_should_skip && (
-            <p className="text-xs text-yellow-600/80 mt-2 flex items-start gap-1.5">
+            <p className="text-xs text-yellow-700/80 mt-2 flex items-start gap-1.5">
               <XCircle className="w-3 h-3 flex-shrink-0 mt-0.5" />
               <span>Skip jika: {product.who_should_skip}</span>
             </p>
@@ -342,7 +342,7 @@ export default function ProdukDetailPage({
           {/* Review form */}
           {submitted ? (
             <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-5 text-center">
-              <CheckCircle className="w-6 h-6 text-green-600 mx-auto mb-2" />
+              <CheckCircle className="w-6 h-6 text-green-700 mx-auto mb-2" />
               <p className="text-sm font-medium text-foreground">Terima kasih atas ulasanmu!</p>
               <button
                 onClick={() => setSubmitted(false)}

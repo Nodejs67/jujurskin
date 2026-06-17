@@ -220,7 +220,7 @@ export default function KalkulatorPage() {
                             <div className="flex items-center gap-2 mb-0.5">
                               <p className="text-sm font-semibold text-foreground">{k.name}</p>
                               {isAffordable && (
-                                <Badge variant="outline" className="text-[10px] border-green-400/30 text-green-600 px-1.5 py-0">
+                                <Badge variant="outline" className="text-[10px] border-green-400/30 text-green-700 px-1.5 py-0">
                                   Masuk budget ✓
                                 </Badge>
                               )}
@@ -255,8 +255,8 @@ export default function KalkulatorPage() {
                             </div>
                             {isAffordable && kitSavings > 0 && (
                               <div className="flex items-center justify-between">
-                                <span className="text-xs text-green-600">Sisa budget</span>
-                                <span className="text-xs font-semibold text-green-600">{formatRp(kitSavings)}</span>
+                                <span className="text-xs text-green-700">Sisa budget</span>
+                                <span className="text-xs font-semibold text-green-700">{formatRp(kitSavings)}</span>
                               </div>
                             )}
                           </motion.div>

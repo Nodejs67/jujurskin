@@ -26,10 +26,10 @@ interface ProgressEntry {
 }
 
 const METRICS = [
-  { key: "kondisi_jerawat" as const, label: "Kondisi Jerawat", icon: Zap, color: "text-blue-600", desc: "10 = bebas jerawat" },
-  { key: "kelembapan" as const, label: "Kelembapan", icon: Droplets, color: "text-cyan-600", desc: "10 = sangat lembap" },
-  { key: "kecerahan" as const, label: "Kecerahan", icon: Sun, color: "text-amber-600", desc: "10 = sangat cerah & glowing" },
-  { key: "iritasi" as const, label: "Bebas Iritasi", icon: Heart, color: "text-green-600", desc: "10 = tidak ada iritasi" },
+  { key: "kondisi_jerawat" as const, label: "Kondisi Jerawat", icon: Zap, color: "text-blue-700", desc: "10 = bebas jerawat" },
+  { key: "kelembapan" as const, label: "Kelembapan", icon: Droplets, color: "text-cyan-700", desc: "10 = sangat lembap" },
+  { key: "kecerahan" as const, label: "Kecerahan", icon: Sun, color: "text-amber-700", desc: "10 = sangat cerah & glowing" },
+  { key: "iritasi" as const, label: "Bebas Iritasi", icon: Heart, color: "text-green-700", desc: "10 = tidak ada iritasi" },
 ];
 
 function ScoreSlider({ value, onChange, color, disabled }: { value: number; onChange: (v: number) => void; color: string; disabled?: boolean }) {
@@ -72,8 +72,8 @@ function TrendArrow({ entries, metricKey }: { entries: ProgressEntry[]; metricKe
   const diff = last - prev;
   if (diff === 0) return <span className="text-xs text-muted-foreground">→</span>;
   return diff > 0
-    ? <span className="text-xs text-green-600">↑ +{diff}</span>
-    : <span className="text-xs text-red-600">↓ {diff}</span>;
+    ? <span className="text-xs text-green-700">↑ +{diff}</span>
+    : <span className="text-xs text-red-700">↓ {diff}</span>;
 }
 
 const LINE_COLORS: Record<string, string> = {
@@ -322,7 +322,7 @@ export default function ProgressPage() {
               <p className="text-3xl font-bold text-primary mb-0.5">{overallScore}</p>
               <p className="text-xs text-muted-foreground">Skor Minggu Ini <span className="text-xs">(dari 100)</span></p>
               {entries.length > 1 && (
-                <p className={`text-xs font-medium mt-1 ${improvement >= 0 ? "text-green-600" : "text-red-600"}`}>
+                <p className={`text-xs font-medium mt-1 ${improvement >= 0 ? "text-green-700" : "text-red-700"}`}>
                   {improvement >= 0 ? `↑ Naik ${improvement} poin` : `↓ Turun ${Math.abs(improvement)} poin`} dari awal
                 </p>
               )}
@@ -608,7 +608,7 @@ export default function ProgressPage() {
                             </button>
                             <button
                               onClick={() => handleDelete(entry.id)}
-                              className="flex items-center gap-1.5 text-xs text-red-600 hover:underline"
+                              className="flex items-center gap-1.5 text-xs text-red-700 hover:underline"
                             >
                               <Trash2 className="w-3 h-3" /> Hapus
                             </button>

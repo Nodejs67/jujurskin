@@ -60,14 +60,14 @@
   --card-foreground: oklch(0.27 0.03 155);
   --popover: oklch(0.995 0.004 150);
   --popover-foreground: oklch(0.27 0.03 155);
-  --primary: oklch(0.52 0.13 150);        /* sage green pekat → tombol, teks putih lulus kontras */
+  --primary: oklch(0.47 0.13 150);        /* sage pekat → tombol & teks kecil lulus kontras di latar terang */
   --primary-foreground: oklch(0.99 0.01 150);
   --secondary: oklch(0.93 0.02 150);
-  --secondary-foreground: oklch(0.40 0.08 150);
+  --secondary-foreground: oklch(0.38 0.08 150);
   --muted: oklch(0.95 0.015 150);
-  --muted-foreground: oklch(0.45 0.04 155); /* cukup gelap utk lulus WCAG di latar terang (full opacity) */
-  --accent: oklch(0.70 0.11 75);          /* emas */
-  --accent-foreground: oklch(0.28 0.04 75);
+  --muted-foreground: oklch(0.42 0.04 155); /* full opacity, cukup gelap utk teks-xs di latar terang */
+  --accent: oklch(0.56 0.13 70);          /* deep gold/amber → lulus sbg teks; bg pakai tint /10 */
+  --accent-foreground: oklch(0.99 0.01 75);
   --destructive: oklch(0.55 0.22 27);
   --border: oklch(0.90 0.015 150);
   --input: oklch(0.92 0.015 150);

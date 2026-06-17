@@ -31,23 +31,23 @@ const CATEGORY_ICONS: Record<IngredientCategory, React.ElementType> = {
 };
 
 const CATEGORY_COLORS: Record<IngredientCategory, string> = {
-  treatment: "text-blue-600 bg-blue-400/10 border-blue-400/20",
-  sunscreen: "text-yellow-600 bg-yellow-400/10 border-yellow-400/20",
-  moisturizer: "text-cyan-600 bg-cyan-400/10 border-cyan-400/20",
+  treatment: "text-blue-700 bg-blue-400/10 border-blue-400/20",
+  sunscreen: "text-yellow-700 bg-yellow-400/10 border-yellow-400/20",
+  moisturizer: "text-cyan-700 bg-cyan-400/10 border-cyan-400/20",
   brightening: "text-purple-400 bg-purple-400/10 border-purple-400/20",
-  soothing: "text-green-600 bg-green-400/10 border-green-400/20",
-  antioxidant: "text-orange-600 bg-orange-400/10 border-orange-400/20",
+  soothing: "text-green-700 bg-green-400/10 border-green-400/20",
+  antioxidant: "text-orange-700 bg-orange-400/10 border-orange-400/20",
 };
 
 const SAFETY_COLORS: Record<string, string> = {
-  sangat_aman: "text-green-600 bg-green-400/10 border-green-400/20",
-  aman: "text-blue-600 bg-blue-400/10 border-blue-400/20",
-  hati_hati: "text-yellow-600 bg-yellow-400/10 border-yellow-400/20",
+  sangat_aman: "text-green-700 bg-green-400/10 border-green-400/20",
+  aman: "text-blue-700 bg-blue-400/10 border-blue-400/20",
+  hati_hati: "text-yellow-700 bg-yellow-400/10 border-yellow-400/20",
 };
 
 const EVIDENCE_COLORS: Record<string, string> = {
-  kuat: "text-green-600",
-  sedang: "text-yellow-600",
+  kuat: "text-green-700",
+  sedang: "text-yellow-700",
   terbatas: "text-muted-foreground",
 };
 
@@ -89,17 +89,17 @@ function IngredientCard({ ingredient, onClick }: { ingredient: Ingredient; onCli
           {EVIDENCE_LABELS[ingredient.evidence_level]}
         </Badge>
         {ingredient.pregnancy_safe && (
-          <Badge variant="outline" className="text-xs px-2 py-0.5 text-rose-600 border-rose-400/30 bg-rose-400/5">
+          <Badge variant="outline" className="text-xs px-2 py-0.5 text-rose-700 border-rose-400/30 bg-rose-400/5">
             🤰 Hamil OK
           </Badge>
         )}
         {ingredient.beginner_friendly && (
-          <Badge variant="outline" className="text-xs px-2 py-0.5 text-amber-600 border-amber-400/30 bg-amber-400/5">
+          <Badge variant="outline" className="text-xs px-2 py-0.5 text-amber-700 border-amber-400/30 bg-amber-400/5">
             ⭐ Pemula
           </Badge>
         )}
         {ingredient.irritation_risk === "tinggi" && (
-          <Badge variant="outline" className="text-xs px-2 py-0.5 text-red-600 border-red-400/30 bg-red-400/5">
+          <Badge variant="outline" className="text-xs px-2 py-0.5 text-red-700 border-red-400/30 bg-red-400/5">
             ⚠️ Iritasi Tinggi
           </Badge>
         )}
@@ -121,10 +121,10 @@ const ALL_CATEGORIES: (IngredientCategory | "semua")[] = [
 type SmartFilter = "aman_hamil" | "pemula" | "low_iritasi" | "bukti_kuat";
 
 const SMART_FILTERS: { id: SmartFilter; label: string; icon: React.ElementType; color: string }[] = [
-  { id: "aman_hamil", label: "Aman Hamil", icon: Baby, color: "text-rose-600 bg-rose-400/10 border-rose-400/30" },
-  { id: "pemula", label: "Pemula Friendly", icon: Star, color: "text-amber-600 bg-amber-400/10 border-amber-400/30" },
-  { id: "low_iritasi", label: "Low Iritasi", icon: Zap, color: "text-green-600 bg-green-400/10 border-green-400/30" },
-  { id: "bukti_kuat", label: "Bukti Kuat", icon: Shield, color: "text-blue-600 bg-blue-400/10 border-blue-400/30" },
+  { id: "aman_hamil", label: "Aman Hamil", icon: Baby, color: "text-rose-700 bg-rose-400/10 border-rose-400/30" },
+  { id: "pemula", label: "Pemula Friendly", icon: Star, color: "text-amber-700 bg-amber-400/10 border-amber-400/30" },
+  { id: "low_iritasi", label: "Low Iritasi", icon: Zap, color: "text-green-700 bg-green-400/10 border-green-400/30" },
+  { id: "bukti_kuat", label: "Bukti Kuat", icon: Shield, color: "text-blue-700 bg-blue-400/10 border-blue-400/30" },
 ];
 
 export default function EdukasiPage() {
@@ -204,14 +204,14 @@ export default function EdukasiPage() {
           className="grid grid-cols-3 gap-3 mb-8"
         >
           {[
-            { icon: CheckCircle, label: "Aman dipakai", value: `${INGREDIENTS.filter(i => i.safety_rating === "sangat_aman").length} ingredient`, color: "text-green-600 bg-green-400/10 border-green-400/20" },
+            { icon: CheckCircle, label: "Aman dipakai", value: `${INGREDIENTS.filter(i => i.safety_rating === "sangat_aman").length} ingredient`, color: "text-green-700 bg-green-400/10 border-green-400/20" },
             { icon: Shield, label: "Bukti ilmiah kuat", value: `${INGREDIENTS.filter(i => i.evidence_level === "kuat").length} ingredient`, color: "text-primary bg-primary/10 border-primary/20" },
-            { icon: AlertTriangle, label: "Perlu hati-hati", value: `${INGREDIENTS.filter(i => i.safety_rating === "hati_hati").length} ingredient`, color: "text-yellow-600 bg-yellow-400/10 border-yellow-400/20" },
+            { icon: AlertTriangle, label: "Perlu hati-hati", value: `${INGREDIENTS.filter(i => i.safety_rating === "hati_hati").length} ingredient`, color: "text-yellow-700 bg-yellow-400/10 border-yellow-400/20" },
           ].map((stat, i) => (
             <div key={i} className={`rounded-xl border p-4 text-center ${stat.color}`}>
               <stat.icon className="w-4 h-4 mx-auto mb-1.5" />
               <p className="text-sm font-bold">{stat.value}</p>
-              <p className="text-xs opacity-70 mt-0.5">{stat.label}</p>
+              <p className="text-xs opacity-90 mt-0.5">{stat.label}</p>
             </div>
           ))}
         </motion.div>

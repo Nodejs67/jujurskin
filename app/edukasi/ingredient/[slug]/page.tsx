@@ -26,14 +26,14 @@ const fadeUp = {
 };
 
 const SAFETY_STYLES: Record<string, { color: string; bg: string; border: string; icon: React.ElementType }> = {
-  sangat_aman: { color: "text-green-600", bg: "bg-green-400/10", border: "border-green-400/20", icon: CheckCircle },
-  aman: { color: "text-blue-600", bg: "bg-blue-400/10", border: "border-blue-400/20", icon: CheckCircle },
-  hati_hati: { color: "text-yellow-600", bg: "bg-yellow-400/10", border: "border-yellow-400/20", icon: AlertTriangle },
+  sangat_aman: { color: "text-green-700", bg: "bg-green-400/10", border: "border-green-400/20", icon: CheckCircle },
+  aman: { color: "text-blue-700", bg: "bg-blue-400/10", border: "border-blue-400/20", icon: CheckCircle },
+  hati_hati: { color: "text-yellow-700", bg: "bg-yellow-400/10", border: "border-yellow-400/20", icon: AlertTriangle },
 };
 
 const EVIDENCE_STYLES: Record<string, string> = {
-  kuat: "text-green-600",
-  sedang: "text-yellow-600",
+  kuat: "text-green-700",
+  sedang: "text-yellow-700",
   terbatas: "text-muted-foreground",
 };
 
@@ -99,7 +99,7 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
               {CATEGORY_LABELS[ing.category]}
             </Badge>
             {ing.pregnancy_safe && (
-              <Badge variant="outline" className="text-xs border-green-400/30 text-green-600 bg-green-400/10 gap-1">
+              <Badge variant="outline" className="text-xs border-green-400/30 text-green-700 bg-green-400/10 gap-1">
                 <Baby className="w-3 h-3" /> Aman Kehamilan
               </Badge>
             )}
@@ -134,16 +134,16 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
           </div>
           {/* Kehamilan */}
           <div className={`rounded-xl border p-3 text-center ${ing.pregnancy_safe ? "bg-rose-400/5 border-rose-400/20" : "bg-destructive/5 border-destructive/15"}`}>
-            <Baby className={`w-4 h-4 mx-auto mb-1 ${ing.pregnancy_safe ? "text-rose-600" : "text-destructive/60"}`} />
-            <p className={`text-[10px] font-semibold ${ing.pregnancy_safe ? "text-rose-600" : "text-destructive/70"} leading-tight`}>
+            <Baby className={`w-4 h-4 mx-auto mb-1 ${ing.pregnancy_safe ? "text-rose-700" : "text-destructive/60"}`} />
+            <p className={`text-[10px] font-semibold ${ing.pregnancy_safe ? "text-rose-700" : "text-destructive/70"} leading-tight`}>
               {ing.pregnancy_safe ? "Aman" : "Hindari"}
             </p>
             <p className="text-[9px] text-muted-foreground mt-0.5">Hamil</p>
           </div>
           {/* Pemula */}
           <div className={`rounded-xl border p-3 text-center ${ing.beginner_friendly ? "bg-amber-400/5 border-amber-400/20" : "bg-muted/30 border-border"}`}>
-            <Star className={`w-4 h-4 mx-auto mb-1 ${ing.beginner_friendly ? "text-amber-600" : "text-muted-foreground"}`} />
-            <p className={`text-[10px] font-semibold leading-tight ${ing.beginner_friendly ? "text-amber-600" : "text-muted-foreground"}`}>
+            <Star className={`w-4 h-4 mx-auto mb-1 ${ing.beginner_friendly ? "text-amber-700" : "text-muted-foreground"}`} />
+            <p className={`text-[10px] font-semibold leading-tight ${ing.beginner_friendly ? "text-amber-700" : "text-muted-foreground"}`}>
               {ing.beginner_friendly ? "Friendly" : "Advanced"}
             </p>
             <p className="text-[9px] text-muted-foreground mt-0.5">Pemula</p>
@@ -156,12 +156,12 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
               "bg-red-400/5 border-red-400/20"
             }`}>
               <Zap className={`w-4 h-4 mx-auto mb-1 ${
-                ing.irritation_risk === "rendah" ? "text-green-600" :
-                ing.irritation_risk === "sedang" ? "text-amber-600" : "text-red-600"
+                ing.irritation_risk === "rendah" ? "text-green-700" :
+                ing.irritation_risk === "sedang" ? "text-amber-700" : "text-red-700"
               }`} />
               <p className={`text-[10px] font-semibold leading-tight capitalize ${
-                ing.irritation_risk === "rendah" ? "text-green-600" :
-                ing.irritation_risk === "sedang" ? "text-amber-600" : "text-red-600"
+                ing.irritation_risk === "rendah" ? "text-green-700" :
+                ing.irritation_risk === "sedang" ? "text-amber-700" : "text-red-700"
               }`}>{ing.irritation_risk}</p>
               <p className="text-[9px] text-muted-foreground mt-0.5">Iritasi</p>
             </div>
@@ -199,11 +199,11 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
         <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.25 }}
           className="grid sm:grid-cols-2 gap-4">
           <div className="rounded-xl border border-green-400/20 bg-green-400/5 p-5">
-            <p className="text-xs text-green-600 font-semibold uppercase tracking-wide mb-3">✅ Cocok untuk</p>
+            <p className="text-xs text-green-700 font-semibold uppercase tracking-wide mb-3">✅ Cocok untuk</p>
             <div className="space-y-2">
               {ing.good_for.map((item, i) => (
                 <div key={i} className="flex items-start gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-green-600 mt-0.5 shrink-0" />
+                  <CheckCircle className="w-3.5 h-3.5 text-green-700 mt-0.5 shrink-0" />
                   <span className="text-xs text-foreground">{item}</span>
                 </div>
               ))}
@@ -224,8 +224,8 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
           ) : (
             <div className="rounded-xl border border-green-400/20 bg-green-400/5 p-5 flex items-center justify-center">
               <div className="text-center">
-                <CheckCircle className="w-6 h-6 text-green-600 mx-auto mb-2" />
-                <p className="text-xs text-green-600 font-medium">Tidak ada kontraindikasi</p>
+                <CheckCircle className="w-6 h-6 text-green-700 mx-auto mb-2" />
+                <p className="text-xs text-green-700 font-medium">Tidak ada kontraindikasi</p>
                 <p className="text-xs text-muted-foreground mt-1">Aman untuk semua orang</p>
               </div>
             </div>
@@ -286,7 +286,7 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
 
           {/* Conflicts with */}
           <div className={`rounded-xl border p-5 ${ing.conflicts_with.length > 0 ? "border-yellow-400/20 bg-yellow-400/5" : "border-border bg-card"}`}>
-            <p className={`text-xs font-semibold uppercase tracking-wide mb-3 ${ing.conflicts_with.length > 0 ? "text-yellow-600" : "text-muted-foreground"}`}>
+            <p className={`text-xs font-semibold uppercase tracking-wide mb-3 ${ing.conflicts_with.length > 0 ? "text-yellow-700" : "text-muted-foreground"}`}>
               ⚠️ Jangan dikombinasikan
             </p>
             {ing.conflicts_with.length > 0 ? (
@@ -355,9 +355,9 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-4 bg-green-400/5">
-                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-green-700 mt-0.5 shrink-0" />
                     <div>
-                      <p className="text-xs text-green-600 font-medium mb-0.5 uppercase tracking-wide">Fakta</p>
+                      <p className="text-xs text-green-700 font-medium mb-0.5 uppercase tracking-wide">Fakta</p>
                       <p className="text-sm text-foreground leading-relaxed">{myth.fact}</p>
                     </div>
                   </div>
@@ -402,7 +402,7 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
                     <p className="text-xs text-muted-foreground">{prod.brand} · Rp {prod.price_min.toLocaleString("id")}</p>
                   </div>
                   {prod.bpom_registered && (
-                    <Badge variant="outline" className="text-[10px] border-green-400/30 text-green-600 shrink-0">BPOM</Badge>
+                    <Badge variant="outline" className="text-[10px] border-green-400/30 text-green-700 shrink-0">BPOM</Badge>
                   )}
                 </div>
               ))}
@@ -419,13 +419,13 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
         {/* Check conflicts CTA */}
         <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.53 }}
           className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-4 flex items-start gap-3">
-          <AlertTriangle className="w-4 h-4 text-yellow-600 shrink-0 mt-0.5" />
+          <AlertTriangle className="w-4 h-4 text-yellow-700 shrink-0 mt-0.5" />
           <div className="flex-1">
-            <p className="text-xs font-medium text-yellow-600 mb-1">Kombinasi dengan produk lain?</p>
+            <p className="text-xs font-medium text-yellow-700 mb-1">Kombinasi dengan produk lain?</p>
             <p className="text-xs text-muted-foreground mb-2">Cek apakah {ing.name} aman dikombinasikan dengan ingredient lain yang kamu pakai.</p>
             <button
               onClick={() => router.push(`/cek-konflik`)}
-              className="text-xs text-yellow-600 hover:underline font-medium"
+              className="text-xs text-yellow-700 hover:underline font-medium"
             >
               Cek Konflik Ingredient →
             </button>
