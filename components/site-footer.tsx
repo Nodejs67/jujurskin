@@ -26,6 +26,7 @@ export function SiteFooter() {
               { href: "/simulasi", label: "Simulasi What-If" },
               { href: "/cek-klaim", label: "Cek Klaim Iklan" },
               { href: "/mitos-fakta", label: "Mitos vs Fakta" },
+              { href: "/iklim", label: "Iklim Kotamu" },
               { href: "/bandingkan", label: "Bandingkan" },
               { href: "/rutinitas", label: "Rutinitas" },
               { href: "/progress", label: "Progress Kulit" },

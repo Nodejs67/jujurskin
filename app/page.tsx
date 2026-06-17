@@ -118,6 +118,7 @@ const NAV_LINKS = [
   { href: "/simulasi", label: "Simulasi" },
   { href: "/cek-klaim", label: "Cek Klaim" },
   { href: "/mitos-fakta", label: "Mitos/Fakta" },
+  { href: "/iklim", label: "Iklim" },
   { href: "/rutinitas", label: "Rutinitas" },
   { href: "/progress", label: "Progress" },
 ];
@@ -742,6 +743,12 @@ export default function Home() {
                 </div>
               </motion.div>
             ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Button onClick={() => router.push("/iklim")} variant="outline" className="border-border gap-2">
+              <MapPin className="w-4 h-4" /> Cek UV & kelembapan real-time kotamu
+            </Button>
           </div>
         </div>
       </section>

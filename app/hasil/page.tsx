@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
 import type { AnalysisResult } from "@/lib/recommendations";
 import { PRODUCTS, type ProductCategory } from "@/lib/products";
+import { ClimateWidget } from "@/components/climate-widget";
 
 const CATEGORY_MAP: Record<string, ProductCategory> = {
   "Sun Protection": "sunscreen",
@@ -493,6 +494,13 @@ function HasilContent() {
                 </li>
               ))}
             </ul>
+          </motion.div>
+        )}
+
+        {/* Iklim real-time kotamu */}
+        {data.kota && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.42 }}>
+            <ClimateWidget defaultCity={data.kota} />
           </motion.div>
         )}
 
