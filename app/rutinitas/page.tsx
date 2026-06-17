@@ -94,7 +94,7 @@ function RutinitasContent() {
       const id = searchParams.get("id");
       if (id && supabase) {
         try {
-          const { data } = await supabase.from("analyses").select("hasil, nama").eq("id", id).single();
+          const { data } = await supabase.from("skin_analyses").select("hasil, nama").eq("id", id).single();
           if (data?.hasil) {
             setHasil(data.hasil as AnalysisResult);
             setNamaUser(data.nama ?? "");

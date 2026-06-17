@@ -75,6 +75,7 @@ function HasilContent() {
   const [notFound, setNotFound] = useState(false);
   const [expandedRec, setExpandedRec] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
+  const [tierView, setTierView] = useState<"basic" | "sedang" | "lengkap">("lengkap");
 
   useEffect(() => {
     const id = params.get("id");
@@ -91,8 +92,16 @@ function HasilContent() {
     }
 
     supabase.from("skin_analyses").select("*").eq("id", id).single().then(({ data: row, error }) => {
-      if (error || !row) { setNotFound(true); }
-      else { setData(row as Analysis); }
+      if (error || !row) {
+        // Fallback ke localStorage agar hasil tidak hilang saat kembali dari halaman lain
+        const cached = localStorage.getItem("jujurskin_hasil");
+        if (cached) setData({ id: "local", nama: null, usia: 0, kota: "", tipe_kulit: "", masalah: [], budget: 0, hasil: JSON.parse(cached) });
+        else setNotFound(true);
+      } else {
+        setData(row as Analysis);
+        // Cache hasil supaya bisa dibuka lagi tanpa mengulang analisis
+        try { localStorage.setItem("jujurskin_hasil", JSON.stringify((row as Analysis).hasil)); } catch { /* abaikan */ }
+      }
       setLoading(false);
     });
   }, [params]);
@@ -124,6 +133,12 @@ function HasilContent() {
 
   const h = data.hasil;
   const nama = data.nama || "Kamu";
+  const shownRecs =
+    tierView === "basic"
+      ? h.recs.slice(0, Math.min(3, h.recs.length))
+      : tierView === "sedang"
+      ? h.recs.slice(0, Math.min(5, h.recs.length))
+      : h.recs;
 
   return (
     <main className="min-h-screen bg-background">
@@ -236,9 +251,30 @@ function HasilContent() {
 
         {/* Rekomendasi */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <p className="text-sm font-semibold text-foreground mb-3">Rekomendasi untuk kamu:</p>
+          <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
+            <p className="text-sm font-semibold text-foreground">Rekomendasi untuk kamu:</p>
+            <div className="flex gap-1 p-1 rounded-lg bg-secondary/50">
+              {([["basic", "Basic"], ["sedang", "Sedang"], ["lengkap", "Lengkap"]] as const).map(([v, l]) => (
+                <button
+                  key={v}
+                  onClick={() => setTierView(v)}
+                  className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${tierView === v ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground mb-3">
+            {tierView === "basic"
+              ? "Versi paling ringkas — esensial prioritas teratas saja."
+              : tierView === "sedang"
+              ? "Versi menengah — esensial + beberapa treatment penting."
+              : "Versi lengkap — semua rekomendasi sesuai kondisimu."}{" "}
+            Menampilkan {shownRecs.length} dari {h.recs.length} produk.
+          </p>
           <div className="space-y-3">
-            {h.recs.map((rec, i) => {
+            {shownRecs.map((rec, i) => {
               const productSuggs = getProductSuggestions(rec.category || rec.product, data.budget);
               const isOpen = expandedRec === i;
               return (
@@ -271,12 +307,14 @@ function HasilContent() {
                       {isOpen ? "Sembunyikan produk" : `Lihat produk${productSuggs.length > 0 ? ` (${productSuggs.length})` : ""} →`}
                     </button>
                     <span className="text-muted-foreground/30">·</span>
-                    <button
-                      onClick={() => router.push("/edukasi")}
+                    <a
+                      href="/edukasi"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center gap-1 text-xs text-primary hover:text-primary transition-colors"
                     >
                       <BookOpen className="w-3 h-3" /> Pelajari ingredient →
-                    </button>
+                    </a>
                   </div>
 
                   {/* Inline product suggestions */}
@@ -291,7 +329,8 @@ function HasilContent() {
                       {productSuggs.length > 0 ? (
                         <>
                           {productSuggs.map((prod) => (
-                            <div key={prod.id} className="flex items-start justify-between gap-3 p-3 rounded-lg bg-background/60 border border-border/50">
+                            <a key={prod.id} href={`/produk/${prod.id}`} target="_blank" rel="noopener noreferrer"
+                              className="flex items-start justify-between gap-3 p-3 rounded-lg bg-background/60 border border-border/50 hover:border-primary/40 transition-colors">
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-1.5 mb-0.5">
                                   <p className="text-xs font-semibold text-foreground truncate">{prod.name}</p>
@@ -306,21 +345,23 @@ function HasilContent() {
                                 <p className="text-xs font-bold text-accent">Rp {prod.price_min.toLocaleString("id")}</p>
                                 <p className="text-[10px] text-muted-foreground">– {prod.price_max.toLocaleString("id")}</p>
                               </div>
-                            </div>
+                            </a>
                           ))}
-                          <button
-                            onClick={() => router.push(`/produk`)}
-                            className="w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors py-1"
+                          <a
+                            href="/produk"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors py-1"
                           >
                             Lihat semua produk →
-                          </button>
+                          </a>
                         </>
                       ) : (
                         <div className="p-3 rounded-lg bg-background/60 border border-border/50 text-center">
                           <p className="text-xs text-muted-foreground">Belum ada produk spesifik di database untuk kategori ini.</p>
-                          <button onClick={() => router.push("/produk")} className="text-xs text-primary hover:underline mt-1">
+                          <a href="/produk" target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1 inline-block">
                             Cari di halaman produk →
-                          </button>
+                          </a>
                         </div>
                       )}
                     </motion.div>
@@ -507,7 +548,8 @@ function HasilContent() {
           {/* Budget tiers */}
           {h.budget_tiers && h.budget_tiers.length > 0 && (
             <div className="mt-4 pt-4 border-t border-border">
-              <p className="text-xs font-semibold text-foreground mb-2.5">Pilihan sesuai kantong (total estimasi/bulan)</p>
+              <p className="text-xs font-semibold text-foreground mb-1">Pilihan sesuai kantong (total estimasi/bulan)</p>
+              <p className="text-[11px] text-muted-foreground mb-2.5">Harga lebih mahal ≠ lebih ampuh. Keampuhan dari bahan aktif & formulasi — yang mahal beda di tekstur, kenyamanan & brand. Pilih sesuai kantong & selera.</p>
               <div className="space-y-2">
                 {h.budget_tiers.map((t) => (
                   <div key={t.tier} className="flex items-start justify-between gap-3 p-3 rounded-lg bg-secondary/30 border border-border/50">

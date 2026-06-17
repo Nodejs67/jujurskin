@@ -728,15 +728,24 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
 
   // ── Phase 2: Rekomendasi edukatif (BUKAN diagnosis medis)
   const education: EduSection[] = [];
+
+  // Pola makan — selalu ada, isinya menyesuaikan jenis kulit & masalah
+  const foodItems: string[] = [];
+  if (has("jerawat") || isHormonal || isOily || has("berminyak")) {
+    foodItems.push("Kurangi gorengan & makanan berminyak serta tinggi gula (high-GI: minuman manis, fast food) — pada sebagian orang memicu minyak berlebih & jerawat.");
+    foodItems.push("Untuk sebagian orang, susu sapi memperparah jerawat — coba kurangi lalu amati respons kulitmu.");
+  }
+  if (isDry || has("kering")) {
+    foodItems.push("Perbanyak lemak sehat (alpukat, ikan berlemak, kacang) & cukupi air — membantu melembapkan kulit kering dari dalam.");
+  }
+  if (has("pigmentasi") || has("kusam") || has("bekas_jerawat") || hasPIH) {
+    foodItems.push("Makanan tinggi vitamin C (jeruk, paprika, jambu) & antioksidan mendukung produksi kolagen dan kulit lebih cerah.");
+  }
+  foodItems.push("Perbanyak sayur & buah berserat dan makanan tinggi omega-3 (ikan, chia) — mendukung kulit lebih tenang & sehat.");
+  foodItems.push("Bersifat umum & berbeda tiap orang — bukan aturan medis baku.");
+  education.push({ title: "🍽️ Pola makan untuk kulitmu", items: foodItems });
+
   if (has("jerawat") || isHormonal) {
-    education.push({
-      title: "🍽️ Pola makan & jerawat",
-      items: [
-        "Untuk sebagian orang, susu sapi & makanan tinggi gula (high-GI: gorengan, minuman manis) bisa memperparah jerawat — coba kurangi lalu amati respons kulitmu.",
-        "Perbanyak makanan tinggi omega-3 (ikan, chia, kacang) & sayur-buah berserat — mendukung kulit lebih tenang.",
-        "Ini bersifat umum & berbeda tiap orang, bukan aturan medis baku.",
-      ],
-    });
     education.push({
       title: "🧼 Kebiasaan harian",
       items: [
