@@ -24,6 +24,7 @@ export function SiteFooter() {
               { href: "/bandingkan", label: "Bandingkan" },
               { href: "/rutinitas", label: "Rutinitas" },
               { href: "/progress", label: "Progress Kulit" },
+              { href: "/artikel", label: "Artikel" },
               { href: "/kalkulator", label: "Budget Planner" },
               { href: "/feedback", label: "Feedback" },
             ].map((link) => (

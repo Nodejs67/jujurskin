@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { INGREDIENTS } from "@/lib/ingredients";
+import { ARTICLES } from "@/lib/articles";
+import { PRODUCTS } from "@/lib/products";
 
 const BASE = "https://jujurskin.vercel.app";
 
@@ -31,5 +33,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...ingredientEntries];
+  const artikelEntries: MetadataRoute.Sitemap = ARTICLES.map((a) => ({
+    url: `${BASE}/artikel/${a.slug}`,
+    lastModified: new Date(a.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const artikelHub: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE}/artikel`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
+  ];
+
+  const produkEntries: MetadataRoute.Sitemap = PRODUCTS.map((p) => ({
+    url: `${BASE}/produk/${p.id}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticEntries, ...ingredientEntries, ...artikelHub, ...artikelEntries, ...produkEntries];
 }
