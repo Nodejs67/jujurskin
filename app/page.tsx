@@ -263,7 +263,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                <CheckCircle className="w-3 h-3 text-primary/50" />
+                <CheckCircle className="w-3 h-3 text-primary" />
                 Analisis selesai dalam 45 detik · Tidak perlu daftar
               </div>
             </div>
@@ -289,7 +289,7 @@ export default function Home() {
           <motion.div variants={fadeUp} className="mt-6 flex flex-wrap justify-center gap-5 text-xs text-muted-foreground">
             {["Tidak ada iklan berbayar", "Tidak terafiliasi brand apapun", "Data pribadimu aman", "Bahasa Indonesia"].map((t) => (
               <div key={t} className="flex items-center gap-1.5">
-                <CheckCircle className="w-3.5 h-3.5 text-primary/50" /> {t}
+                <CheckCircle className="w-3.5 h-3.5 text-primary" /> {t}
               </div>
             ))}
           </motion.div>
@@ -376,7 +376,7 @@ export default function Home() {
                   >
                     {item.type === "ok"
                       ? <CheckCircle className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                      : <XCircle className="w-4 h-4 text-destructive/70 mt-0.5 shrink-0" />
+                      : <XCircle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
                     }
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2 mb-0.5">
@@ -547,7 +547,7 @@ export default function Home() {
               ].map((item, i) => (
                 <div key={i} className="flex items-center justify-between gap-4 p-3 rounded-lg bg-destructive/5 border border-destructive/10">
                   <div className="flex items-start gap-3">
-                    <XCircle className="w-4 h-4 text-destructive/60 mt-0.5 shrink-0" />
+                    <XCircle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
                     <div>
                       <p className="text-sm font-medium text-foreground">{item.name}</p>
                       <p className="text-xs text-muted-foreground">{item.reason}</p>
@@ -776,7 +776,7 @@ export default function Home() {
               <div className="space-y-2.5">
                 {vsGPT.map((item) => (
                   <div key={item} className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <XCircle className="w-4 h-4 text-destructive/50 shrink-0" />
+                    <XCircle className="w-4 h-4 text-destructive shrink-0" />
                     {item}
                   </div>
                 ))}
@@ -793,7 +793,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="font-semibold text-foreground">JujurSkin</p>
-                  <p className="text-xs text-primary/70">Dibangun khusus untuk kulitmu</p>
+                  <p className="text-xs text-primary">Dibangun khusus untuk kulitmu</p>
                 </div>
               </div>
               <div className="space-y-2.5">
@@ -887,7 +887,7 @@ export default function Home() {
                 <motion.div key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
                   className="flex items-start gap-3 p-3 rounded-lg bg-destructive/5 border border-destructive/10"
                 >
-                  <XCircle className="w-4 h-4 text-destructive/60 mt-0.5 shrink-0" />
+                  <XCircle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
                   <span className="text-sm text-muted-foreground">{item}</span>
                 </motion.div>
               ))}

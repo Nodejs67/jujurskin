@@ -134,8 +134,8 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
           </div>
           {/* Kehamilan */}
           <div className={`rounded-xl border p-3 text-center ${ing.pregnancy_safe ? "bg-rose-400/5 border-rose-400/20" : "bg-destructive/5 border-destructive/15"}`}>
-            <Baby className={`w-4 h-4 mx-auto mb-1 ${ing.pregnancy_safe ? "text-rose-700" : "text-destructive/60"}`} />
-            <p className={`text-[10px] font-semibold ${ing.pregnancy_safe ? "text-rose-700" : "text-destructive/70"} leading-tight`}>
+            <Baby className={`w-4 h-4 mx-auto mb-1 ${ing.pregnancy_safe ? "text-rose-700" : "text-destructive"}`} />
+            <p className={`text-[10px] font-semibold ${ing.pregnancy_safe ? "text-rose-700" : "text-destructive"} leading-tight`}>
               {ing.pregnancy_safe ? "Aman" : "Hindari"}
             </p>
             <p className="text-[9px] text-muted-foreground mt-0.5">Hamil</p>
@@ -171,7 +171,7 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
         {/* Compare CTA */}
         <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.12 }}>
           <a href={`/bandingkan?a=${ing.id}`}
-            className="flex items-center gap-2 text-xs text-primary/70 hover:text-primary transition-colors">
+            className="flex items-center gap-2 text-xs text-primary hover:text-primary transition-colors">
             <GitCompare className="w-3.5 h-3.5" />
             Bandingkan {ing.name} dengan ingredient lain →
           </a>
@@ -211,11 +211,11 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
           </div>
           {ing.avoid_if.length > 0 ? (
             <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-5">
-              <p className="text-xs text-destructive/70 font-semibold uppercase tracking-wide mb-3">⚠️ Hindari jika</p>
+              <p className="text-xs text-destructive font-semibold uppercase tracking-wide mb-3">⚠️ Hindari jika</p>
               <div className="space-y-2">
                 {ing.avoid_if.map((item, i) => (
                   <div key={i} className="flex items-start gap-2">
-                    <XCircle className="w-3.5 h-3.5 text-destructive/60 mt-0.5 shrink-0" />
+                    <XCircle className="w-3.5 h-3.5 text-destructive mt-0.5 shrink-0" />
                     <span className="text-xs text-foreground">{item}</span>
                   </div>
                 ))}
@@ -348,9 +348,9 @@ function IngredientDetail({ ing }: { ing: Ingredient }) {
               {ing.myths.map((myth, i) => (
                 <div key={i} className="rounded-xl border border-border bg-card overflow-hidden">
                   <div className="flex items-start gap-3 p-4 border-b border-border/50 bg-destructive/5">
-                    <XCircle className="w-4 h-4 text-destructive/60 mt-0.5 shrink-0" />
+                    <XCircle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
                     <div>
-                      <p className="text-xs text-destructive/60 font-medium mb-0.5 uppercase tracking-wide">Mitos</p>
+                      <p className="text-xs text-destructive font-medium mb-0.5 uppercase tracking-wide">Mitos</p>
                       <p className="text-sm text-foreground">&ldquo;{myth.myth}&rdquo;</p>
                     </div>
                   </div>

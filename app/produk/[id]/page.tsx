@@ -369,7 +369,7 @@ export default function ProdukDetailPage({
                         className={`w-5 h-5 transition-colors ${
                           star <= form.rating
                             ? "fill-primary text-primary"
-                            : "text-muted-foreground/30 hover:text-primary/50"
+                            : "text-muted-foreground/30 hover:text-primary"
                         }`}
                       />
                     </button>

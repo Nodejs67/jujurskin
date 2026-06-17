@@ -193,7 +193,7 @@ export default function KalkulatorPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-sm font-semibold text-foreground">Starter Kit yang sesuai budgetmu:</p>
-                <Badge variant="outline" className="text-xs border-primary/20 text-primary/70 bg-primary/5">
+                <Badge variant="outline" className="text-xs border-primary/20 text-primary bg-primary/5">
                   {affordableKits.length} opsi
                 </Badge>
               </div>
@@ -242,7 +242,7 @@ export default function KalkulatorPage() {
                             {k.items.map((item, j) => (
                               <div key={j} className="flex items-center justify-between text-xs">
                                 <div className="flex items-center gap-2">
-                                  <CheckCircle className="w-3 h-3 text-primary/60 shrink-0" />
+                                  <CheckCircle className="w-3 h-3 text-primary shrink-0" />
                                   <span className="text-foreground">{item.name}</span>
                                   <Badge variant="outline" className="text-[10px] border-border text-muted-foreground px-1.5 py-0">{item.category}</Badge>
                                 </div>
@@ -319,7 +319,7 @@ export default function KalkulatorPage() {
                   "Beli ukuran besar jika produknya cocok — harga per ml jauh lebih hemat",
                 ].map((tip, i) => (
                   <div key={i} className="flex items-start gap-2">
-                    <TrendingDown className="w-3.5 h-3.5 text-primary/60 mt-0.5 shrink-0" />
+                    <TrendingDown className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
                     <p className="text-xs text-muted-foreground">{tip}</p>
                   </div>
                 ))}

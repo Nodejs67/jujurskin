@@ -143,7 +143,7 @@ function MythCard({ myth, fact, icon, defaultOpen = false }: { myth: string; fac
       >
         <span className="text-xl shrink-0">{icon}</span>
         <div className="flex-1">
-          <p className="text-xs text-destructive/60 font-medium mb-0.5">MITOS</p>
+          <p className="text-xs text-destructive font-medium mb-0.5">MITOS</p>
           <p className="text-sm text-foreground leading-tight">&ldquo;{myth}&rdquo;</p>
         </div>
         {open ? <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />}
@@ -347,7 +347,7 @@ export default function PanduanPage() {
                       {skin.use.map((u, j) => <p key={j} className="text-xs text-foreground mb-1">• {u}</p>)}
                     </div>
                     <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-3">
-                      <p className="text-xs text-destructive/60 font-semibold mb-2">❌ Hindari</p>
+                      <p className="text-xs text-destructive font-semibold mb-2">❌ Hindari</p>
                       {skin.avoid.map((a, j) => <p key={j} className="text-xs text-foreground mb-1">• {a}</p>)}
                     </div>
                   </div>

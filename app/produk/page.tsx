@@ -452,7 +452,7 @@ export default function ProdukPage() {
             <p className="text-xs text-muted-foreground">{filtered.length} produk ditemukan</p>
             <button
               onClick={() => { setQuery(""); setActiveCategory("semua"); setActivePriceRange("semua"); setActiveSkinType("semua"); }}
-              className="text-xs text-primary/70 hover:text-primary transition-colors"
+              className="text-xs text-primary hover:text-primary transition-colors"
             >
               Reset filter
             </button>

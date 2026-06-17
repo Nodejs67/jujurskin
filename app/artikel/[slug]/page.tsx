@@ -177,7 +177,7 @@ export default function ArtikelDetailPage({
                       <Clock className="w-3 h-3" /> {rel.read_time} menit
                     </p>
                   </div>
-                  <ArrowLeft className="w-4 h-4 text-primary/0 group-hover:text-primary/60 transition-all rotate-180 group-hover:translate-x-1 flex-shrink-0" />
+                  <ArrowLeft className="w-4 h-4 text-primary/0 group-hover:text-primary transition-all rotate-180 group-hover:translate-x-1 flex-shrink-0" />
                 </a>
               ))}
             </div>

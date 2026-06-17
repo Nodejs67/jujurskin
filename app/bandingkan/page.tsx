@@ -448,8 +448,8 @@ function BandingkanContent() {
 
         {/* Bottom links */}
         <div className="flex flex-wrap gap-3 pb-6 text-xs">
-          <a href="/edukasi" className="text-primary/70 hover:text-primary transition-colors">← Database 100+ Ingredient</a>
-          <a href="/cek-konflik" className="text-primary/70 hover:text-primary transition-colors">Cek Konflik →</a>
+          <a href="/edukasi" className="text-primary hover:text-primary transition-colors">← Database 100+ Ingredient</a>
+          <a href="/cek-konflik" className="text-primary hover:text-primary transition-colors">Cek Konflik →</a>
         </div>
       </div>
     </main>

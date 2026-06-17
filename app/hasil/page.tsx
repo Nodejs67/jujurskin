@@ -223,7 +223,7 @@ function HasilContent() {
                   </div>
                   <p className="text-xs text-muted-foreground mb-2 leading-relaxed">{rec.reason}</p>
                   <div className="flex flex-wrap gap-1.5 mb-3">
-                    <Badge variant="outline" className="text-xs border-primary/20 text-primary/70">{rec.frequency}</Badge>
+                    <Badge variant="outline" className="text-xs border-primary/20 text-primary">{rec.frequency}</Badge>
                     {rec.examples.map((ex, j) => (
                       <Badge key={j} variant="outline" className="text-xs border-border text-muted-foreground">{ex}</Badge>
                     ))}
@@ -240,7 +240,7 @@ function HasilContent() {
                     <span className="text-muted-foreground/30">·</span>
                     <button
                       onClick={() => router.push("/edukasi")}
-                      className="flex items-center gap-1 text-xs text-primary/70 hover:text-primary transition-colors"
+                      className="flex items-center gap-1 text-xs text-primary hover:text-primary transition-colors"
                     >
                       <BookOpen className="w-3 h-3" /> Pelajari ingredient →
                     </button>
@@ -305,7 +305,7 @@ function HasilContent() {
             <div className="space-y-2">
               {h.skips.map((skip, i) => (
                 <div key={i} className="flex items-start gap-3 p-4 rounded-xl border border-destructive/15 bg-destructive/5">
-                  <XCircle className="w-4 h-4 text-destructive/60 mt-0.5 shrink-0" />
+                  <XCircle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
                   <div className="flex-1">
                     <div className="flex justify-between items-start gap-2">
                       <p className="text-sm font-medium text-foreground">Skip: {skip.product}</p>
@@ -379,7 +379,7 @@ function HasilContent() {
             <ul className="space-y-1.5">
               {h.lifestyle_notes.map((note, i) => (
                 <li key={i} className="text-xs text-muted-foreground flex gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-primary/60 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-3.5 h-3.5 text-primary flex-shrink-0 mt-0.5" />
                   <span>{note}</span>
                 </li>
               ))}

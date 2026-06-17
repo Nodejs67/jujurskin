@@ -204,14 +204,14 @@ export default function EdukasiPage() {
           className="grid grid-cols-3 gap-3 mb-8"
         >
           {[
-            { icon: CheckCircle, label: "Aman dipakai", value: `${INGREDIENTS.filter(i => i.safety_rating === "sangat_aman").length} ingredient`, color: "text-green-700 bg-green-400/10 border-green-400/20" },
+            { icon: CheckCircle, label: "Aman dipakai", value: `${INGREDIENTS.filter(i => i.safety_rating === "sangat_aman").length} ingredient`, color: "text-green-800 bg-green-400/10 border-green-400/20" },
             { icon: Shield, label: "Bukti ilmiah kuat", value: `${INGREDIENTS.filter(i => i.evidence_level === "kuat").length} ingredient`, color: "text-primary bg-primary/10 border-primary/20" },
-            { icon: AlertTriangle, label: "Perlu hati-hati", value: `${INGREDIENTS.filter(i => i.safety_rating === "hati_hati").length} ingredient`, color: "text-yellow-700 bg-yellow-400/10 border-yellow-400/20" },
+            { icon: AlertTriangle, label: "Perlu hati-hati", value: `${INGREDIENTS.filter(i => i.safety_rating === "hati_hati").length} ingredient`, color: "text-yellow-800 bg-yellow-400/10 border-yellow-400/20" },
           ].map((stat, i) => (
             <div key={i} className={`rounded-xl border p-4 text-center ${stat.color}`}>
               <stat.icon className="w-4 h-4 mx-auto mb-1.5" />
               <p className="text-sm font-bold">{stat.value}</p>
-              <p className="text-xs opacity-90 mt-0.5">{stat.label}</p>
+              <p className="text-xs mt-0.5">{stat.label}</p>
             </div>
           ))}
         </motion.div>

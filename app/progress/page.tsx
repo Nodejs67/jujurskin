@@ -495,7 +495,7 @@ export default function ProgressPage() {
         {entries.length === 0 && !showForm && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-              <TrendingUp className="w-8 h-8 text-primary/60" />
+              <TrendingUp className="w-8 h-8 text-primary" />
             </div>
             <h3 className="font-semibold text-base mb-2">Mulai Tracking Kulitmu</h3>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto mb-6">
