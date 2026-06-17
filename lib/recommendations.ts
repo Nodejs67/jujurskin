@@ -83,6 +83,28 @@ export interface RoutineStep {
   warning?: string;
 }
 
+export interface ProblemPriority {
+  rank: number;
+  title: string;
+  desc: string;
+}
+
+export interface TimelineItem {
+  item: string;
+  time: string;
+}
+
+export interface BudgetTier {
+  tier: string;
+  total: number;
+  desc: string;
+}
+
+export interface EduSection {
+  title: string;
+  items: string[];
+}
+
 export interface AnalysisResult {
   recs: Recommendation[];
   skips: SkipItem[];
@@ -95,6 +117,15 @@ export interface AnalysisResult {
   night_routine: RoutineStep[];
   lifestyle_notes: string[];
   pregnancy_warnings: string[];
+  // Phase 2 — output transparan & edukatif (opsional; hasil lama tetap kompatibel)
+  problem_priorities?: ProblemPriority[];
+  result_timeline?: TimelineItem[];
+  overtreatment_warning?: string;
+  budget_efficiency?: number;
+  potential_saving?: number;
+  budget_tiers?: BudgetTier[];
+  education?: EduSection[];
+  disclaimer?: string;
 }
 
 // ── Kota dengan iklim ekstrem di Indonesia
@@ -611,6 +642,114 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   const morningRoutine = buildMorningRoutine(recs, input);
   const nightRoutine = buildNightRoutine(recs, input);
 
+  // ── Phase 2: Prioritas masalah kulit (#1/#2/#3)
+  const priorities: ProblemPriority[] = [];
+  let prank = 1;
+  if (isSensitive || isStressed || poorSleep || isDry) {
+    priorities.push({ rank: prank++, title: "Perbaikan & penguatan skin barrier", desc: "Barrier yang sehat adalah fondasi. Tanpa ini, treatment lain mudah memicu iritasi." });
+  }
+  if (has("jerawat")) {
+    priorities.push({ rank: prank++, title: "Mengontrol jerawat aktif", desc: "Tenangkan peradangan & cegah jerawat baru sebelum fokus ke bekas." });
+  }
+  if (has("bekas_jerawat") || hasPIH) {
+    priorities.push({ rank: prank++, title: "Memudarkan bekas & noda (PIH)", desc: "Setelah jerawat terkendali, fokus memudarkan noda dengan Niacinamide/Vit C + sunscreen." });
+  }
+  if (has("pigmentasi") || has("kusam")) {
+    priorities.push({ rank: prank++, title: "Mencerahkan & meratakan warna kulit", desc: "Hiperpigmentasi butuh konsistensi + proteksi UV disiplin." });
+  }
+  if (has("anti_aging")) {
+    priorities.push({ rank: prank++, title: "Pencegahan penuaan dini", desc: "Retinoid/antioksidan + sunscreen memperlambat tanda penuaan." });
+  }
+  if (priorities.length === 0) {
+    priorities.push({ rank: 1, title: "Menjaga & merawat kulit sehat", desc: "Fokus pada konsistensi: cleanser lembut, pelembap, dan sunscreen." });
+  }
+  const problem_priorities = priorities.slice(0, 3);
+
+  // ── Phase 2: Estimasi waktu hasil per kategori
+  const TIME_MAP: Record<string, string> = {
+    "Sun Protection": "Perlindungan langsung — mencegah kerusakan baru sejak hari pertama",
+    "Cleansing": "1–2 minggu — kulit terasa lebih bersih & seimbang",
+    "Moisturizing": "1–2 minggu — kulit lebih lembap & nyaman",
+    "Toner / Essence": "1–2 minggu — hidrasi lebih baik",
+    "Repair & Soothing": "2–4 minggu — kulit lebih tenang & tidak reaktif",
+    "Exfoliant": "2–4 minggu — tekstur lebih halus",
+    "Acne Treatment": "4–8 minggu — jerawat aktif berkurang bertahap",
+    "Brightening & Repair": "4–8 minggu — bekas memudar perlahan",
+    "Brightening": "4–8 minggu — warna kulit lebih merata",
+    "Anti-Aging": "8–12 minggu — tekstur & garis halus membaik",
+  };
+  const seenCat = new Set<string>();
+  const result_timeline: TimelineItem[] = [];
+  for (const r of recs) {
+    if (TIME_MAP[r.category] && !seenCat.has(r.category)) {
+      seenCat.add(r.category);
+      result_timeline.push({ item: r.product, time: TIME_MAP[r.category] });
+    }
+  }
+
+  // ── Phase 2: Peringatan over-treatment dari produk existing + obat
+  const existingLower = input.produk_existing?.toLowerCase() || "";
+  const STRONG_ACTIVES = ["retinol", "retinoid", "tretinoin", "adapalene", "aha", "bha", "salicylic", "glycolic", "exfoliat", "benzoyl", "vitamin c", "peeling"];
+  const existingActiveCount = STRONG_ACTIVES.filter((a) => existingLower.includes(a)).length;
+  let overtreatment_warning: string | undefined;
+  if (onAcneMeds || existingActiveCount >= 2) {
+    overtreatment_warning = `${onAcneMeds ? "Kamu sedang memakai obat jerawat." : `Sepertinya kamu sudah memakai beberapa bahan aktif (${existingActiveCount} terdeteksi).`} Hindari menumpuk retinoid + exfoliant + BHA sekaligus — ini penyebab utama iritasi & "purging" berkepanjangan. Tambahkan produk aktif baru SATU per satu, beri jeda 2–4 minggu, dan jangan pakai banyak aktif di malam yang sama.`;
+  }
+
+  // ── Phase 2: Budget tiers (hemat/menengah/premium) & efficiency score
+  const sumMin = recs.reduce((a, r) => a + r.price_min, 0);
+  const sumMax = recs.reduce((a, r) => a + r.price_max, 0);
+  const sumAvg = Math.round((sumMin + sumMax) / 2);
+  const budget_tiers: BudgetTier[] = [
+    { tier: "Hemat", total: sumMin, desc: "Pilih opsi termurah dari tiap rekomendasi — tetap efektif untuk pemula." },
+    { tier: "Menengah", total: sumAvg, desc: "Keseimbangan harga & kualitas. Paling umum direkomendasikan." },
+    { tier: "Premium", total: sumMax, desc: "Opsi premium bila budget memungkinkan — bukan keharusan." },
+  ];
+  const potential_saving = skips.reduce((a, s) => a + s.saving_estimate, 0);
+  let eff = 65;
+  if (skips.length > 0) eff += Math.min(20, skips.length * 7);
+  if (input.budget > 0) eff += budgetUsed <= input.budget ? 12 : -12;
+  eff += neverUsesSunscreen ? -5 : 5;
+  const budget_efficiency = Math.max(40, Math.min(98, eff));
+
+  // ── Phase 2: Rekomendasi edukatif (BUKAN diagnosis medis)
+  const education: EduSection[] = [];
+  if (has("jerawat") || isHormonal) {
+    education.push({
+      title: "🍽️ Pola makan & jerawat",
+      items: [
+        "Untuk sebagian orang, susu sapi & makanan tinggi gula (high-GI: gorengan, minuman manis) bisa memperparah jerawat — coba kurangi lalu amati respons kulitmu.",
+        "Perbanyak makanan tinggi omega-3 (ikan, chia, kacang) & sayur-buah berserat — mendukung kulit lebih tenang.",
+        "Ini bersifat umum & berbeda tiap orang, bukan aturan medis baku.",
+      ],
+    });
+    education.push({
+      title: "🧼 Kebiasaan harian",
+      items: [
+        "Ganti sarung bantal 2–3x/minggu dan hindari memencet jerawat (memperparah bekas & PIH).",
+        "Bersihkan wajah setelah berkeringat agar pori tidak tersumbat.",
+      ],
+    });
+  }
+  if (has("pigmentasi") || has("bekas_jerawat") || hasPIH) {
+    education.push({
+      title: "☀️ Memudarkan noda & bekas",
+      items: [
+        "Sunscreen disiplin adalah faktor TERPENTING memudarkan bekas — tanpa itu noda justru makin gelap & lama hilang.",
+        "Makanan tinggi vitamin C (jeruk, paprika, jambu) mendukung produksi kolagen.",
+      ],
+    });
+  }
+  education.push({
+    title: "😴 Tidur, stres & air",
+    items: [
+      "Tidur cukup (7–8 jam) dan kelola stres — keduanya nyata mempengaruhi jerawat & regenerasi kulit.",
+      "Cukupi minum air harian untuk mendukung hidrasi kulit dari dalam.",
+    ],
+  });
+
+  const disclaimer = "Hasil ini berbasis kuesioner & aturan umum perawatan kulit — BUKAN diagnosis medis. Untuk kondisi kulit yang parah, menetap, atau menyakitkan, konsultasikan ke dokter kulit.";
+
   return {
     recs,
     skips,
@@ -629,5 +768,13 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
     night_routine: nightRoutine,
     lifestyle_notes: lifestyleNotes,
     pregnancy_warnings: pregnancyWarnings,
+    problem_priorities,
+    result_timeline,
+    overtreatment_warning,
+    budget_efficiency,
+    potential_saving,
+    budget_tiers,
+    education,
+    disclaimer,
   };
 }

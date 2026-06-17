@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info, Copy, Check } from "lucide-react";
+import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info, Copy, Check, Clock, AlertTriangle, ListChecks, Wallet, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
@@ -201,6 +201,38 @@ function HasilContent() {
           <p className="text-sm text-foreground leading-relaxed">{h.summary}</p>
         </motion.div>
 
+        {/* Disclaimer non-medis */}
+        {h.disclaimer && (
+          <div className="flex items-start gap-2 rounded-xl border border-border bg-card px-4 py-3">
+            <Info className="w-3.5 h-3.5 text-muted-foreground shrink-0 mt-0.5" />
+            <p className="text-xs text-muted-foreground leading-relaxed">{h.disclaimer}</p>
+          </div>
+        )}
+
+        {/* Fokus Utama (Prioritas masalah) */}
+        {h.problem_priorities && h.problem_priorities.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.17 }}>
+            <div className="flex items-center gap-2 mb-3">
+              <ListChecks className="w-4 h-4 text-primary" />
+              <p className="text-sm font-semibold text-foreground">Fokus utama kulitmu (urut prioritas)</p>
+            </div>
+            <div className="space-y-2">
+              {h.problem_priorities.map((p) => (
+                <div key={p.rank} className="flex items-start gap-3 p-3 rounded-xl border border-border bg-card">
+                  <div className="w-6 h-6 rounded-full bg-primary/15 border border-primary/40 text-primary text-xs font-bold flex items-center justify-center shrink-0">
+                    #{p.rank}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{p.title}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed mt-0.5">{p.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">💡 Selesaikan bertahap dari #1 — tidak perlu beli semua sekaligus.</p>
+          </motion.div>
+        )}
+
         {/* Rekomendasi */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <p className="text-sm font-semibold text-foreground mb-3">Rekomendasi untuk kamu:</p>
@@ -298,6 +330,43 @@ function HasilContent() {
           </div>
         </motion.div>
 
+        {/* Estimasi waktu hasil */}
+        {h.result_timeline && h.result_timeline.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+            className="rounded-2xl border border-border bg-card p-5"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <Clock className="w-4 h-4 text-primary" />
+              <p className="text-sm font-semibold text-foreground">Estimasi kapan hasil terlihat</p>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">Skincare butuh konsistensi. Ekspektasi realistis = tidak mudah menyerah.</p>
+            <div className="space-y-2.5">
+              {h.result_timeline.map((t, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">{t.item}</p>
+                    <p className="text-xs text-muted-foreground">{t.time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Peringatan over-treatment */}
+        {h.overtreatment_warning && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.27 }}
+            className="rounded-xl border border-yellow-500/40 bg-yellow-400/10 p-4"
+          >
+            <div className="flex items-center gap-2 mb-1.5">
+              <AlertTriangle className="w-4 h-4 text-yellow-800" />
+              <p className="text-xs font-semibold text-yellow-800">Waspada over-treatment</p>
+            </div>
+            <p className="text-xs text-yellow-900 leading-relaxed">{h.overtreatment_warning}</p>
+          </motion.div>
+        )}
+
         {/* Skip items */}
         {h.skips.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
@@ -350,6 +419,46 @@ function HasilContent() {
               </>
             )}
           </div>
+
+          {/* Budget Efficiency Score */}
+          {typeof h.budget_efficiency === "number" && (
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center gap-1.5">
+                  <Wallet className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs font-semibold text-foreground">Skor Efisiensi Budget</span>
+                </div>
+                <span className="text-sm font-bold text-primary">{h.budget_efficiency}/100</span>
+              </div>
+              <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+                <motion.div className="h-full bg-primary rounded-full"
+                  initial={{ width: 0 }} animate={{ width: `${h.budget_efficiency}%` }} transition={{ duration: 1, delay: 0.4 }} />
+              </div>
+              {!!h.potential_saving && h.potential_saving > 0 && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  Potensi hemat ~<span className="text-accent font-medium">Rp {h.potential_saving.toLocaleString("id")}</span> dengan tidak membeli produk yang tidak perlu.
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Budget tiers */}
+          {h.budget_tiers && h.budget_tiers.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-border">
+              <p className="text-xs font-semibold text-foreground mb-2.5">Pilihan sesuai kantong (total estimasi/bulan)</p>
+              <div className="space-y-2">
+                {h.budget_tiers.map((t) => (
+                  <div key={t.tier} className="flex items-start justify-between gap-3 p-3 rounded-lg bg-secondary/30 border border-border/50">
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold text-foreground">{t.tier}</p>
+                      <p className="text-[11px] text-muted-foreground leading-snug">{t.desc}</p>
+                    </div>
+                    <span className="text-xs font-bold text-accent shrink-0 whitespace-nowrap">Rp {t.total.toLocaleString("id")}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* Climate tip */}
@@ -387,6 +496,34 @@ function HasilContent() {
           </motion.div>
         )}
 
+        {/* Rekomendasi Edukatif */}
+        {h.education && h.education.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.43 }}
+            className="rounded-2xl border border-border bg-card p-5"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <GraduationCap className="w-4 h-4 text-primary" />
+              <p className="text-sm font-semibold text-foreground">Bukan cuma produk — ini yang membantu dari dalam</p>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">Saran edukatif & umum, bukan diagnosis medis.</p>
+            <div className="space-y-4">
+              {h.education.map((sec, i) => (
+                <div key={i}>
+                  <p className="text-sm font-medium text-foreground mb-1.5">{sec.title}</p>
+                  <ul className="space-y-1">
+                    {sec.items.map((it, j) => (
+                      <li key={j} className="text-xs text-muted-foreground flex gap-2">
+                        <span className="text-primary flex-shrink-0 mt-0.5">•</span>
+                        <span className="leading-relaxed">{it}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* Pregnancy Warnings */}
         {h.pregnancy_warnings && h.pregnancy_warnings.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.43 }}
@@ -398,7 +535,7 @@ function HasilContent() {
             </div>
             <ul className="space-y-1.5">
               {h.pregnancy_warnings.map((w, i) => (
-                <li key={i} className="text-xs text-rose-300 flex gap-2">
+                <li key={i} className="text-xs text-rose-800 flex gap-2">
                   <span className="flex-shrink-0 mt-0.5">•</span>
                   <span>{w}</span>
                 </li>
