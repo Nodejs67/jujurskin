@@ -13,6 +13,7 @@ const STATIC_PAGES = [
   { url: "/panduan", priority: 0.8, changeFrequency: "monthly" as const },
   { url: "/cek-konflik", priority: 0.7, changeFrequency: "monthly" as const },
   { url: "/tidak-perlu", priority: 0.8, changeFrequency: "monthly" as const },
+  { url: "/simulasi", priority: 0.7, changeFrequency: "monthly" as const },
   { url: "/bandingkan", priority: 0.7, changeFrequency: "monthly" as const },
   { url: "/kalkulator", priority: 0.6, changeFrequency: "monthly" as const },
   { url: "/rutinitas", priority: 0.6, changeFrequency: "monthly" as const },

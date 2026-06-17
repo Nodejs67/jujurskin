@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   ArrowLeft, Star, CheckCircle, XCircle, FlaskConical,
-  Users, Send, MapPin, Sparkles,
+  Users, Send, MapPin, Sparkles, ShieldCheck,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PRODUCTS, type ProductCategory } from "@/lib/products";
+import { productSafety } from "@/lib/safety";
 import { SiteFooter } from "@/components/site-footer";
 
 const fadeUp = {
@@ -120,6 +121,10 @@ export default function ProdukDetailPage({
     reviews.length > 0
       ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
       : product.rating_community.toFixed(1);
+
+  const safety = productSafety(product);
+  const safetyColor =
+    safety.level === "Tinggi" ? "text-green-700" : safety.level === "Cukup" ? "text-yellow-800" : "text-destructive";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -247,6 +252,38 @@ export default function ProdukDetailPage({
               </span>
             ))}
           </div>
+        </motion.div>
+
+        {/* Skor Keamanan */}
+        <motion.div variants={fadeUp} initial="hidden" animate="show" className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-primary" /> Skor Keamanan
+            </h2>
+            <div className="text-right">
+              <span className={`text-2xl font-bold ${safetyColor}`}>{safety.score}</span>
+              <span className="text-sm text-muted-foreground">/100</span>
+              <p className={`text-[11px] font-medium ${safetyColor}`}>{safety.level}</p>
+            </div>
+          </div>
+          <div className="space-y-2">
+            {safety.params.map((p) => (
+              <div key={p.label} className="flex items-start gap-2">
+                {p.good ? (
+                  <CheckCircle className="w-3.5 h-3.5 text-green-700 shrink-0 mt-0.5" />
+                ) : (
+                  <XCircle className="w-3.5 h-3.5 text-yellow-800 shrink-0 mt-0.5" />
+                )}
+                <div className="flex-1">
+                  <p className="text-xs font-medium text-foreground">{p.label}</p>
+                  <p className="text-[11px] text-muted-foreground">{p.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-[11px] text-muted-foreground mt-3 pt-3 border-t border-border">
+            Skor berbasis heuristik (BPOM, transparansi, perkiraan iritasi) — panduan awal, bukan penilaian laboratorium/medis.
+          </p>
         </motion.div>
 
         {/* Why good */}

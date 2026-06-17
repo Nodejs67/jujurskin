@@ -23,6 +23,7 @@ export function SiteFooter() {
               { href: "/produk", label: "Produk" },
               { href: "/cek-konflik", label: "Cek Konflik" },
               { href: "/tidak-perlu", label: "Produk Tidak Perlu" },
+              { href: "/simulasi", label: "Simulasi What-If" },
               { href: "/bandingkan", label: "Bandingkan" },
               { href: "/rutinitas", label: "Rutinitas" },
               { href: "/progress", label: "Progress Kulit" },
@@ -30,9 +31,9 @@ export function SiteFooter() {
               { href: "/kalkulator", label: "Budget Planner" },
               { href: "/feedback", label: "Feedback" },
             ].map((link) => (
-              <a key={link.href} href={link.href} className="hover:text-foreground transition-colors">
+              <Link key={link.href} href={link.href} className="hover:text-foreground transition-colors">
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
