@@ -15,8 +15,10 @@ type FormData = {
   kota: string;
   jenis_kelamin: "pria" | "wanita" | "";
   tipe_kulit: SkinType | "";
+  tipe_kulit_custom: string;
   masalah: Problem[];
   budget: number;
+  tier_preferensi: "hemat" | "seimbang" | "maksimal";
   produk_existing: string;
   // Advanced fields
   penggunaan_sunscreen: "tidak_pernah" | "jarang" | "kadang" | "selalu" | "";
@@ -45,14 +47,6 @@ type FormData = {
   siklus_haid: "teratur" | "tidak_teratur" | "tidak_yakin" | "";
   diagnosis_hormonal: boolean | null;
 };
-
-const BUDGET_OPTIONS = [
-  { label: "Di bawah Rp 50.000", value: 50000 },
-  { label: "Rp 50.000 – 150.000", value: 150000 },
-  { label: "Rp 150.000 – 300.000", value: 300000 },
-  { label: "Rp 300.000 – 500.000", value: 500000 },
-  { label: "Di atas Rp 500.000", value: 750000 },
-];
 
 const SKIN_TYPES: { value: SkinType; label: string; desc: string; emoji: string }[] = [
   { value: "normal", label: "Normal", desc: "Tidak terlalu kering, tidak terlalu berminyak", emoji: "😊" },
@@ -137,7 +131,7 @@ export default function AnalisisPage() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<FormData>({
     nama: "", usia: "", kota: "", jenis_kelamin: "",
-    tipe_kulit: "", masalah: [], budget: 150000, produk_existing: "",
+    tipe_kulit: "", tipe_kulit_custom: "", masalah: [], budget: 0, tier_preferensi: "seimbang", produk_existing: "",
     penggunaan_sunscreen: "", paparan_matahari: "", lingkungan: "",
     kualitas_tidur: "", tingkat_stress: "",
     riwayat_hormonal: null, status_kehamilan: "",
@@ -173,7 +167,7 @@ export default function AnalisisPage() {
 
   const canNext = () => {
     if (step === 1) return form.usia && form.kota && form.jenis_kelamin;
-    if (step === 2) return form.tipe_kulit !== "";
+    if (step === 2) return form.tipe_kulit !== "" || form.tipe_kulit_custom.trim() !== "";
     if (step === 3) return form.masalah.length > 0;
     if (step === 4) return form.penggunaan_sunscreen && form.paparan_matahari && form.lingkungan && form.kualitas_tidur && form.tingkat_stress;
     if (step === 5) return (!isWanita || form.status_kehamilan !== "") && form.pengalaman_retinoid !== "";
@@ -321,6 +315,21 @@ export default function AnalisisPage() {
                       {form.tipe_kulit === t.value && <CheckCircle className="w-4 h-4 text-primary ml-auto shrink-0" />}
                     </button>
                   ))}
+                </div>
+
+                {/* Isi sendiri — kalau merasa beda dari pilihan di atas */}
+                <div className="pt-1">
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">
+                    Merasa beda dari pilihan di atas? Jelaskan sendiri <span className="text-muted-foreground font-normal">(opsional)</span>
+                  </label>
+                  <textarea
+                    value={form.tipe_kulit_custom}
+                    onChange={e => update("tipe_kulit_custom", e.target.value)}
+                    rows={2}
+                    placeholder="Contoh: berminyak di T-zone tapi sangat kering & gampang ngelupas di pipi, kadang gatal..."
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1.5">Boleh pilih salah satu di atas, isi ini, atau keduanya — pendapatmu kami catat.</p>
                 </div>
               </motion.div>
             )}
@@ -698,19 +707,9 @@ export default function AnalisisPage() {
                   <h1 className="text-2xl font-bold text-foreground mb-1">Budget skincare per bulan?</h1>
                   <p className="text-sm text-muted-foreground">Kami akan pastikan rekomendasinya sesuai budget — tidak lebih, tidak kurang.</p>
                 </div>
-                <div className="space-y-3">
-                  {BUDGET_OPTIONS.map(b => (
-                    <button key={b.value} onClick={() => update("budget", b.value)}
-                      className={`w-full flex items-center justify-between p-4 rounded-xl border text-left transition-all ${form.budget === b.value ? "border-primary bg-primary/10" : "border-border bg-card hover:border-border/80"}`}>
-                      <span className={`text-sm font-medium ${form.budget === b.value ? "text-primary" : "text-foreground"}`}>{b.label}</span>
-                      {form.budget === b.value && <CheckCircle className="w-4 h-4 text-primary" />}
-                    </button>
-                  ))}
-                </div>
-
                 {/* Input budget manual — ketik angka, otomatis diformat */}
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-1.5 block">Atau ketik budget sendiri</label>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Ketik budget bulananmu</label>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">Rp</span>
                     <input
@@ -728,6 +727,43 @@ export default function AnalisisPage() {
                     Contoh: ketik <span className="text-foreground font-medium">150000</span> → otomatis jadi <span className="text-primary font-medium">Rp 150.000</span>. Bisa juga 75000, 250000, dst.
                   </p>
                 </div>
+
+                {/* Level rekomendasi (muncul setelah budget diisi) */}
+                <AnimatePresence>
+                  {form.budget > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-2">
+                        <label className="text-sm font-semibold text-foreground mb-1 block">Seberapa lengkap rekomendasi yang kamu mau?</label>
+                        <p className="text-xs text-muted-foreground mb-3">Kami sesuaikan jumlah & jenis produk dengan gaya belanjamu.</p>
+                        <div className="space-y-2">
+                          {([
+                            { v: "hemat", emoji: "💧", label: "Secukupnya", desc: "Fokus pada produk paling esensial saja — hemat & anti ribet." },
+                            { v: "seimbang", emoji: "🌿", label: "Seimbang", desc: "Perpaduan ideal antara hasil dan harga. Pilihan kebanyakan orang.", rec: true },
+                            { v: "maksimal", emoji: "✨", label: "Lengkap", desc: "Rutinitas lebih menyeluruh untuk hasil optimal, selama budget memungkinkan." },
+                          ] as const).map((t) => (
+                            <button key={t.v} onClick={() => update("tier_preferensi", t.v)}
+                              className={`w-full flex items-start gap-3 p-3.5 rounded-xl border text-left transition-all ${form.tier_preferensi === t.v ? "border-primary bg-primary/10" : "border-border bg-card hover:border-border/80"}`}>
+                              <span className="text-xl shrink-0">{t.emoji}</span>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                  <p className={`text-sm font-semibold ${form.tier_preferensi === t.v ? "text-primary" : "text-foreground"}`}>{t.label}</p>
+                                  {"rec" in t && t.rec && <span className="text-[10px] bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">Rekomendasi</span>}
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-0.5">{t.desc}</p>
+                              </div>
+                              {form.tier_preferensi === t.v && <CheckCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
                   <p className="text-xs text-muted-foreground">💡 Tidak perlu beli semua sekaligus. Kami akan tunjukkan produk mana yang paling dulu diprioritaskan.</p>
@@ -759,7 +795,7 @@ export default function AnalisisPage() {
                     <div><span className="text-muted-foreground">Nama:</span> <span className="text-foreground">{form.nama || "—"}</span></div>
                     <div><span className="text-muted-foreground">Usia:</span> <span className="text-foreground">{form.usia} tahun</span></div>
                     <div><span className="text-muted-foreground">Kota:</span> <span className="text-foreground">{form.kota}</span></div>
-                    <div><span className="text-muted-foreground">Kulit:</span> <span className="text-foreground capitalize">{form.tipe_kulit}</span></div>
+                    <div><span className="text-muted-foreground">Kulit:</span> <span className="text-foreground capitalize">{form.tipe_kulit || (form.tipe_kulit_custom ? "Dijelaskan sendiri" : "—")}</span></div>
                     <div className="col-span-2"><span className="text-muted-foreground">Masalah:</span> <span className="text-foreground">{form.masalah.map(m => m.replace("_", " ")).join(", ") || "—"}</span></div>
                     <div><span className="text-muted-foreground">Budget:</span> <span className="text-primary font-medium">Rp {form.budget.toLocaleString("id")}</span></div>
                     <div><span className="text-muted-foreground">Sunscreen:</span> <span className="text-foreground">{form.penggunaan_sunscreen || "—"}</span></div>

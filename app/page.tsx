@@ -119,6 +119,7 @@ const NAV_LINKS = [
   { href: "/cek-klaim", label: "Cek Klaim" },
   { href: "/mitos-fakta", label: "Mitos/Fakta" },
   { href: "/iklim", label: "Iklim" },
+  { href: "/bandingkan-produk", label: "Bandingkan Produk" },
   { href: "/rutinitas", label: "Rutinitas" },
   { href: "/progress", label: "Progress" },
 ];

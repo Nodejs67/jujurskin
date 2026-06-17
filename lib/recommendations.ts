@@ -18,6 +18,8 @@ export interface AnalysisInput {
   tipe_kulit: SkinType;
   masalah: Problem[];
   budget: number;
+  tier_preferensi?: "hemat" | "seimbang" | "maksimal";
+  tipe_kulit_custom?: string;
   produk_existing: string;
   // Advanced lifestyle & history fields (optional)
   penggunaan_sunscreen?: "tidak_pernah" | "jarang" | "kadang" | "selalu";
@@ -245,6 +247,10 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   const exercisesOften = input.olahraga === "rutin";
   const irregularCycle = input.siklus_haid === "tidak_teratur";
   const diagnosedHormonal = input.diagnosis_hormonal === true;
+  // Preferensi kelengkapan rekomendasi
+  const tier = input.tier_preferensi ?? "seimbang";
+  const wantMin = tier === "hemat";   // hanya esensial
+  const wantMax = tier === "maksimal"; // rutinitas lebih lengkap
 
   // ── Lifestyle notes
   if (isStressed || poorSleep) {
@@ -281,6 +287,9 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   }
   if (exercisesOften) {
     lifestyleNotes.push("Rutin olahraga bagus untuk sirkulasi & kulit, tapi langsung bersihkan keringat setelahnya (cleanser lembut) agar keringat + sebum tidak menyumbat pori dan memicu jerawat.");
+  }
+  if (input.tipe_kulit_custom && input.tipe_kulit_custom.trim()) {
+    lifestyleNotes.push(`Kamu menjelaskan kondisi kulitmu sendiri: "${input.tipe_kulit_custom.trim()}". Kami pertimbangkan ini — kalau terasa kompleks/membandel, kombinasi barrier repair + konsultasi dokter kulit bisa membantu.`);
   }
   if (irregularCycle || diagnosedHormonal) {
     lifestyleNotes.push("Siklus haid tidak teratur / kondisi hormonal yang kamu tandai bisa berkaitan dengan jerawat hormonal yang membandel. Niacinamide + Zinc dan konsistensi membantu, tapi untuk kasus menetap sebaiknya cek ke dokter (edukatif, bukan diagnosis).");
@@ -333,7 +342,7 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   budgetLeft -= (cleanMin + cleanMax) / 2;
 
   // ── Hydration (for dry/AC environments or dehydrated skin)
-  if ((isDry || dryEnvironment || has("kering")) && budgetLeft > 15000) {
+  if ((isDry || dryEnvironment || has("kering")) && (budgetLeft > 15000 || wantMax) && !wantMin) {
     recs.push({
       priority: priority++,
       product: "Hyaluronic Acid Toner / Essence",
@@ -541,7 +550,7 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   }
 
   // ── Barrier Repair (untuk stress/poor sleep)
-  if ((isStressed || poorSleep) && budgetLeft > 25000 && !recs.some(r => r.product.includes("Ceramide") || r.product.includes("Centella"))) {
+  if ((isStressed || poorSleep) && (budgetLeft > 25000 || wantMax) && !wantMin && !recs.some(r => r.product.includes("Ceramide") || r.product.includes("Centella"))) {
     recs.push({
       priority: priority++,
       product: "Centella Asiatica / Ceramide Barrier Serum",
@@ -635,7 +644,12 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   const mainMasalah = input.masalah.length > 0
     ? `masalah utamamu (${input.masalah.slice(0, 2).map(m => m.replace("_", " ")).join(" & ")})`
     : "kondisi kulitmu";
-  const summary = `Dengan budget Rp ${input.budget.toLocaleString("id")}, kamu bisa mengatasi ${mainMasalah} hanya dengan ${recs.length} produk yang tepat. Total estimasi biaya: Rp ${Math.max(0, input.budget - budgetLeft).toLocaleString("id")}.`;
+  const tierNote = wantMin
+    ? " Sesuai pilihanmu, kami fokus ke versi paling esensial saja."
+    : wantMax
+    ? " Sesuai pilihanmu, kami sertakan rutinitas yang lebih lengkap."
+    : "";
+  const summary = `Dengan budget Rp ${input.budget.toLocaleString("id")}, kamu bisa mengatasi ${mainMasalah} hanya dengan ${recs.length} produk yang tepat. Total estimasi biaya: Rp ${Math.max(0, input.budget - budgetLeft).toLocaleString("id")}.${tierNote}`;
 
   const budgetUsed = Math.min(input.budget, Math.max(0, input.budget - budgetLeft));
 

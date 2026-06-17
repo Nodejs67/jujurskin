@@ -17,6 +17,7 @@ const STATIC_PAGES = [
   { url: "/cek-klaim", priority: 0.7, changeFrequency: "monthly" as const },
   { url: "/mitos-fakta", priority: 0.7, changeFrequency: "monthly" as const },
   { url: "/iklim", priority: 0.6, changeFrequency: "monthly" as const },
+  { url: "/bandingkan-produk", priority: 0.6, changeFrequency: "monthly" as const },
   { url: "/bandingkan", priority: 0.7, changeFrequency: "monthly" as const },
   { url: "/kalkulator", priority: 0.6, changeFrequency: "monthly" as const },
   { url: "/rutinitas", priority: 0.6, changeFrequency: "monthly" as const },
