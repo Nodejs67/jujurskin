@@ -67,9 +67,17 @@ export default function AkunPage() {
     : "—";
 
   const latestEntry = entries.length > 0 ? entries[entries.length - 1] : null;
+  const firstEntry = entries.length > 0 ? entries[0] : null;
   const skinScore = hasil?.score?.total ?? null;
   const budgetScore = typeof hasil?.budget_efficiency === "number" ? hasil.budget_efficiency : null;
   const progScore = latestEntry ? progressScore(latestEntry) : null;
+
+  // Spending analytics (dari data perangkat)
+  const monthlySpend = hasil?.budget_used ?? null;
+  const saving = hasil?.potential_saving ?? null;
+  const improvement = firstEntry && latestEntry ? progressScore(latestEntry) - progressScore(firstEntry) : null;
+  const costPerImprovement = monthlySpend && improvement && improvement > 0 ? Math.round(monthlySpend / improvement) : null;
+  const showSpending = monthlySpend !== null || saving !== null;
 
   const scoreCards = [
     { label: "Healthy Skin", value: skinScore, icon: Heart, suffix: "/100", href: "/analisis", cta: "Analisis dulu" },
@@ -182,6 +190,48 @@ export default function AkunPage() {
             ))}
           </div>
         </div>
+
+        {/* Spending Analytics */}
+        {showSpending && (
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <div className="flex items-center gap-2 mb-1">
+              <Wallet className="w-4 h-4 text-primary" />
+              <p className="text-sm font-semibold text-foreground">Spending Analytics</p>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">Seberapa efisien pengeluaran skincaremu — dari analisis & progress di perangkat ini.</p>
+            <div className="grid grid-cols-2 gap-3">
+              {monthlySpend !== null && (
+                <div className="rounded-xl bg-secondary/30 border border-border/50 p-3">
+                  <p className="text-[11px] text-muted-foreground">Estimasi pengeluaran/bulan</p>
+                  <p className="text-lg font-bold text-foreground">Rp {monthlySpend.toLocaleString("id")}</p>
+                </div>
+              )}
+              {saving !== null && saving > 0 && (
+                <div className="rounded-xl bg-accent/10 border border-accent/20 p-3">
+                  <p className="text-[11px] text-muted-foreground">Potensi hemat/bulan</p>
+                  <p className="text-lg font-bold text-accent">Rp {saving.toLocaleString("id")}</p>
+                </div>
+              )}
+              {improvement !== null && (
+                <div className="rounded-xl bg-secondary/30 border border-border/50 p-3">
+                  <p className="text-[11px] text-muted-foreground">Peningkatan skor kulit</p>
+                  <p className={`text-lg font-bold ${improvement > 0 ? "text-green-700" : "text-foreground"}`}>
+                    {improvement > 0 ? `+${improvement}` : improvement} poin
+                  </p>
+                </div>
+              )}
+              {costPerImprovement !== null && (
+                <div className="rounded-xl bg-secondary/30 border border-border/50 p-3">
+                  <p className="text-[11px] text-muted-foreground">Biaya per poin peningkatan</p>
+                  <p className="text-lg font-bold text-foreground">Rp {costPerImprovement.toLocaleString("id")}</p>
+                </div>
+              )}
+            </div>
+            {improvement === null && (
+              <p className="text-xs text-muted-foreground mt-3">Catat progress mingguan di <Link href="/progress" className="text-primary hover:underline">/progress</Link> untuk melihat biaya per peningkatan kulitmu.</p>
+            )}
+          </div>
+        )}
 
         {/* Akses cepat */}
         <div>
