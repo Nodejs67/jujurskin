@@ -266,16 +266,16 @@ export default function CekKonflikPage() {
           {inputs.map((val, i) => (
             <div key={i} className="flex gap-2">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   value={val}
                   onChange={(e) => updateInput(i, e.target.value)}
                   placeholder={`Ingredient ${i + 1} (contoh: Retinol, BHA, Vitamin C)`}
-                  className="w-full pl-9 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full pl-9 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
               {inputs.length > 2 && (
-                <button onClick={() => removeInput(i)} className="p-3 rounded-xl border border-border bg-card text-muted-foreground/80 hover:text-destructive hover:border-destructive/30 transition-colors">
+                <button onClick={() => removeInput(i)} className="p-3 rounded-xl border border-border bg-card text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors">
                   <Trash2 className="w-4 h-4" />
                 </button>
               )}
@@ -362,7 +362,7 @@ export default function CekKonflikPage() {
                                 <span className="text-sm font-semibold text-foreground">
                                   {c.ingredient1.name}
                                 </span>
-                                <span className="text-muted-foreground/80 text-xs">+</span>
+                                <span className="text-muted-foreground text-xs">+</span>
                                 <span className="text-sm font-semibold text-foreground">
                                   {c.ingredient2.name}
                                 </span>

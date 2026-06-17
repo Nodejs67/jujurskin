@@ -130,7 +130,7 @@ export default function TidakPerluPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="space-y-5 mb-6">
           {ITEM_GROUPS.map((group) => (
             <div key={group.group}>
-              <p className="text-xs text-muted-foreground/80 uppercase tracking-wide mb-2">{group.group}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">{group.group}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {group.items.map((item) => {
                   const active = owned.includes(item.id);

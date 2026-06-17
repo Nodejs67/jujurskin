@@ -201,7 +201,7 @@ export default function Home() {
             <span className="text-foreground font-medium">jujur bilang apa yang tidak kamu butuhkan.</span>{" "}
             Rekomendasi berbasis kondisi kulit & budget — bukan iklan.
           </motion.p>
-          <motion.p variants={fadeUp} className="text-sm text-muted-foreground/80 mb-10">
+          <motion.p variants={fadeUp} className="text-sm text-muted-foreground mb-10">
             Untuk pria & wanita · Seluruh Indonesia · 100% Gratis
           </motion.p>
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
@@ -262,7 +262,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/80">
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
                 <CheckCircle className="w-3 h-3 text-primary/50" />
                 Analisis selesai dalam 45 detik · Tidak perlu daftar
               </div>
@@ -282,11 +282,11 @@ export default function Home() {
                 <p className="text-2xl font-bold text-primary mb-0.5">
                   <NumberTicker value={stat.num} />{stat.suffix}
                 </p>
-                <p className="text-xs text-muted-foreground/85">{stat.label}</p>
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
               </div>
             ))}
           </motion.div>
-          <motion.div variants={fadeUp} className="mt-6 flex flex-wrap justify-center gap-5 text-xs text-muted-foreground/80">
+          <motion.div variants={fadeUp} className="mt-6 flex flex-wrap justify-center gap-5 text-xs text-muted-foreground">
             {["Tidak ada iklan berbayar", "Tidak terafiliasi brand apapun", "Data pribadimu aman", "Bahasa Indonesia"].map((t) => (
               <div key={t} className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-primary/50" /> {t}
@@ -529,7 +529,7 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-muted-foreground mb-2">{stat.label}</p>
                 <p className={`text-2xl font-bold ${stat.color} mb-1`}>{stat.value}</p>
-                <p className="text-xs text-muted-foreground/80">{stat.sub}</p>
+                <p className="text-xs text-muted-foreground">{stat.sub}</p>
               </motion.div>
             ))}
           </div>
@@ -678,7 +678,7 @@ export default function Home() {
                   ].map((stat) => (
                     <div key={stat.label} className="rounded-lg bg-secondary/50 p-2 text-center">
                       <p className="text-xs font-semibold text-foreground">{stat.value}</p>
-                      <p className="text-xs text-muted-foreground/80">{stat.label}</p>
+                      <p className="text-xs text-muted-foreground">{stat.label}</p>
                     </div>
                   ))}
                 </div>
@@ -970,7 +970,7 @@ export default function Home() {
                   {row.us ? <CheckCircle className="w-5 h-5 text-primary" /> : <XCircle className="w-5 h-5 text-muted-foreground/25" />}
                 </div>
                 <div className="flex justify-center">
-                  {row.them ? <CheckCircle className="w-5 h-5 text-muted-foreground/80" /> : <XCircle className="w-5 h-5 text-destructive/45" />}
+                  {row.them ? <CheckCircle className="w-5 h-5 text-muted-foreground" /> : <XCircle className="w-5 h-5 text-destructive/45" />}
                 </div>
               </motion.div>
             ))}
@@ -1132,7 +1132,7 @@ export default function Home() {
             ))}
           </motion.div>
           {/* Trust bar */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-10 flex flex-wrap justify-center gap-6 text-xs text-muted-foreground/80">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-10 flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
             {[
               { icon: "🔒", text: "Tidak menyimpan data sensitif" },
               { icon: "📵", text: "Tidak ada iklan tersembunyi" },
@@ -1165,7 +1165,7 @@ export default function Home() {
               >
                 Analisis Kulit Saya Sekarang <ArrowRight className="w-4 h-4" />
               </ShimmerButton>
-              <p className="mt-4 text-xs text-muted-foreground/80">Untuk pria & wanita · Seluruh Indonesia</p>
+              <p className="mt-4 text-xs text-muted-foreground">Untuk pria & wanita · Seluruh Indonesia</p>
             </div>
           </div>
         </motion.div>
@@ -1183,7 +1183,7 @@ export default function Home() {
                 </div>
                 <span className="text-sm font-semibold">JujurSkin</span>
               </div>
-              <p className="text-xs text-muted-foreground/80 leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 Platform skincare pertama Indonesia yang jujur bilang apa yang tidak kamu butuhkan.
               </p>
             </div>
@@ -1200,7 +1200,7 @@ export default function Home() {
                   { label: "Produk Tidak Perlu", href: "/tidak-perlu" },
                   { label: "Beri Feedback", href: "/feedback" },
                 ].map((link) => (
-                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/80 hover:text-foreground transition-colors">
+                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground hover:text-foreground transition-colors">
                     {link.label}
                   </a>
                 ))}
@@ -1219,7 +1219,7 @@ export default function Home() {
                   { label: "Rutinitas AM/PM", href: "/rutinitas" },
                   { label: "Progress Kulit", href: "/progress" },
                 ].map((link) => (
-                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground/80 hover:text-foreground transition-colors">
+                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground hover:text-foreground transition-colors">
                     {link.label}
                   </a>
                 ))}
@@ -1230,17 +1230,17 @@ export default function Home() {
             <div>
               <p className="text-xs font-semibold text-foreground mb-3 uppercase tracking-wide">Tentang</p>
               <div className="space-y-2">
-                <p className="text-xs text-muted-foreground/80">Tidak ada iklan</p>
-                <p className="text-xs text-muted-foreground/80">Tidak terafiliasi brand</p>
-                <p className="text-xs text-muted-foreground/80">Berbasis data & sains</p>
-                <p className="text-xs text-muted-foreground/80">100% Gratis</p>
+                <p className="text-xs text-muted-foreground">Tidak ada iklan</p>
+                <p className="text-xs text-muted-foreground">Tidak terafiliasi brand</p>
+                <p className="text-xs text-muted-foreground">Berbasis data & sains</p>
+                <p className="text-xs text-muted-foreground">100% Gratis</p>
               </div>
             </div>
           </div>
 
           <div className="border-t border-border/50 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-muted-foreground/80">© 2026 JujurSkin Indonesia</p>
-            <p className="text-xs text-muted-foreground/80 text-center">Rekomendasi berbasis data & ilmu pengetahuan, bukan endorsement berbayar</p>
+            <p className="text-xs text-muted-foreground">© 2026 JujurSkin Indonesia</p>
+            <p className="text-xs text-muted-foreground text-center">Rekomendasi berbasis data & ilmu pengetahuan, bukan endorsement berbayar</p>
           </div>
         </div>
       </footer>

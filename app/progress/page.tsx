@@ -330,7 +330,7 @@ export default function ProgressPage() {
             <div className="rounded-xl border border-border/60 bg-card/80 p-4 text-center">
               <p className="text-3xl font-bold text-primary mb-0.5">{entries.length}</p>
               <p className="text-xs text-muted-foreground">Minggu Tercatat</p>
-              <p className="text-xs text-muted-foreground/80 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {entries.length < 4 ? "Konsistenlah selama 4 minggu" : entries.length < 8 ? "Bagus! Terus lanjutkan" : "Luar biasa konsisten!"}
               </p>
             </div>
@@ -423,7 +423,7 @@ export default function ProgressPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <m.icon className={`w-3.5 h-3.5 ${m.color}`} />
                     <p className="text-sm font-medium">{m.label}</p>
-                    <span className="text-xs text-muted-foreground/80">({m.desc})</span>
+                    <span className="text-xs text-muted-foreground">({m.desc})</span>
                   </div>
                   <ScoreSlider
                     value={form[m.key]}
@@ -439,7 +439,7 @@ export default function ProgressPage() {
                   value={form.produk_dipakai_raw}
                   onChange={e => setForm(f => ({ ...f, produk_dipakai_raw: e.target.value }))}
                   placeholder="Misal: Azarine SPF45, COSRX Snail, Somethinc Niacinamide..."
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
 
@@ -450,7 +450,7 @@ export default function ProgressPage() {
                   onChange={e => setForm(f => ({ ...f, catatan: e.target.value }))}
                   placeholder="Kondisi jerawat, reaksi produk baru, perubahan cuaca, hormon, stress, dll..."
                   rows={3}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none"
                 />
               </div>
 
@@ -471,8 +471,8 @@ export default function ProgressPage() {
                   </div>
                 ) : (
                   <label className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-dashed border-border bg-card/50 cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-colors">
-                    <ImageIcon className="w-6 h-6 text-muted-foreground/80" />
-                    <span className="text-xs text-muted-foreground/80">Klik untuk pilih foto · Max 2MB</span>
+                    <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">Klik untuk pilih foto · Max 2MB</span>
                     <input
                       type="file"
                       accept="image/*"

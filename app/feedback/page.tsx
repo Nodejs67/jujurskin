@@ -127,19 +127,19 @@ export default function FeedbackPage() {
               <div className="col-span-1">
                 <label className="text-xs text-muted-foreground mb-1 block">Nama / Inisial</label>
                 <input value={form.nama} onChange={e => update("nama", e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-secondary/30 text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full px-3 py-2 rounded-lg border border-border bg-secondary/30 text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                   placeholder="Contoh: S" />
               </div>
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Umur</label>
                 <input type="number" value={form.usia} onChange={e => update("usia", e.target.value)} min={10} max={80}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-secondary/30 text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full px-3 py-2 rounded-lg border border-border bg-secondary/30 text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                   placeholder="24" />
               </div>
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Kota</label>
                 <input value={form.kota} onChange={e => update("kota", e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-secondary/30 text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full px-3 py-2 rounded-lg border border-border bg-secondary/30 text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                   placeholder="Jakarta" />
               </div>
             </div>
@@ -167,7 +167,7 @@ export default function FeedbackPage() {
             <div key={q.field} className="rounded-xl border border-border bg-card p-5">
               <label className="text-sm font-medium text-foreground mb-2 block">{q.label}</label>
               <textarea value={form[q.field] as string} onChange={e => update(q.field, e.target.value)} rows={3}
-                className="w-full px-3 py-2.5 rounded-lg border border-border bg-secondary/30 text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                className="w-full px-3 py-2.5 rounded-lg border border-border bg-secondary/30 text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none"
                 placeholder={q.placeholder} />
             </div>
           ))}
@@ -181,10 +181,10 @@ export default function FeedbackPage() {
           </Button>
 
           {form.pengguna_aktif === null && (
-            <p className="text-xs text-center text-muted-foreground/80">Isi “Pengguna skincare aktif?” untuk lanjut</p>
+            <p className="text-xs text-center text-muted-foreground">Isi “Pengguna skincare aktif?” untuk lanjut</p>
           )}
 
-          <p className="text-xs text-center text-muted-foreground/80 pb-6">
+          <p className="text-xs text-center text-muted-foreground pb-6">
             Semua field opsional kecuali pilihan pengguna aktif. Identitasmu aman.
           </p>
         </motion.div>

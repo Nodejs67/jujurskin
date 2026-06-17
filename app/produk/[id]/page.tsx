@@ -157,20 +157,20 @@ export default function ProdukDetailPage({
 
             <div className="mt-4 pt-4 border-t border-border/30 grid grid-cols-3 gap-3">
               <div className="text-center">
-                <p className="text-xs text-muted-foreground/80 mb-1">Harga</p>
+                <p className="text-xs text-muted-foreground mb-1">Harga</p>
                 <p className="text-sm font-semibold text-foreground">
                   Rp{Math.round(product.price_min / 1000)}k–{Math.round(product.price_max / 1000)}k
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-muted-foreground/80 mb-1">Rating</p>
+                <p className="text-xs text-muted-foreground mb-1">Rating</p>
                 <p className="text-sm font-semibold text-primary flex items-center justify-center gap-1">
                   <Star className="w-3 h-3 fill-primary" />
                   {communityAvg}
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-muted-foreground/80 mb-1">BPOM</p>
+                <p className="text-xs text-muted-foreground mb-1">BPOM</p>
                 <p
                   className={`text-sm font-semibold flex items-center justify-center gap-1 ${
                     product.bpom_registered ? "text-green-400" : "text-yellow-400"
@@ -327,7 +327,7 @@ export default function ProdukDetailPage({
                   {review.komentar && (
                     <p className="text-sm text-muted-foreground">{review.komentar}</p>
                   )}
-                  <p className="text-xs text-muted-foreground/80 mt-2">
+                  <p className="text-xs text-muted-foreground mt-2">
                     {new Date(review.created_at).toLocaleDateString("id-ID", {
                       day: "numeric",
                       month: "long",
@@ -384,7 +384,7 @@ export default function ProdukDetailPage({
                   placeholder="Pengguna Anonim"
                   value={form.nama}
                   onChange={(e) => setForm((f) => ({ ...f, nama: e.target.value }))}
-                  className="w-full rounded-lg border border-border/50 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus:border-primary/50"
+                  className="w-full rounded-lg border border-border/50 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
                 />
               </div>
 
@@ -412,7 +412,7 @@ export default function ProdukDetailPage({
                   value={form.komentar}
                   onChange={(e) => setForm((f) => ({ ...f, komentar: e.target.value }))}
                   rows={3}
-                  className="w-full rounded-lg border border-border/50 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus:border-primary/50 resize-none"
+                  className="w-full rounded-lg border border-border/50 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 resize-none"
                 />
               </div>
 

@@ -68,11 +68,11 @@ function IngredientCard({ ingredient, onClick }: { ingredient: Ingredient; onCli
               {ingredient.name}
             </h3>
             {ingredient.aliases.length > 0 && (
-              <p className="text-xs text-muted-foreground/80">{ingredient.aliases[0]}</p>
+              <p className="text-xs text-muted-foreground">{ingredient.aliases[0]}</p>
             )}
           </div>
         </div>
-        <ChevronRight className="w-4 h-4 text-muted-foreground/80 group-hover:text-primary transition-colors shrink-0 mt-0.5" />
+        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0 mt-0.5" />
       </div>
 
       <p className="text-xs text-muted-foreground leading-relaxed mb-3 line-clamp-2">{ingredient.tagline}</p>
@@ -219,19 +219,19 @@ export default function EdukasiPage() {
         {/* Search */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-5">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Cari ingredient... (contoh: niacinamide, retinol, BHA)"
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
         </motion.div>
 
         {/* Smart Filters */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="flex flex-wrap gap-2 mb-3">
-          <span className="text-xs text-muted-foreground/80 self-center mr-1">Filter cepat:</span>
+          <span className="text-xs text-muted-foreground self-center mr-1">Filter cepat:</span>
           {SMART_FILTERS.map((f) => {
             const isActive = smartFilters.includes(f.id);
             return (
@@ -247,7 +247,7 @@ export default function EdukasiPage() {
             );
           })}
           {smartFilters.length > 0 && (
-            <button onClick={() => setSmartFilters([])} className="text-xs text-muted-foreground/80 hover:text-foreground underline">
+            <button onClick={() => setSmartFilters([])} className="text-xs text-muted-foreground hover:text-foreground underline">
               Reset
             </button>
           )}

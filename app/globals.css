@@ -65,7 +65,7 @@
   --secondary: oklch(0.93 0.02 150);
   --secondary-foreground: oklch(0.40 0.08 150);
   --muted: oklch(0.95 0.015 150);
-  --muted-foreground: oklch(0.47 0.04 155); /* cukup gelap utk lulus WCAG di latar terang */
+  --muted-foreground: oklch(0.45 0.04 155); /* cukup gelap utk lulus WCAG di latar terang (full opacity) */
   --accent: oklch(0.70 0.11 75);          /* emas */
   --accent-foreground: oklch(0.28 0.04 75);
   --destructive: oklch(0.55 0.22 27);

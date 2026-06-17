@@ -340,12 +340,12 @@ export default function ProdukPage() {
         {/* Search */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-4">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Cari produk, brand, atau ingredient... (contoh: niacinamide, Azarine, BHA)"
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
         </motion.div>
@@ -495,7 +495,7 @@ export default function ProdukPage() {
           viewport={{ once: true }}
           className="mt-10 rounded-xl border border-border bg-card/50 p-4 text-center"
         >
-          <p className="text-xs text-muted-foreground/80">
+          <p className="text-xs text-muted-foreground">
             Harga adalah estimasi dan bisa berbeda di tiap platform. JujurSkin tidak terafiliasi dengan brand manapun dan tidak mendapat komisi dari rekomendasi ini.
           </p>
         </motion.div>

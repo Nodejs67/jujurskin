@@ -178,7 +178,7 @@ export default function KalkulatorPage() {
                   setSelectedKit(null);
                 }}
                 placeholder="atau ketik sendiri, contoh: 150.000"
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
             <p className="text-xs text-muted-foreground mt-2">
@@ -229,7 +229,7 @@ export default function KalkulatorPage() {
                           </div>
                           <div className="text-right shrink-0">
                             <p className="text-sm font-bold text-accent">{formatRp(total)}</p>
-                            <p className="text-xs text-muted-foreground/80">{k.items.length} produk</p>
+                            <p className="text-xs text-muted-foreground">{k.items.length} produk</p>
                           </div>
                         </div>
 

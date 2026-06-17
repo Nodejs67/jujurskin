@@ -146,7 +146,7 @@ function MythCard({ myth, fact, icon, defaultOpen = false }: { myth: string; fac
           <p className="text-xs text-destructive/60 font-medium mb-0.5">MITOS</p>
           <p className="text-sm text-foreground leading-tight">&ldquo;{myth}&rdquo;</p>
         </div>
-        {open ? <ChevronUp className="w-4 h-4 text-muted-foreground/80 shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground/80 shrink-0" />}
+        {open ? <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />}
       </button>
       <AnimatePresence>
         {open && (

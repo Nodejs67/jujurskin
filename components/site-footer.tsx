@@ -15,7 +15,7 @@ export function SiteFooter() {
             <span className="text-xs font-medium">JujurSkin</span>
           </Link>
 
-          <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground/80">
+          <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground">
             {[
               { href: "/analisis", label: "Analisis Kulit" },
               { href: "/panduan", label: "Panduan" },
@@ -38,8 +38,8 @@ export function SiteFooter() {
         </div>
 
         <div className="border-t border-border/30 pt-4 flex flex-col md:flex-row items-center justify-between gap-2">
-          <p className="text-xs text-muted-foreground/80">© 2026 JujurSkin Indonesia</p>
-          <p className="text-xs text-muted-foreground/80 text-center">
+          <p className="text-xs text-muted-foreground">© 2026 JujurSkin Indonesia</p>
+          <p className="text-xs text-muted-foreground text-center">
             Tidak terafiliasi brand · Berbasis data & ilmu pengetahuan · 100% Gratis
           </p>
         </div>
