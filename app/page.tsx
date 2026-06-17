@@ -55,6 +55,15 @@ const steps = [
   { num: "03", title: "Hemat & Konsisten", desc: "Track progres kulitmu, cek keamanan produk, dan bangun rutinitas yang benar-benar bekerja." },
 ];
 
+const skinConditions = [
+  { emoji: "😤", name: "Kulit Berjerawat", desc: "Jerawat aktif, komedo, pori tersumbat.", ciri: ["Bruntusan", "Beruntus merah", "Komedo"], color: "text-rose-700", bg: "bg-rose-400/10", border: "border-rose-400/20" },
+  { emoji: "🛡️", name: "Skin Barrier Rusak", desc: "Pelindung kulit melemah — mudah perih & merah.", ciri: ["Perih", "Kemerahan", "Mengelupas"], color: "text-amber-700", bg: "bg-amber-400/10", border: "border-amber-400/20" },
+  { emoji: "🌑", name: "Hiperpigmentasi", desc: "Noda gelap & bekas jerawat (PIH).", ciri: ["Flek hitam", "Bekas jerawat", "Warna tak rata"], color: "text-purple-700", bg: "bg-purple-400/10", border: "border-purple-400/20" },
+  { emoji: "💧", name: "Kulit Berminyak", desc: "Produksi sebum berlebih, wajah cepat kilap.", ciri: ["Mengilap", "Pori besar", "Mudah jerawat"], color: "text-blue-700", bg: "bg-blue-400/10", border: "border-blue-400/20" },
+  { emoji: "🌵", name: "Kulit Kering", desc: "Kurang kelembapan, terasa kencang & kasar.", ciri: ["Kencang", "Bersisik", "Kusam"], color: "text-orange-700", bg: "bg-orange-400/10", border: "border-orange-400/20" },
+  { emoji: "🌿", name: "Kulit Sehat", desc: "Tujuan kita: barrier kuat, lembap, terlindungi.", ciri: ["Lembap", "Merata", "Terlindungi UV"], color: "text-green-700", bg: "bg-green-400/10", border: "border-green-400/20" },
+];
+
 const skinScoreBreakdown = [
   { label: "Barrier Health", score: 82, color: "bg-green-400", text: "text-green-700" },
   { label: "Hydration", score: 71, color: "bg-blue-400", text: "text-blue-700" },
@@ -106,6 +115,7 @@ const NAV_LINKS = [
   { href: "/produk", label: "Produk" },
   { href: "/cek-konflik", label: "Cek Konflik" },
   { href: "/tidak-perlu", label: "Tidak Perlu" },
+  { href: "/simulasi", label: "Simulasi" },
   { href: "/rutinitas", label: "Rutinitas" },
   { href: "/progress", label: "Progress" },
 ];
@@ -324,6 +334,42 @@ export default function Home() {
           ))}
         </Marquee>
       </div>
+
+      {/* ── KONDISI KULIT (visual) ───────────────────── */}
+      <section className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <p className="text-xs text-primary uppercase tracking-widest mb-3">Kenali Kulitmu</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Kondisi kulit yang kami pahami</h2>
+            <p className="text-muted-foreground">Apa pun kondisimu sekarang, JujurSkin bantu menuju kulit sehat — bukan sekadar putih.</p>
+          </motion.div>
+
+          <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}
+            className="grid grid-cols-2 md:grid-cols-3 gap-4"
+          >
+            {skinConditions.map((c) => (
+              <motion.div variants={fadeUp} key={c.name}
+                className={`rounded-2xl border ${c.border} bg-card p-5 transition-transform hover:-translate-y-1`}
+              >
+                <div className={`w-12 h-12 rounded-xl ${c.bg} flex items-center justify-center text-2xl mb-3`}>{c.emoji}</div>
+                <h3 className={`font-semibold mb-1 ${c.color}`}>{c.name}</h3>
+                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{c.desc}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {c.ciri.map((t) => (
+                    <span key={t} className="text-[10px] px-2 py-0.5 rounded-full border border-border text-muted-foreground">{t}</span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <div className="text-center mt-8">
+            <Button onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
+              Cari tahu kondisi kulitku <ArrowRight className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {/* ── 1. DEMO HASIL ANALISIS ────────────────────── */}
       <section id="demo" className="py-24 px-6">
