@@ -76,6 +76,88 @@ function TrendArrow({ entries, metricKey }: { entries: ProgressEntry[]; metricKe
     : <span className="text-xs text-red-400">↓ {diff}</span>;
 }
 
+const LINE_COLORS: Record<string, string> = {
+  kondisi_jerawat: "#60a5fa",
+  kelembapan: "#22d3ee",
+  kecerahan: "#fbbf24",
+  iritasi: "#4ade80",
+};
+
+function ProgressLineChart({ entries }: { entries: ProgressEntry[] }) {
+  const PL = 28, PR = 16, PT = 12, PB = 28;
+  const W = 400, H = 160;
+  const cW = W - PL - PR;
+  const cH = H - PT - PB;
+  const n = entries.length;
+
+  const xOf = (i: number) =>
+    PL + (n === 1 ? cW / 2 : (i / (n - 1)) * cW);
+  const yOf = (val: number) =>
+    PT + cH - ((val - 1) / 9) * cH;
+
+  const keys = ["kondisi_jerawat", "kelembapan", "kecerahan", "iritasi"] as const;
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: "140px" }}>
+      {[2, 4, 6, 8, 10].map((v) => (
+        <g key={v}>
+          <line
+            x1={PL} y1={yOf(v)} x2={W - PR} y2={yOf(v)}
+            stroke="rgba(255,255,255,0.07)" strokeWidth="1"
+          />
+          <text x={PL - 4} y={yOf(v) + 3.5} textAnchor="end" fontSize="8" fill="rgba(255,255,255,0.22)">
+            {v}
+          </text>
+        </g>
+      ))}
+
+      {entries.map((entry, i) => (
+        <text
+          key={entry.id}
+          x={xOf(i)}
+          y={H - 5}
+          textAnchor="middle"
+          fontSize="8"
+          fill="rgba(255,255,255,0.28)"
+        >
+          W{entry.week}
+        </text>
+      ))}
+
+      {keys.map((key) => {
+        const color = LINE_COLORS[key];
+        const pts = entries
+          .map((e, i) => `${xOf(i).toFixed(1)},${yOf(e[key]).toFixed(1)}`)
+          .join(" ");
+        return (
+          <g key={key}>
+            {n >= 2 && (
+              <polyline
+                points={pts}
+                fill="none"
+                stroke={color}
+                strokeWidth="1.8"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                opacity="0.85"
+              />
+            )}
+            {entries.map((e, i) => (
+              <circle
+                key={e.id}
+                cx={xOf(i)}
+                cy={yOf(e[key])}
+                r={n <= 5 ? 3 : 2}
+                fill={color}
+              />
+            ))}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 const STORAGE_KEY = "jujurskin_progress";
 const SESSION_KEY = "jujurskin_session";
 
@@ -278,41 +360,34 @@ export default function ProgressPage() {
                   className="overflow-hidden"
                 >
                   <div className="border border-t-0 border-border/60 rounded-b-xl bg-card/50 p-4">
-                    {METRICS.map(m => (
-                      <div key={m.key} className="mb-4 last:mb-0">
-                        <div className="flex items-center justify-between mb-1.5">
+                    <ProgressLineChart entries={entries} />
+                    {/* Legend */}
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 mb-3 mt-1">
+                      {METRICS.map(m => (
+                        <div key={m.key} className="flex items-center gap-1.5">
+                          <span
+                            className="w-4 h-0.5 rounded-full inline-block"
+                            style={{ backgroundColor: LINE_COLORS[m.key] }}
+                          />
+                          <span className="text-[10px] text-muted-foreground">{m.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Metric summary */}
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border/30 pt-3">
+                      {METRICS.map(m => (
+                        <div key={m.key} className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
-                            <m.icon className={`w-3.5 h-3.5 ${m.color}`} />
-                            <p className="text-xs font-medium">{m.label}</p>
+                            <m.icon className={`w-3 h-3 ${m.color}`} />
+                            <p className="text-xs text-muted-foreground">{m.label}</p>
                           </div>
-                          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                            <span>Rata-rata: <strong className={m.color}>{avgScore(entries, m.key)}</strong></span>
+                          <div className="flex items-center gap-1.5 text-xs">
+                            <strong className={m.color}>{avgScore(entries, m.key)}</strong>
                             <TrendArrow entries={entries} metricKey={m.key} />
                           </div>
                         </div>
-                        {/* Mini bar chart */}
-                        <div className="flex items-end gap-1 h-12">
-                          {entries.map((entry, i) => {
-                            const val = entry[m.key] as number;
-                            const pct = (val / 10) * 100;
-                            return (
-                              <div key={entry.id} className="flex-1 flex flex-col items-center gap-1">
-                                <div className="w-full relative flex items-end" style={{ height: "40px" }}>
-                                  <motion.div
-                                    className={`w-full rounded-t ${m.color.replace("text-", "bg-")} opacity-70`}
-                                    initial={{ height: 0 }}
-                                    animate={{ height: `${pct}%` }}
-                                    transition={{ delay: i * 0.05 }}
-                                    style={{ minHeight: "2px" }}
-                                  />
-                                </div>
-                                <p className="text-[9px] text-muted-foreground/50">W{entry.week}</p>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               )}
