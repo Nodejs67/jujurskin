@@ -134,7 +134,7 @@ export default function Home() {
             <Button size="sm" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-medium">
               Mulai Gratis
             </Button>
-            <button className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
+            <button aria-label={menuOpen ? "Tutup menu" : "Buka menu"} aria-expanded={menuOpen} className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
               {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
