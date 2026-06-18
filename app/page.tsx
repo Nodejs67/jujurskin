@@ -916,7 +916,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-foreground mb-2">Produk Indonesia</h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
-                38+ produk skincare terkurasi berdasarkan ingredient — bukan popularitas. Semua sudah BPOM, ada info harga, dan penjelasan kenapa produk itu efektif.
+                90+ produk skincare terkurasi berdasarkan ingredient — bukan popularitas. Mayoritas terdaftar BPOM (yang belum kami tandai jelas), ada info harga, dan penjelasan kenapa produk itu efektif.
               </p>
               <div className="flex flex-wrap gap-2 mb-5">
                 {["Sunscreen", "Cleanser", "Moisturizer", "Serum", "Treatment"].map((c) => (

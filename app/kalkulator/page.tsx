@@ -105,7 +105,7 @@ export default function KalkulatorPage() {
 
   const budgetProducts = useMemo(() => {
     if (!budget) return [];
-    return PRODUCTS.filter((p) => p.price_min <= budget).sort((a, b) => b.rating_community - a.rating_community).slice(0, 6);
+    return PRODUCTS.filter((p) => p.bpom_registered && p.price_min <= budget).sort((a, b) => b.rating_community - a.rating_community).slice(0, 6);
   }, [budget]);
 
   const kit = selectedKit !== null ? STARTER_KITS[selectedKit] : null;

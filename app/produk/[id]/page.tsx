@@ -1,15 +1,16 @@
 "use client";
 
 import { use, useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft, Star, CheckCircle, XCircle, FlaskConical,
+  ArrowLeft, Star, CheckCircle, XCircle, FlaskConical, AlertTriangle,
   Users, Send, MapPin, Sparkles, ShieldCheck, ExternalLink,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PRODUCTS, type ProductCategory } from "@/lib/products";
+import { PRODUCTS, getActivesWithPercent, type ProductCategory } from "@/lib/products";
 import { productSafety } from "@/lib/safety";
 import { SiteFooter } from "@/components/site-footer";
 
@@ -122,6 +123,7 @@ export default function ProdukDetailPage({
       ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
       : product.rating_community.toFixed(1);
 
+  const actives = getActivesWithPercent(product);
   const safety = productSafety(product);
   const safetyColor =
     safety.level === "Tinggi" ? "text-green-700" : safety.level === "Cukup" ? "text-yellow-800" : "text-destructive";
@@ -193,6 +195,19 @@ export default function ProdukDetailPage({
           </div>
         </motion.div>
 
+        {/* Warning BPOM belum terverifikasi */}
+        {!product.bpom_registered && (
+          <div className="rounded-lg border border-yellow-500/40 bg-yellow-400/10 p-3 text-sm text-foreground flex items-start gap-2">
+            <AlertTriangle className="w-4 h-4 text-yellow-700 shrink-0 mt-0.5" />
+            <span>
+              <strong className="text-yellow-800">Status BPOM belum terverifikasi.</strong>{" "}
+              Bukan berarti berbahaya — hanya belum kami pastikan. Cek nomor BPOM-nya di{" "}
+              <a href="https://cekbpom.pom.go.id/" target="_blank" rel="noopener noreferrer" className="text-primary underline">cekbpom.pom.go.id</a>{" "}
+              atau lewat <Link href="/cek-bpom" className="text-primary underline">Cek BPOM</Link> sebelum membeli.
+            </span>
+          </div>
+        )}
+
         {/* SPF badge */}
         {product.spf && (
           <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-3 text-sm text-yellow-300/90 flex items-center gap-2">
@@ -237,11 +252,32 @@ export default function ProdukDetailPage({
           </div>
         </motion.div>
 
-        {/* Ingredient utama */}
+        {/* Ingredient utama + kadar + komposisi lengkap */}
         <motion.div variants={fadeUp} initial="hidden" animate="show">
           <h2 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-            <FlaskConical className="w-4 h-4 text-primary" /> Ingredient Utama
+            <FlaskConical className="w-4 h-4 text-primary" /> Bahan Aktif & Komposisi
           </h2>
+
+          {/* Bahan aktif dengan kadar resmi (badge menonjol) */}
+          {actives.length > 0 && (
+            <div className="mb-4">
+              <p className="text-xs text-muted-foreground mb-2">Kadar bahan aktif (sesuai klaim resmi brand):</p>
+              <div className="flex flex-wrap gap-2">
+                {actives.map((a) => (
+                  <span
+                    key={a.name + a.percent}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/40 bg-primary/10 text-sm font-semibold text-primary"
+                  >
+                    {a.name}
+                    <span className="px-1.5 py-0.5 rounded-md bg-primary text-primary-foreground text-xs font-bold">{a.percent}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Bahan utama */}
+          <p className="text-xs text-muted-foreground mb-2">Bahan utama:</p>
           <div className="flex flex-wrap gap-2">
             {product.key_ingredients.map((ki) => (
               <span
@@ -252,6 +288,26 @@ export default function ProdukDetailPage({
               </span>
             ))}
           </div>
+
+          {/* Komposisi lengkap (INCI) */}
+          {product.full_ingredients && product.full_ingredients.length > 0 ? (
+            <details className="mt-4 rounded-xl border border-border bg-card p-4">
+              <summary className="text-sm font-semibold text-foreground cursor-pointer">
+                Komposisi lengkap (INCI) — {product.full_ingredients.length} bahan
+              </summary>
+              <p className="text-xs text-foreground/80 leading-relaxed mt-3">
+                {product.full_ingredients.join(", ")}
+              </p>
+              <p className="text-[11px] text-muted-foreground mt-3">
+                Sumber: kemasan/database publik. Formula bisa berubah sewaktu-waktu — selalu cek daftar bahan di kemasan asli sebelum membeli, terutama jika kamu punya alergi.
+              </p>
+            </details>
+          ) : (
+            <p className="text-[11px] text-muted-foreground mt-4 flex items-start gap-1.5">
+              <FlaskConical className="w-3 h-3 flex-shrink-0 mt-0.5" />
+              <span>Daftar komposisi lengkap belum kami verifikasi untuk produk ini. Cek daftar bahan (INCI) di kemasan asli atau situs resmi brand.</span>
+            </p>
+          )}
         </motion.div>
 
         {/* Skor Keamanan */}

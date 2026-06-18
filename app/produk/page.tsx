@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
-  Search, ArrowLeft, ShoppingBag, Star, CheckCircle,
+  Search, ArrowLeft, ShoppingBag, Star, CheckCircle, AlertTriangle,
   Sparkles, Filter, ChevronDown, ChevronUp,
 } from "lucide-react";
 import { SiteFooter } from "@/components/site-footer";
@@ -13,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import {
   PRODUCTS,
   CATEGORY_LABELS,
+  getActivesWithPercent,
   type ProductCategory,
   type PriceRange,
   type Product,
@@ -98,9 +100,13 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
             </h2>
           </div>
         </div>
-        {product.bpom_registered && (
+        {product.bpom_registered ? (
           <Badge variant="outline" className="text-xs border-green-400/30 text-green-700 bg-green-400/10 shrink-0">
             BPOM ✓
+          </Badge>
+        ) : (
+          <Badge variant="outline" className="text-xs border-yellow-500/40 text-yellow-800 bg-yellow-400/15 shrink-0">
+            <AlertTriangle className="w-2.5 h-2.5 mr-1" /> Cek BPOM
           </Badge>
         )}
       </div>
@@ -153,9 +159,13 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
               <Badge variant="outline" className="text-xs border-primary/30 text-primary bg-primary/10">
                 {CATEGORY_LABELS[product.category]}
               </Badge>
-              {product.bpom_registered && (
+              {product.bpom_registered ? (
                 <Badge variant="outline" className="text-xs border-green-400/30 text-green-700 bg-green-400/10">
                   <CheckCircle className="w-2.5 h-2.5 mr-1" /> BPOM
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="text-xs border-yellow-500/40 text-yellow-800 bg-yellow-400/15">
+                  <AlertTriangle className="w-2.5 h-2.5 mr-1" /> Belum terverifikasi BPOM
                 </Badge>
               )}
             </div>
@@ -168,6 +178,20 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
             </div>
             <p className="text-sm text-primary font-medium mt-2">{product.tagline}</p>
           </div>
+
+          {/* Warning BPOM belum terverifikasi */}
+          {!product.bpom_registered && (
+            <div className="rounded-xl border border-yellow-500/40 bg-yellow-400/10 p-4">
+              <p className="text-xs text-yellow-800 font-semibold uppercase tracking-wide mb-1.5 flex items-center gap-1.5">
+                <AlertTriangle className="w-3.5 h-3.5" /> Status BPOM belum terverifikasi
+              </p>
+              <p className="text-sm text-foreground leading-relaxed">
+                Kami belum bisa memastikan produk ini sudah punya nomor notifikasi BPOM. Ini <strong>bukan berarti produk berbahaya</strong> — hanya belum kami verifikasi. Sebelum membeli/memakai, cek sendiri nomor BPOM-nya di{" "}
+                <a href="https://cekbpom.pom.go.id/" target="_blank" rel="noopener noreferrer" className="text-primary underline font-medium">cekbpom.pom.go.id</a>{" "}
+                atau lewat halaman <Link href="/cek-bpom" className="text-primary underline font-medium">Cek BPOM</Link>.
+              </p>
+            </div>
+          )}
 
           {/* Price + Rating */}
           <div className="rounded-xl border border-border bg-card p-4 flex items-center justify-between">
@@ -192,9 +216,24 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
             <p className="text-sm text-foreground leading-relaxed">{product.why_good}</p>
           </div>
 
-          {/* Key ingredients */}
+          {/* Key ingredients + kadar + komposisi lengkap */}
           <div className="rounded-xl border border-border bg-card p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Ingredient Utama</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Bahan Aktif & Komposisi</p>
+
+            {getActivesWithPercent(product).length > 0 && (
+              <div className="mb-3 flex flex-wrap gap-2">
+                {getActivesWithPercent(product).map((a) => (
+                  <span
+                    key={a.name + a.percent}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-primary/40 bg-primary/10 text-xs font-semibold text-primary"
+                  >
+                    {a.name}
+                    <span className="px-1 py-0.5 rounded bg-primary text-primary-foreground text-[10px] font-bold">{a.percent}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+
             <div className="flex flex-wrap gap-2">
               {product.key_ingredients.map((ing) => (
                 <Badge key={ing} variant="outline" className="text-xs border-border text-foreground">
@@ -202,6 +241,24 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
                 </Badge>
               ))}
             </div>
+
+            {product.full_ingredients && product.full_ingredients.length > 0 ? (
+              <details className="mt-3">
+                <summary className="text-xs font-medium text-primary cursor-pointer">
+                  Lihat komposisi lengkap (INCI) — {product.full_ingredients.length} bahan
+                </summary>
+                <p className="text-[11px] text-muted-foreground leading-relaxed mt-2">
+                  {product.full_ingredients.join(", ")}
+                </p>
+                <p className="text-[10px] text-muted-foreground/80 mt-2">
+                  Sumber: kemasan/database publik. Formula bisa berubah — selalu cek kemasan asli, terutama jika punya alergi.
+                </p>
+              </details>
+            ) : (
+              <p className="text-[10px] text-muted-foreground mt-3">
+                Komposisi lengkap belum diverifikasi — cek daftar bahan di kemasan asli.
+              </p>
+            )}
           </div>
 
           {/* Who it's for */}
@@ -333,7 +390,7 @@ export default function ProdukPage() {
             <span className="gradient-text">yang terbukti efektif</span>
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto text-sm leading-relaxed">
-            Pilihan produk lokal dan terjangkau yang sudah terbukti — dikurasi berdasarkan ingredient, bukan endorsement. Semua sudah terdaftar BPOM.
+            Pilihan produk lokal dan terjangkau yang sudah terbukti — dikurasi berdasarkan ingredient, bukan endorsement. Mayoritas sudah terdaftar BPOM; produk yang belum kami verifikasi ditandai dengan label peringatan.
           </p>
         </motion.div>
 

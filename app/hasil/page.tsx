@@ -35,7 +35,10 @@ function getProductSuggestions(category: string, budget: number) {
   const productCategory = CATEGORY_MAP[category];
   if (!productCategory) return [];
   return PRODUCTS.filter(
-    (p) => p.category === productCategory && (budget === 0 || p.price_min <= budget)
+    (p) =>
+      p.category === productCategory &&
+      p.bpom_registered && // hanya rekomendasikan produk yang sudah terdaftar BPOM
+      (budget === 0 || p.price_min <= budget)
   ).slice(0, 2);
 }
 
