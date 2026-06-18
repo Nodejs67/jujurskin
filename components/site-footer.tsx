@@ -43,7 +43,12 @@ export function SiteFooter() {
         </div>
 
         <div className="border-t border-border/30 pt-4 flex flex-col md:flex-row items-center justify-between gap-2">
-          <p className="text-xs text-muted-foreground">© 2026 JujurSkin Indonesia</p>
+          <p className="text-xs text-muted-foreground">
+            © 2026 JujurSkin Indonesia ·{" "}
+            <Link href="/kebijakan" className="hover:text-foreground transition-colors underline-offset-2 hover:underline">
+              Kebijakan Privasi
+            </Link>
+          </p>
           <p className="text-xs text-muted-foreground text-center">
             Tidak terafiliasi brand · Berbasis data & ilmu pengetahuan · 100% Gratis
           </p>

@@ -22,6 +22,7 @@ const STATIC_PAGES = [
   { url: "/kalkulator", priority: 0.6, changeFrequency: "monthly" as const },
   { url: "/rutinitas", priority: 0.6, changeFrequency: "monthly" as const },
   { url: "/progress", priority: 0.5, changeFrequency: "monthly" as const },
+  { url: "/kebijakan", priority: 0.3, changeFrequency: "yearly" as const },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
