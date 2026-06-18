@@ -20,6 +20,7 @@ export function SiteFooter() {
               { href: "/analisis", label: "Analisis Kulit" },
               { href: "/analisis-foto", label: "Analisis Foto" },
               { href: "/cek-bpom", label: "Cek BPOM" },
+              { href: "/sunscreen", label: "Sunscreen No-Whitecast" },
               { href: "/panduan", label: "Panduan" },
               { href: "/edukasi", label: "Edukasi" },
               { href: "/produk", label: "Produk" },

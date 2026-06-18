@@ -34,6 +34,7 @@ const MENU_GROUPS: { title: string; links: { href: string; label: string }[] }[]
       { href: "/cek-bpom", label: "Cek BPOM" },
       { href: "/cek-klaim", label: "Cek Klaim Iklan" },
       { href: "/cek-konflik", label: "Cek Konflik Bahan" },
+      { href: "/sunscreen", label: "Sunscreen No-Whitecast" },
       { href: "/simulasi", label: "Simulasi What-If" },
       { href: "/kalkulator", label: "Kalkulator Budget" },
     ],
