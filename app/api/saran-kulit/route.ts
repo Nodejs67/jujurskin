@@ -12,7 +12,7 @@ import { NextRequest, NextResponse } from "next/server";
 type Body = {
   scores?: { redness?: number; oiliness?: number; evenness?: number };
   levels?: { redness?: string; oiliness?: string; evenness?: string };
-  meta?: { usia?: string | number; tipe_kulit?: string; kota?: string };
+  meta?: { usia?: string | number; tipe_kulit?: string; kota?: string; tone?: string };
 };
 
 export async function POST(req: NextRequest) {
@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
       `Kemerahan: level ${l.redness ?? "?"} (skor ${s.redness ?? "?"}/100)`,
       `Kilap/minyak T-zone: level ${l.oiliness ?? "?"} (skor ${s.oiliness ?? "?"}/100)`,
       `Kerataan warna: level ${l.evenness ?? "?"} (skor ${s.evenness ?? "?"}/100)`,
+      m.tone ? `Perkiraan warna kulit (ITA): ${m.tone}` : "",
       m.tipe_kulit ? `Tipe kulit (klaim user): ${m.tipe_kulit}` : "",
       m.usia ? `Usia: ${m.usia}` : "",
       m.kota ? `Kota: ${m.kota}` : "",

@@ -85,6 +85,7 @@ export default function AnalisisFotoPage() {
             oiliness: res.metrics.find((m) => m.key === "oil")?.level,
             evenness: res.metrics.find((m) => m.key === "even")?.level,
           },
+          meta: { tone: res.skinTone.label },
         }),
       });
       const d = await r.json();
@@ -209,6 +210,14 @@ export default function AnalisisFotoPage() {
                   </ul>
                 </div>
               )}
+
+              <div className="rounded-xl border border-border bg-card p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Warna kulit (ITA°)</p>
+                  <p className="text-xs text-muted-foreground">Estimasi tone — informatif, bukan baik/buruk. Kulit sehat tak harus putih.</p>
+                </div>
+                <span className="text-sm font-semibold px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary">{result.skinTone.label}</span>
+              </div>
 
               <div className="grid gap-3">
                 {result.metrics.map((m) => (

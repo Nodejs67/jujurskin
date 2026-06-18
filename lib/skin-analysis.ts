@@ -38,6 +38,8 @@ export type SkinResult = {
     clipping: number; // fraksi piksel mentok 0/255
   };
   warnings: string[];
+  // warna kulit (Individual Typology Angle) — informatif, bukan baik/buruk
+  skinTone: { ita: number; label: string };
   // skor 0–100 ternormalisasi — dipakai untuk membandingkan antar-waktu (progress)
   scores: { redness: number; oiliness: number; evenness: number };
 };
@@ -67,22 +69,10 @@ function labFromRgb(r: number, g: number, b: number): { L: number; a: number; bb
   return { L: 116 * fy - 16, a: 500 * (fx - fy), bb: 200 * (fy - fz) };
 }
 
-// ---------- White-balance: gray-world ----------
-// Buang cast lampu (kuning/biru) sebelum mengukur warna → kemerahan jadi
-// jauh lebih tahan terhadap perbedaan pencahayaan.
-function grayWorldGains(samples: Sample[]): [number, number, number] {
-  if (!samples.length) return [1, 1, 1];
-  let sr = 0, sg = 0, sb = 0;
-  for (const [r, g, b] of samples) { sr += r; sg += g; sb += b; }
-  const mr = sr / samples.length, mg = sg / samples.length, mb = sb / samples.length;
-  const gray = (mr + mg + mb) / 3;
-  const clamp = (x: number) => Math.min(1.4, Math.max(0.7, x)); // jangan overkoreksi
-  return [clamp(gray / (mr || 1)), clamp(gray / (mg || 1)), clamp(gray / (mb || 1))];
-}
-
-function applyGain([r, g, b]: Sample, [gr, gg, gb]: [number, number, number]): Sample {
-  return [Math.min(255, r * gr), Math.min(255, g * gg), Math.min(255, b * gb)];
-}
+// CATATAN: white-balance gray-world SENGAJA TIDAK dipakai untuk warna kulit.
+// Gray-world dihitung dari piksel kulit akan menetralkan rata-rata warna kulit
+// jadi abu-abu → justru MENGHAPUS kemerahan yang ingin diukur (terverifikasi:
+// a* jatuh ke ~0 padahal kulit asli ~16). Maka a*/chroma diukur dari nilai mentah.
 
 function std(values: number[]): number {
   if (values.length < 2) return 0;
@@ -95,20 +85,27 @@ function clamp01to100(x: number): number {
   return Math.round(Math.min(100, Math.max(0, x)));
 }
 
+// Rata-rata & deviasi setelah membuang outlier (mis. piksel rambut/bayangan/kilau)
+// → pengukuran jauh lebih stabil & akurat.
+function trimmedStats(values: number[], trim = 0.1): { mean: number; std: number } {
+  if (values.length === 0) return { mean: 0, std: 0 };
+  const s = [...values].sort((a, b) => a - b);
+  const k = Math.floor(s.length * trim);
+  const c = k > 0 && s.length - 2 * k > 1 ? s.slice(k, s.length - k) : s;
+  const m = c.reduce((a, x) => a + x, 0) / c.length;
+  const v = c.reduce((a, x) => a + (x - m) * (x - m), 0) / c.length;
+  return { mean: m, std: Math.sqrt(v) };
+}
+
 // ---------- Analisis utama ----------
 export function analyzeSkin(input: SkinInput): SkinResult {
   const warnings: string[] = [];
-  const gains = grayWorldGains(input.all);
 
-  // --- Kemerahan (erythema) via a* CIELAB pada pipi, sudah white-balanced ---
-  const cheekA: number[] = [];
-  for (const s of input.cheek) {
-    const [r, g, b] = applyGain(s, gains);
-    cheekA.push(labFromRgb(r, g, b).a);
-  }
-  const meanA = cheekA.length ? cheekA.reduce((a, c) => a + c, 0) / cheekA.length : 0;
-  const rednessLevel: Level = meanA > 18 ? "tinggi" : meanA > 13 ? "sedang" : "rendah";
-  const rednessScore = clamp01to100(((meanA - 6) / 22) * 100); // a* ~6..28 → 0..100
+  // --- Kemerahan (erythema) via a* CIELAB pada pipi (nilai MENTAH + trimmed) ---
+  const cheekA = input.cheek.map(([r, g, b]) => labFromRgb(r, g, b).a);
+  const meanA = trimmedStats(cheekA).mean;
+  const rednessLevel: Level = meanA > 20 ? "tinggi" : meanA > 14 ? "sedang" : "rendah";
+  const rednessScore = clamp01to100(((meanA - 8) / 20) * 100); // a* ~8..28 → 0..100
 
   // --- Kilap/minyak via specular (HSV: terang + tak jenuh) pada T-zone ---
   let shineTz = 0;
@@ -122,18 +119,22 @@ export function analyzeSkin(input: SkinInput): SkinResult {
   const shineLevel: Level = shineFrac > 0.05 ? "tinggi" : shineFrac > 0.015 ? "sedang" : "rendah";
   const oilScore = clamp01to100(shineFrac * 1200);
 
-  // --- Kerataan warna via sebaran chroma (a*,b*) seluruh kulit ---
-  const allA: number[] = [];
-  const allB: number[] = [];
-  for (const s of input.all) {
-    const [r, g, b] = applyGain(s, gains);
+  // --- Warna kulit seluruh area (Lab mentah, trimmed) → kerataan + tone ITA° ---
+  const allL: number[] = [], allA: number[] = [], allB: number[] = [];
+  for (const [r, g, b] of input.all) {
     const lab = labFromRgb(r, g, b);
-    allA.push(lab.a);
-    allB.push(lab.bb);
+    allL.push(lab.L); allA.push(lab.a); allB.push(lab.bb);
   }
-  const chromaSpread = Math.sqrt(std(allA) ** 2 + std(allB) ** 2);
-  const evenLevel: Level = chromaSpread > 9 ? "tinggi" : chromaSpread > 6 ? "sedang" : "rendah";
-  const evenScore = clamp01to100(((chromaSpread - 3) / 10) * 100); // makin tinggi = makin tidak rata
+  const sa = trimmedStats(allA), sb = trimmedStats(allB), sl = trimmedStats(allL);
+  const chromaSpread = Math.sqrt(sa.std ** 2 + sb.std ** 2);
+  const evenLevel: Level = chromaSpread > 8 ? "tinggi" : chromaSpread > 5 ? "sedang" : "rendah";
+  const evenScore = clamp01to100(((chromaSpread - 2) / 9) * 100); // makin tinggi = makin tidak rata
+
+  // --- Warna kulit via ITA° (Individual Typology Angle) — standar dermatologi ---
+  const ita = (Math.atan2(sl.mean - 50, sb.mean || 0.0001) * 180) / Math.PI;
+  const toneLabel =
+    ita > 55 ? "Sangat terang" : ita > 41 ? "Terang" : ita > 28 ? "Sedang" :
+    ita > 10 ? "Sawo matang" : ita > -30 ? "Cokelat" : "Gelap";
 
   // --- Kualitas foto: exposure, clipping, blur ---
   const lum = input.faceLum;
@@ -206,6 +207,7 @@ export function analyzeSkin(input: SkinInput): SkinResult {
     confidence,
     quality: { exposure, blur, pose, clipping: Math.round(clipping * 1000) / 1000 },
     warnings,
+    skinTone: { ita: Math.round(ita), label: toneLabel },
     scores: { redness: rednessScore, oiliness: oilScore, evenness: evenScore },
   };
 }
