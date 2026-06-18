@@ -3,10 +3,12 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info, Copy, Check, Clock, AlertTriangle, ListChecks, Wallet, GraduationCap, Sun, Moon } from "lucide-react";
+import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info, Copy, Check, Clock, AlertTriangle, ListChecks, Wallet, GraduationCap, Sun, Moon, Bookmark, BookmarkCheck, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/components/auth-provider";
+import { saveAnalysis } from "@/lib/supabase/account";
 import type { AnalysisResult } from "@/lib/recommendations";
 import { PRODUCTS, type ProductCategory } from "@/lib/products";
 import { ClimateWidget } from "@/components/climate-widget";
@@ -76,6 +78,26 @@ function HasilContent() {
   const [expandedRec, setExpandedRec] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
   const [tierView, setTierView] = useState<"basic" | "sedang" | "lengkap">("lengkap");
+  const { user } = useAuth();
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+
+  async function handleSaveToAccount() {
+    if (!data) return;
+    if (!user) {
+      router.push("/masuk?next=/hasil");
+      return;
+    }
+    setSaveState("saving");
+    const ok = await saveAnalysis(user.id, {
+      hasil: data.hasil,
+      tipe_kulit: data.tipe_kulit || undefined,
+      usia: data.usia || undefined,
+      kota: data.kota || undefined,
+      budget: data.budget || undefined,
+      masalah: data.masalah && data.masalah.length ? data.masalah : undefined,
+    });
+    setSaveState(ok ? "saved" : "error");
+  }
 
   useEffect(() => {
     const id = params.get("id");
@@ -161,6 +183,30 @@ function HasilContent() {
       </div>
 
       <div className="max-w-2xl mx-auto px-6 py-10 space-y-6">
+
+        {/* Simpan ke Akun */}
+        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <Bookmark className="w-4 h-4 text-primary shrink-0" /> Simpan hasil ini ke akunmu
+            </p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {user ? "Agar bisa dibuka lagi kapan saja dari perangkat mana pun." : "Masuk dulu untuk menyimpan & membuka kembali hasilmu lintas perangkat."}
+            </p>
+          </div>
+          <Button
+            size="sm"
+            onClick={handleSaveToAccount}
+            disabled={saveState === "saving" || saveState === "saved"}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs gap-1.5 shrink-0"
+          >
+            {saveState === "saving" ? (<><Loader2 className="w-3.5 h-3.5 animate-spin" /> Menyimpan</>)
+              : saveState === "saved" ? (<><BookmarkCheck className="w-3.5 h-3.5" /> Tersimpan</>)
+              : saveState === "error" ? (<>Coba lagi</>)
+              : user ? (<><Bookmark className="w-3.5 h-3.5" /> Simpan</>)
+              : (<>Masuk</>)}
+          </Button>
+        </div>
 
         {/* Hero */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center pt-4">

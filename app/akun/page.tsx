@@ -6,11 +6,12 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Sparkles, LogOut, Mail, Calendar, Loader2, Repeat, TrendingUp, FlaskConical,
-  Heart, Wallet, ShieldCheck, ListChecks, ArrowRight,
+  Heart, Wallet, ShieldCheck, ListChecks, ArrowRight, Bookmark, Trash2, Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
 import type { AnalysisResult } from "@/lib/recommendations";
+import { listSavedAnalyses, deleteSavedAnalysis, saveAnalysis, type SavedAnalysis } from "@/lib/supabase/account";
 
 const QUICK_LINKS = [
   { href: "/analisis", icon: Sparkles, label: "Analisis Kulit", desc: "Mulai atau ulangi analisis" },
@@ -36,6 +37,8 @@ export default function AkunPage() {
 
   const [hasil, setHasil] = useState<AnalysisResult | null>(null);
   const [entries, setEntries] = useState<ProgressEntry[]>([]);
+  const [saved, setSaved] = useState<SavedAnalysis[]>([]);
+  const [deviceSave, setDeviceSave] = useState<"idle" | "saving" | "done">("idle");
 
   useEffect(() => {
     if (!loading && !user) router.replace("/masuk?next=/akun");
@@ -51,6 +54,30 @@ export default function AkunPage() {
       /* abaikan data rusak */
     }
   }, []);
+
+  useEffect(() => {
+    if (user) listSavedAnalyses(user.id).then(setSaved);
+  }, [user]);
+
+  function openSaved(s: SavedAnalysis) {
+    try {
+      localStorage.setItem("jujurskin_hasil", JSON.stringify(s.hasil));
+    } catch { /* abaikan */ }
+    router.push("/hasil");
+  }
+
+  async function removeSaved(id: string) {
+    const ok = await deleteSavedAnalysis(id);
+    if (ok) setSaved((prev) => prev.filter((s) => s.id !== id));
+  }
+
+  async function saveDeviceAnalysis() {
+    if (!user || !hasil) return;
+    setDeviceSave("saving");
+    const ok = await saveAnalysis(user.id, { hasil });
+    if (ok && user) setSaved(await listSavedAnalyses(user.id));
+    setDeviceSave(ok ? "done" : "idle");
+  }
 
   if (loading || !user) {
     return (
@@ -251,13 +278,60 @@ export default function AkunPage() {
           </div>
         </div>
 
-        {/* Catatan sinkron */}
-        <div className="rounded-xl border border-dashed border-border bg-muted/30 p-4">
-          <p className="text-sm text-foreground font-medium mb-1">Tentang data dashboard</p>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Skor di atas dibaca dari analisis & progress yang tersimpan di perangkat ini. Sinkronisasi otomatis lintas
-            perangkat (HP ↔ laptop) sedang kami siapkan.
-          </p>
+        {/* Analisis Tersimpan (di akun, lintas perangkat) */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <Bookmark className="w-4 h-4 text-primary" /> Analisis Tersimpan
+            </h2>
+            {hasil && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={saveDeviceAnalysis}
+                disabled={deviceSave !== "idle"}
+                className="text-xs gap-1.5"
+              >
+                {deviceSave === "saving" ? (<><Loader2 className="w-3.5 h-3.5 animate-spin" /> Menyimpan</>)
+                  : deviceSave === "done" ? (<><Check className="w-3.5 h-3.5" /> Tersimpan</>)
+                  : (<>Simpan analisis perangkat ini</>)}
+              </Button>
+            )}
+          </div>
+          {saved.length > 0 ? (
+            <div className="space-y-2">
+              {saved.map((s) => (
+                <div key={s.id} className="rounded-xl border border-border bg-card p-3 flex items-center justify-between gap-3">
+                  <button onClick={() => openSaved(s)} className="min-w-0 text-left group">
+                    <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">
+                      {s.label || `Analisis ${s.tipe_kulit || "kulit"}`}
+                      {typeof s.hasil?.score?.total === "number" && (
+                        <span className="text-muted-foreground font-normal"> · Skor {s.hasil.score.total}/100</span>
+                      )}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(s.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
+                      {s.kota ? ` · ${s.kota}` : ""}
+                    </p>
+                  </button>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button onClick={() => openSaved(s)} aria-label="Buka" className="p-2 rounded-lg hover:bg-secondary/60 text-primary transition-colors">
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => removeSaved(s.id)} aria-label="Hapus" className="p-2 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed border-border bg-muted/30 p-4">
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Belum ada analisis tersimpan di akun. Buka hasil analisis lalu tekan <strong className="text-foreground">Simpan ke Akun</strong>, atau simpan analisis di perangkat ini lewat tombol di atas — agar bisa dibuka lagi dari HP atau laptop mana pun.
+              </p>
+            </div>
+          )}
         </div>
 
         <Button variant="outline" onClick={handleSignOut} className="w-full gap-2">
