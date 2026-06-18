@@ -233,7 +233,7 @@ export default function Home() {
 
           {/* ── Hero Mockup Card ─── */}
           <motion.div variants={fadeUp} className="relative max-w-sm mx-auto mb-10 animate-float">
-            <div className="relative rounded-2xl border border-primary/20 bg-card/80 backdrop-blur-md p-5 shadow-2xl shadow-primary/10 overflow-hidden">
+            <div className="relative isolate rounded-2xl border border-primary/20 bg-card/80 backdrop-blur-md p-5 shadow-2xl shadow-primary/10 overflow-hidden">
               <BorderBeam duration={5} colorFrom="#86efac" colorTo="#d4af37" />
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-sm">🌿</div>
@@ -292,7 +292,7 @@ export default function Home() {
               { num: 7, suffix: " tanya", label: "Quiz personal mendalam" },
               { num: 100, suffix: "%", label: "Gratis selamanya" },
             ].map((stat, i) => (
-              <div key={stat.label} className="relative text-center p-4 rounded-xl border border-border/50 bg-card/50 overflow-hidden">
+              <div key={stat.label} className="relative isolate text-center p-4 rounded-xl border border-border/50 bg-card/50 overflow-hidden">
                 <BorderBeam duration={12} delay={i * 1.5} />
                 <p className="text-2xl font-bold text-primary mb-0.5">
                   <NumberTicker value={stat.num} />{stat.suffix}
@@ -966,7 +966,7 @@ export default function Home() {
           </motion.div>
           <motion.div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
             {features.map((f, i) => (
-              <motion.div key={f.title} variants={fadeUp} className="relative glow-card rounded-2xl border border-border bg-card p-6 overflow-hidden group">
+              <motion.div key={f.title} variants={fadeUp} className="relative isolate glow-card rounded-2xl border border-border bg-card p-6 overflow-hidden group">
                 <BorderBeam duration={10} delay={i * 1.2} colorFrom="#86efac" colorTo="#d4af37" />
                 <div className={`w-10 h-10 rounded-xl ${f.bg} flex items-center justify-center mb-4`}>
                   <f.icon className={`w-5 h-5 ${f.color}`} />
@@ -1165,7 +1165,7 @@ export default function Home() {
                 badge: "Mulai dari Rp 120rb",
               },
             ].map((t, i) => (
-              <motion.div key={t.name} variants={fadeUp} className="relative rounded-2xl border border-border bg-card p-6 overflow-hidden">
+              <motion.div key={t.name} variants={fadeUp} className="relative isolate rounded-2xl border border-border bg-card p-6 overflow-hidden">
                 <BorderBeam duration={8} delay={i * 1.3} />
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">

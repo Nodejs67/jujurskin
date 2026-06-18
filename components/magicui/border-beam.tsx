@@ -23,7 +23,7 @@ export function BorderBeam({
   return (
     <div
       className={cn(
-        "pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden",
+        "pointer-events-none absolute inset-0 -z-10 rounded-[inherit] overflow-hidden",
         className
       )}
       aria-hidden
