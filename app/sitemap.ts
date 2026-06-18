@@ -8,6 +8,7 @@ const BASE = "https://jujurskin.vercel.app";
 const STATIC_PAGES = [
   { url: "/", priority: 1.0, changeFrequency: "weekly" as const },
   { url: "/analisis", priority: 0.9, changeFrequency: "monthly" as const },
+  { url: "/analisis-foto", priority: 0.8, changeFrequency: "monthly" as const },
   { url: "/edukasi", priority: 0.9, changeFrequency: "weekly" as const },
   { url: "/produk", priority: 0.8, changeFrequency: "weekly" as const },
   { url: "/panduan", priority: 0.8, changeFrequency: "monthly" as const },
@@ -15,6 +16,7 @@ const STATIC_PAGES = [
   { url: "/tidak-perlu", priority: 0.8, changeFrequency: "monthly" as const },
   { url: "/simulasi", priority: 0.7, changeFrequency: "monthly" as const },
   { url: "/cek-klaim", priority: 0.7, changeFrequency: "monthly" as const },
+  { url: "/cek-bpom", priority: 0.8, changeFrequency: "monthly" as const },
   { url: "/mitos-fakta", priority: 0.7, changeFrequency: "monthly" as const },
   { url: "/iklim", priority: 0.6, changeFrequency: "monthly" as const },
   { url: "/bandingkan-produk", priority: 0.6, changeFrequency: "monthly" as const },

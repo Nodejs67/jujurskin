@@ -11,6 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SiteFooter } from "@/components/site-footer";
+import { useAuth } from "@/components/auth-provider";
+import { saveProgress, loadProgress } from "@/lib/supabase/account";
 
 interface ProgressEntry {
   id: string;
@@ -190,6 +192,8 @@ export default function ProgressPage() {
   });
   const [photoPreview, setPhotoPreview] = useState<string>("");
   const [compareMode, setCompareMode] = useState(false);
+  const { user } = useAuth();
+  const [syncState, setSyncState] = useState<"idle" | "syncing" | "done">("idle");
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -198,10 +202,48 @@ export default function ProgressPage() {
     }
   }, []);
 
+  // Perangkat baru: kalau login & belum ada jurnal lokal, tarik metrik dari akun.
+  useEffect(() => {
+    if (!user) return;
+    if (localStorage.getItem(STORAGE_KEY)) return;
+    loadProgress(user.id).then((rows) => {
+      if (!rows.length) return;
+      const restored: ProgressEntry[] = rows.map((r) => ({
+        id: `db-${r.week}`,
+        week: r.week,
+        date: r.tanggal || new Date().toISOString().slice(0, 10),
+        kondisi_jerawat: r.kondisi_jerawat,
+        kelembapan: r.kelembapan,
+        kecerahan: r.kecerahan,
+        iritasi: r.iritasi,
+        catatan: r.catatan || "",
+        produk_dipakai: [],
+      }));
+      setEntries(restored);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(restored));
+    });
+  }, [user]);
+
   const saveEntries = useCallback((updated: ProgressEntry[]) => {
     setEntries(updated);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   }, []);
+
+  async function syncToAccount() {
+    if (!user) { router.push("/masuk?next=/progress"); return; }
+    if (!entries.length) return;
+    setSyncState("syncing");
+    const ok = await saveProgress(user.id, entries.map((e) => ({
+      week: e.week,
+      tanggal: e.date,
+      kondisi_jerawat: e.kondisi_jerawat,
+      kelembapan: e.kelembapan,
+      kecerahan: e.kecerahan,
+      iritasi: e.iritasi,
+      catatan: e.catatan,
+    })));
+    setSyncState(ok ? "done" : "idle");
+  }
 
   const handleSubmit = () => {
     const existing = editingId ? entries.find(e => e.id === editingId) : null;
@@ -510,9 +552,18 @@ export default function ProgressPage() {
         {/* Entry List */}
         {entries.length > 0 && (
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <h2 className="font-semibold text-sm">Riwayat Progress</h2>
-              <Badge variant="outline" className="text-xs">{entries.length} minggu</Badge>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={syncToAccount}
+                  disabled={syncState === "syncing"}
+                  className="text-xs text-primary hover:underline disabled:opacity-60"
+                >
+                  {syncState === "syncing" ? "Menyimpan…" : syncState === "done" ? "✓ Tersimpan di akun" : user ? "Simpan ke akun" : "Masuk untuk simpan"}
+                </button>
+                <Badge variant="outline" className="text-xs">{entries.length} minggu</Badge>
+              </div>
             </div>
 
             {[...entries].reverse().map((entry, idx) => {

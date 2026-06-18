@@ -8,6 +8,7 @@ import {
   ArrowRight, CheckCircle, XCircle, ChevronDown, Repeat,
   FlaskConical, Brain, User, ShoppingBag, Menu, X, DollarSign, Star
 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { NumberTicker } from "@/components/magicui/number-ticker";
@@ -635,7 +636,7 @@ export default function Home() {
                 className="rounded-2xl border border-border overflow-hidden bg-card"
               >
                 <div className="h-44 relative overflow-hidden">
-                  <img src={week.img} alt={`Kondisi kulit ${week.week}`} className="w-full h-full object-cover" />
+                  <Image src={week.img} alt={`Kondisi kulit ${week.week}`} fill sizes="(max-width: 768px) 33vw, 300px" className="object-cover" />
                   <div className="absolute top-3 left-3">
                     <Badge variant="outline" className="text-xs border-white/20 text-white/60 bg-black/30">{week.week}</Badge>
                   </div>
@@ -662,7 +663,7 @@ export default function Home() {
             <div className="grid grid-cols-2">
               <div className="relative">
                 <div className="h-52 relative overflow-hidden">
-                  <img src="/skin/week1.jpg" alt="Kulit minggu 1" className="w-full h-full object-cover" />
+                  <Image src="/skin/week1.jpg" alt="Kulit minggu 1" fill sizes="(max-width: 768px) 50vw, 350px" className="object-cover" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                   <p className="text-white text-xs font-medium">Minggu 1</p>
@@ -671,7 +672,7 @@ export default function Home() {
               </div>
               <div className="relative border-l border-border">
                 <div className="h-52 relative overflow-hidden">
-                  <img src="/skin/week8.jpg" alt="Kulit minggu 8" className="w-full h-full object-cover" />
+                  <Image src="/skin/week8.jpg" alt="Kulit minggu 8" fill sizes="(max-width: 768px) 50vw, 350px" className="object-cover" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                   <p className="text-white text-xs font-medium">Minggu 8</p>

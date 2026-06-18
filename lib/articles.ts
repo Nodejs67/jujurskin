@@ -344,6 +344,106 @@ export const ARTICLES: Article[] = [
       },
     ],
   },
+  {
+    id: "a7",
+    slug: "jerawat-hijab",
+    title: "Jerawat di Garis Hijab: Kenapa Terjadi & Cara Mengatasinya",
+    excerpt: "Jerawat di dahi, pipi, dan garis hijab sangat umum di Indonesia. Ini penyebabnya (acne mechanica) dan cara menanganinya tanpa harus lepas hijab.",
+    emoji: "🧕",
+    tags: ["Hijab", "Jerawat", "Indonesia"],
+    date: "2026-06-18",
+    read_time: 5,
+    related_ingredients: ["niacinamide", "salicylic-acid"],
+    related_articles: ["skin-barrier-rusak", "bha-vs-aha"],
+    sections: [
+      {
+        heading: "Kenapa Jerawat Muncul di Area Hijab?",
+        body: "Gesekan kain, keringat yang terperangkap, dan panas lembap di balik hijab menciptakan kondisi ideal untuk jerawat — namanya acne mechanica. Iklim tropis Indonesia yang panas dan lembap membuatnya makin sering terjadi, terutama di dahi, pelipis, dan garis rahang.",
+        tip: "Ini bukan karena kamu 'kotor'. Acne mechanica murni soal gesekan + keringat + bakteri, bukan kebersihan.",
+      },
+      {
+        heading: "Yang Bisa Kamu Lakukan",
+        body: "Tidak perlu lepas hijab. Fokus ke mengurangi keringat terperangkap dan menjaga barrier:",
+        list: [
+          "Pilih bahan hijab yang menyerap & breathable (katun, voal) — hindari polyester tebal saat aktivitas berat.",
+          "Ganti ciput/inner setiap hari; ganti hijab kalau sudah lembap kena keringat.",
+          "Bersihkan wajah setelah seharian berhijab — double cleanse ringan kalau pakai sunscreen/makeup.",
+          "Niacinamide untuk meredakan radang + BHA (salicylic acid) 1–2x/minggu untuk membersihkan pori.",
+        ],
+        warning: "Jangan over-treat dengan banyak produk aktif sekaligus — barrier yang lemah malah memperparah jerawat. Pelan tapi konsisten.",
+      },
+      {
+        heading: "Kapan Perlu ke Dokter?",
+        body: "Kalau jerawat meradang besar, nyeri, bernanah, atau tak membaik setelah 6–8 minggu perawatan dasar, konsultasikan ke dokter kulit. Ini bukan diagnosis medis — hanya panduan umum.",
+      },
+    ],
+  },
+  {
+    id: "a8",
+    slug: "skincare-puasa-ramadan",
+    title: "Skincare Saat Puasa: Jaga Kulit Tetap Lembap Selama Ramadan",
+    excerpt: "Puasa bisa membuat kulit lebih kering karena asupan cairan berkurang. Ini cara menyesuaikan rutinitas skincare selama Ramadan — sederhana & realistis.",
+    emoji: "🌙",
+    tags: ["Puasa", "Ramadan", "Hidrasi"],
+    date: "2026-06-18",
+    read_time: 4,
+    related_ingredients: ["hyaluronic-acid", "ceramide"],
+    related_articles: ["rutinitas-skincare-pemula", "skin-barrier-rusak"],
+    sections: [
+      {
+        heading: "Kenapa Kulit Lebih Kering Saat Puasa",
+        body: "Selama berpuasa, asupan air berkurang dan pola tidur sering berubah. Kulit bisa terasa lebih kering, kusam, dan barrier sedikit melemah. Ini wajar dan bisa diatasi tanpa produk mahal.",
+        tip: "Manfaatkan waktu sahur & berbuka untuk minum cukup air (total ~8 gelas terbagi). Hidrasi dari dalam paling berpengaruh.",
+      },
+      {
+        heading: "Penyesuaian Rutinitas",
+        body: "Tidak perlu mengganti semua produk. Cukup geser fokus ke hidrasi & barrier:",
+        list: [
+          "Pakai pelembap lebih rich di malam hari (cari ceramide, hyaluronic acid, glycerin).",
+          "Jangan skip sunscreen di pagi hari — puasa tidak mengubah kebutuhan proteksi UV.",
+          "Kurangi eksfoliasi berlebih saat kulit sedang kering/sensitif.",
+          "Hindari air terlalu panas saat wudhu/cuci muka — bisa memperparah kekeringan.",
+        ],
+      },
+      {
+        heading: "Tetap Realistis",
+        body: "Kulit kusam ringan saat puasa itu normal dan sementara. Tidak perlu panik beli banyak produk baru — fokus konsistensi pelembap + sunscreen + hidrasi cukup.",
+        warning: "Hati-hati produk yang menjanjikan 'glowing instan saat Ramadan'. Tidak ada yang instan; yang ada konsisten.",
+      },
+    ],
+  },
+  {
+    id: "a9",
+    slug: "kulit-sehat-bukan-putih",
+    title: "Kulit Sehat Lebih Penting daripada Kulit Putih",
+    excerpt: "Standar 'putih = cantik' membuat banyak orang Indonesia membeli produk pemutih berbahaya. Ini kenapa kulit sehat adalah tujuan yang benar — dan lebih realistis.",
+    emoji: "🌿",
+    tags: ["Mindset", "Kulit Sehat", "Edukasi"],
+    date: "2026-06-18",
+    read_time: 5,
+    related_articles: ["sunscreen-wajib-setiap-hari", "skin-barrier-rusak"],
+    sections: [
+      {
+        heading: "Warna Kulit Bukan Ukuran Kesehatan",
+        body: "Warna kulit ditentukan genetik (melanin) dan justru melanin melindungi dari sinar UV. Mengejar 'putih' berarti melawan biologi tubuhmu sendiri — dan sering mendorong orang memakai produk berbahaya.",
+        tip: "Tujuan yang sehat: barrier kuat, lembap, merata, terlindungi UV — bukan beberapa tingkat lebih terang.",
+      },
+      {
+        heading: "Bahaya Produk Pemutih Abal-abal",
+        body: "Banyak krim pemutih ilegal di pasaran mengandung merkuri dan hidrokuinon dosis tinggi. 'Hasil cepat' mereka justru tanda bahaya:",
+        list: [
+          "Merkuri: merusak ginjal & saraf, menipiskan kulit, bisa picu hiperpigmentasi parah jangka panjang.",
+          "Hidrokuinon tanpa pengawasan dokter: bisa sebabkan ochronosis (kulit menghitam permanen).",
+          "Steroid tersembunyi: kulit 'mulus' sesaat, lalu rusak parah saat dihentikan.",
+        ],
+        warning: "Produk yang menjanjikan putih dalam beberapa hari hampir pasti mengandung bahan berbahaya. Cek legalitas BPOM-nya dulu.",
+      },
+      {
+        heading: "Fokus yang Benar",
+        body: "Kalau ingin kulit lebih cerah & merata secara aman: rutin sunscreen (mencegah noda baru), niacinamide/vitamin C untuk meratakan tona perlahan, dan sabar. Hasilnya bertahap tapi nyata dan aman.",
+      },
+    ],
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {

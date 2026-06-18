@@ -21,6 +21,7 @@ const MENU_GROUPS: { title: string; links: { href: string; label: string }[] }[]
     title: "Mulai",
     links: [
       { href: "/analisis", label: "Analisis Kulit" },
+      { href: "/analisis-foto", label: "Analisis Foto" },
       { href: "/hasil", label: "Hasil Analisis" },
       { href: "/rutinitas", label: "Rutinitas AM/PM" },
       { href: "/progress", label: "Progress Tracker" },
@@ -30,6 +31,7 @@ const MENU_GROUPS: { title: string; links: { href: string; label: string }[] }[]
     title: "Alat Jujur",
     links: [
       { href: "/tidak-perlu", label: "Produk Tidak Perlu" },
+      { href: "/cek-bpom", label: "Cek BPOM" },
       { href: "/cek-klaim", label: "Cek Klaim Iklan" },
       { href: "/cek-konflik", label: "Cek Konflik Bahan" },
       { href: "/simulasi", label: "Simulasi What-If" },

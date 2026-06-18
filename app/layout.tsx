@@ -44,6 +44,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://jujurskin.vercel.app",
   },
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/apple-icon.png",
+  },
+};
+
+export const viewport = {
+  themeColor: "#4f7a5b",
 };
 
 export default function RootLayout({

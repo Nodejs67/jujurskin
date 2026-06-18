@@ -18,6 +18,8 @@ export function SiteFooter() {
           <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground">
             {[
               { href: "/analisis", label: "Analisis Kulit" },
+              { href: "/analisis-foto", label: "Analisis Foto" },
+              { href: "/cek-bpom", label: "Cek BPOM" },
               { href: "/panduan", label: "Panduan" },
               { href: "/edukasi", label: "Edukasi" },
               { href: "/produk", label: "Produk" },
