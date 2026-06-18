@@ -657,6 +657,35 @@ function HasilContent() {
           </motion.div>
         )}
 
+        {/* Treatment Opsional — saran upgrade, TIDAK wajib */}
+        {h.optional_upgrades && h.optional_upgrades.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.435 }}
+            className="rounded-2xl border border-accent/30 bg-accent/5 p-5"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <Sparkles className="w-4 h-4 text-accent" />
+              <p className="text-sm font-semibold text-foreground">Kalau ada budget lebih (opsional, tidak wajib)</p>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">
+              Rutinitas inti di atas sudah cukup. Ini cuma <strong>saran tambahan</strong> yang relevan dengan hasil analisis kamu — kami tidak menjual ini, dan kulitmu tetap sehat tanpanya.
+            </p>
+            <div className="space-y-3">
+              {h.optional_upgrades.map((u, i) => (
+                <div key={i} className="rounded-xl border border-border bg-card p-3.5">
+                  <div className="flex items-start justify-between gap-3 mb-1">
+                    <p className="text-sm font-medium text-foreground">{u.title}</p>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${u.type === "Klinik" ? "bg-blue-400/15 text-blue-700" : "bg-green-400/15 text-green-700"}`}>
+                      {u.type}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-2">{u.desc}</p>
+                  <p className="text-xs font-medium text-accent">Estimasi: {u.est_cost}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* Pregnancy Warnings */}
         {h.pregnancy_warnings && h.pregnancy_warnings.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.43 }}

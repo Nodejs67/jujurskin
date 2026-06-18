@@ -107,6 +107,13 @@ export interface EduSection {
   items: string[];
 }
 
+export interface OptionalUpgrade {
+  title: string;
+  desc: string;
+  est_cost: string;
+  type: "Produk" | "Klinik";
+}
+
 export interface AnalysisResult {
   recs: Recommendation[];
   skips: SkipItem[];
@@ -129,6 +136,7 @@ export interface AnalysisResult {
   budget_tiers?: BudgetTier[];
   education?: EduSection[];
   disclaimer?: string;
+  optional_upgrades?: OptionalUpgrade[];
 }
 
 // ── Kota dengan iklim ekstrem di Indonesia
@@ -792,6 +800,23 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
 
   const disclaimer = "Hasil ini berbasis kuesioner & aturan umum perawatan kulit — BUKAN diagnosis medis. Untuk kondisi kulit yang parah, menetap, atau menyakitkan, konsultasikan ke dokter kulit.";
 
+  // ── Treatment opsional (TIDAK WAJIB) — kalau ada budget lebih
+  const optional_upgrades: OptionalUpgrade[] = [];
+  if (!recs.some(r => r.category === "Exfoliant") && !recs.some(r => r.product.includes("Salicylic"))) {
+    optional_upgrades.push({ title: "Exfoliating toner (AHA/BHA/PHA)", type: "Produk", est_cost: "Rp 50–90rb", desc: "1–2x/minggu untuk meratakan tekstur & mencerahkan. Mulai pelan, jangan barengan retinol." });
+  }
+  if (has("pigmentasi") || hasPIH || has("kusam")) {
+    optional_upgrades.push({ title: "Booster pencerah (Alpha Arbutin / Tranexamic Acid)", type: "Produk", est_cost: "Rp 50–120rb", desc: "Mempercepat memudarkan noda, dipakai bergantian dengan Niacinamide." });
+  }
+  if (input.usia >= 30 && !recs.some(r => r.category === "Anti-Aging")) {
+    optional_upgrades.push({ title: "Perawatan area mata (eye cream / peptide)", type: "Produk", est_cost: "Rp 80–150rb", desc: "Mulai relevan di atas 30 tahun untuk garis halus & area mata." });
+  }
+  optional_upgrades.push({ title: "Masker hidrasi (sleeping/sheet mask)", type: "Produk", est_cost: "Rp 20–80rb", desc: "1–2x/minggu untuk boost kelembapan, terutama di cuaca kering/ber-AC." });
+  if (input.budget >= 250000 || (has("jerawat") && severeAcne)) {
+    optional_upgrades.push({ title: "Facial profesional / chemical peel ringan", type: "Klinik", est_cost: "Rp 150–400rb/sesi", desc: "Opsional & berkala untuk komedo/tekstur/jerawat membandel. Pilih klinik dengan dokter — hindari yang menjanjikan hasil instan." });
+  }
+  const optionalUpgrades = optional_upgrades.slice(0, 4);
+
   return {
     recs,
     skips,
@@ -825,5 +850,6 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
     budget_tiers,
     education,
     disclaimer,
+    optional_upgrades: optionalUpgrades,
   };
 }
