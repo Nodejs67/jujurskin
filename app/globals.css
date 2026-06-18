@@ -241,6 +241,25 @@
   }
 }
 
+/* ── Mode Ringan (hemat / koneksi lambat / HP lama) ──────────────
+   Matikan semua animasi & transisi + sembunyikan efek dekoratif berat. */
+[data-ringan="1"] *,
+[data-ringan="1"] *::before,
+[data-ringan="1"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+[data-ringan="1"] .animate-marquee,
+[data-ringan="1"] .animate-marquee-vertical,
+[data-ringan="1"] .animate-border-beam,
+[data-ringan="1"] .animate-gradient,
+[data-ringan="1"] .animate-shimmer,
+[data-ringan="1"] .animate-float,
+[data-ringan="1"] .shimmer {
+  animation: none !important;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

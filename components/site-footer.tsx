@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
+import { ModeRingan } from "@/components/mode-ringan";
 
 export function SiteFooter() {
   return (
@@ -21,6 +22,9 @@ export function SiteFooter() {
               { href: "/analisis-foto", label: "Analisis Foto" },
               { href: "/cek-bpom", label: "Cek BPOM" },
               { href: "/sunscreen", label: "Sunscreen No-Whitecast" },
+              { href: "/kulit-tropis", label: "Kulit Iklim Tropis" },
+              { href: "/ke-dokter", label: "Kapan ke Dokter" },
+              { href: "/kamus", label: "Kamus Istilah" },
               { href: "/panduan", label: "Panduan" },
               { href: "/edukasi", label: "Edukasi" },
               { href: "/produk", label: "Produk" },
@@ -52,9 +56,12 @@ export function SiteFooter() {
               Kebijakan Privasi
             </Link>
           </p>
-          <p className="text-xs text-muted-foreground text-center">
-            Tidak terafiliasi brand · Berbasis data & ilmu pengetahuan · 100% Gratis
-          </p>
+          <div className="flex items-center gap-3">
+            <p className="text-xs text-muted-foreground text-center hidden sm:block">
+              Tidak terafiliasi brand · 100% Gratis
+            </p>
+            <ModeRingan />
+          </div>
         </div>
       </div>
     </footer>
