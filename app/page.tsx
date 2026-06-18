@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState as useNavState } from "react";
 import {
   Shield, TrendingDown, TrendingUp, BookOpen, MapPin, AlertTriangle, Sparkles,
-  ArrowRight, CheckCircle, XCircle, ChevronDown, Camera, Repeat,
+  ArrowRight, CheckCircle, XCircle, ChevronDown, Repeat,
   FlaskConical, Brain, User, ShoppingBag, Menu, X, DollarSign, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -627,15 +627,15 @@ export default function Home() {
           {/* 3 foto progress */}
           <div className="grid grid-cols-3 gap-4 mb-8">
             {[
-              { week: "Minggu 1", status: "Awal Perjalanan", detail: "Jerawat aktif 8 titik", gradient: "from-rose-950 via-red-900/40 to-amber-900/30", score: 52 },
-              { week: "Minggu 4", status: "Mulai Membaik", detail: "Jerawat berkurang 50%", gradient: "from-amber-950 via-amber-800/30 to-yellow-900/20", score: 64 },
-              { week: "Minggu 8", status: "Jauh Lebih Baik", detail: "Kulit merata & bersih", gradient: "from-green-950 via-emerald-900/30 to-teal-900/20", score: 76 },
+              { week: "Minggu 1", status: "Awal Perjalanan", detail: "Jerawat aktif 8 titik", img: "/skin/week1.jpg", score: 52 },
+              { week: "Minggu 4", status: "Mulai Membaik", detail: "Jerawat berkurang 50%", img: "/skin/week4.jpg", score: 64 },
+              { week: "Minggu 8", status: "Jauh Lebih Baik", detail: "Kulit merata & bersih", img: "/skin/week8.jpg", score: 76 },
             ].map((week, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }}
                 className="rounded-2xl border border-border overflow-hidden bg-card"
               >
-                <div className={`h-44 bg-gradient-to-br ${week.gradient} flex items-center justify-center relative`}>
-                  <Camera className="w-10 h-10 text-white/20" />
+                <div className="h-44 relative overflow-hidden">
+                  <img src={week.img} alt={`Kondisi kulit ${week.week}`} className="w-full h-full object-cover" />
                   <div className="absolute top-3 left-3">
                     <Badge variant="outline" className="text-xs border-white/20 text-white/60 bg-black/30">{week.week}</Badge>
                   </div>
@@ -661,8 +661,8 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-2">
               <div className="relative">
-                <div className="h-52 bg-gradient-to-br from-rose-950 via-red-900/50 to-amber-900/40 flex items-center justify-center">
-                  <Camera className="w-10 h-10 text-white/15" />
+                <div className="h-52 relative overflow-hidden">
+                  <img src="/skin/week1.jpg" alt="Kulit minggu 1" className="w-full h-full object-cover" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                   <p className="text-white text-xs font-medium">Minggu 1</p>
@@ -670,8 +670,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="relative border-l border-border">
-                <div className="h-52 bg-gradient-to-br from-green-950 via-emerald-900/40 to-teal-900/30 flex items-center justify-center">
-                  <Camera className="w-10 h-10 text-white/15" />
+                <div className="h-52 relative overflow-hidden">
+                  <img src="/skin/week8.jpg" alt="Kulit minggu 8" className="w-full h-full object-cover" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                   <p className="text-white text-xs font-medium">Minggu 8</p>
