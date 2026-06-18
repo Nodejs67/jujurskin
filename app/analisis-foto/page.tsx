@@ -34,6 +34,34 @@ export default function AnalisisFotoPage() {
   const [preview, setPreview] = useState<string>("");
   const [status, setStatus] = useState<"idle" | "loading-model" | "analyzing" | "done" | "error">("idle");
   const [result, setResult] = useState<SkinResult | null>(null);
+  const [saran, setSaran] = useState<string | null>(null);
+  const [saranLoading, setSaranLoading] = useState(false);
+
+  async function fetchSaran(res: SkinResult) {
+    setSaran(null);
+    setSaranLoading(true);
+    try {
+      const r = await fetch("/api/saran-kulit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // HANYA angka — tidak ada foto
+        body: JSON.stringify({
+          scores: res.scores,
+          levels: {
+            redness: res.metrics.find((m) => m.key === "redness")?.level,
+            oiliness: res.metrics.find((m) => m.key === "oil")?.level,
+            evenness: res.metrics.find((m) => m.key === "even")?.level,
+          },
+        }),
+      });
+      const data = await r.json();
+      setSaran(data?.saran ?? null);
+    } catch {
+      setSaran(null);
+    } finally {
+      setSaranLoading(false);
+    }
+  }
 
   async function getLandmarker() {
     if (landmarkerRef.current) return landmarkerRef.current;
@@ -93,8 +121,11 @@ export default function AnalisisFotoPage() {
 
       const lms = faces[0].map((p) => ({ x: p.x * W, y: p.y * H })); // ke piksel
       const input = buildInput(lms, imgData, W, H);
-      setResult(analyzeSkin(input));
+      const res = analyzeSkin(input);
+      setResult(res);
       setStatus("done");
+      if (res.confidence >= 40) fetchSaran(res); // hanya minta saran kalau hasil cukup layak
+
     } catch (err) {
       console.error(err);
       setStatus("error");
@@ -199,6 +230,25 @@ export default function AnalisisFotoPage() {
                   </div>
                 ))}
               </div>
+
+              {(saranLoading || saran) && (
+                <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+                  <p className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary/15 text-primary text-[10px] font-bold">AI</span>
+                    Saran personal
+                  </p>
+                  {saranLoading ? (
+                    <p className="text-xs text-muted-foreground flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" /> Menyusun saran dari angka hasil ukur…
+                    </p>
+                  ) : (
+                    <p className="text-xs text-foreground leading-relaxed whitespace-pre-wrap">{saran}</p>
+                  )}
+                  <p className="text-[10px] text-muted-foreground mt-2">
+                    Saran dibuat AI hanya dari <strong>angka hasil ukur</strong> — fotomu tidak ikut dikirim.
+                  </p>
+                </div>
+              )}
 
               <div className="rounded-xl border border-border bg-secondary/20 p-4">
                 <p className="text-xs text-muted-foreground leading-relaxed">
