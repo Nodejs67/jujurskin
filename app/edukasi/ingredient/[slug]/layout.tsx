@@ -36,7 +36,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `https://jujurskin.vercel.app/edukasi/ingredient/${ing.id}`,
+      url: `https://jujurskin.com/edukasi/ingredient/${ing.id}`,
       type: "article",
     },
     twitter: {
@@ -45,7 +45,7 @@ export async function generateMetadata({
       description,
     },
     alternates: {
-      canonical: `https://jujurskin.vercel.app/edukasi/ingredient/${ing.id}`,
+      canonical: `https://jujurskin.com/edukasi/ingredient/${ing.id}`,
     },
   };
 }
@@ -67,11 +67,11 @@ export default async function IngredientLayout({
         headline: `${ing.name} — Ingredient Skincare`,
         description: ing.tagline,
         keywords: [ing.name, ...ing.aliases, CATEGORY_LABELS[ing.category]].join(", "),
-        url: `https://jujurskin.vercel.app/edukasi/ingredient/${ing.id}`,
+        url: `https://jujurskin.com/edukasi/ingredient/${ing.id}`,
         publisher: {
           "@type": "Organization",
           name: "JujurSkin",
-          url: "https://jujurskin.vercel.app",
+          url: "https://jujurskin.com",
         },
         about: {
           "@type": "Thing",

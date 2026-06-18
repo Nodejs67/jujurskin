@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     "rujukan poli kulit bpjs",
     "klinik kecantikan vs dokter kulit",
   ],
-  openGraph: { title, description, url: "https://jujurskin.vercel.app/ke-dokter", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/ke-dokter", type: "website" },
   twitter: { card: "summary", title, description },
-  alternates: { canonical: "https://jujurskin.vercel.app/ke-dokter" },
+  alternates: { canonical: "https://jujurskin.com/ke-dokter" },
 };
 
 export default function KeDokterLayout({ children }: { children: React.ReactNode }) {

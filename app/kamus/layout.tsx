@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     "kamus skincare indonesia",
     "pih pie bekas jerawat",
   ],
-  openGraph: { title, description, url: "https://jujurskin.vercel.app/kamus", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/kamus", type: "website" },
   twitter: { card: "summary", title, description },
-  alternates: { canonical: "https://jujurskin.vercel.app/kamus" },
+  alternates: { canonical: "https://jujurskin.com/kamus" },
 };
 
 export default function KamusLayout({ children }: { children: React.ReactNode }) {

@@ -821,7 +821,7 @@ function HasilContent() {
             {/* WhatsApp */}
             <a
               href={`https://wa.me/?text=${encodeURIComponent(
-                `Hei! Aku baru analisis kondisi kulit di JujurSkin — platform skincare Indonesia yang jujur (bukan iklan).\n\nKulit ${data.tipe_kulit || "normal"} dengan skor kesehatan ${h.score.total}/100 setelah pakai rutinitas yang direkomendasikan.\n\nCoba sendiri gratis → https://jujurskin.vercel.app/analisis`
+                `Hei! Aku baru analisis kondisi kulit di JujurSkin — platform skincare Indonesia yang jujur (bukan iklan).\n\nKulit ${data.tipe_kulit || "normal"} dengan skor kesehatan ${h.score.total}/100 setelah pakai rutinitas yang direkomendasikan.\n\nCoba sendiri gratis → https://jujurskin.com/analisis`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -833,7 +833,7 @@ function HasilContent() {
             {/* Twitter/X */}
             <a
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                `Baru analisis kondisi kulit di @JujurSkin — platform skincare Indonesia yang jujur, bukan iklan.\n\nSkor kulit ${data.tipe_kulit || ""}: ${h.score.total}/100 💚\n\nGratis → https://jujurskin.vercel.app/analisis`
+                `Baru analisis kondisi kulit di @JujurSkin — platform skincare Indonesia yang jujur, bukan iklan.\n\nSkor kulit ${data.tipe_kulit || ""}: ${h.score.total}/100 💚\n\nGratis → https://jujurskin.com/analisis`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -845,7 +845,7 @@ function HasilContent() {
             {/* Copy link */}
             <button
               onClick={() => {
-                navigator.clipboard.writeText(`https://jujurskin.vercel.app/analisis`).then(() => {
+                navigator.clipboard.writeText(`https://jujurskin.com/analisis`).then(() => {
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 });

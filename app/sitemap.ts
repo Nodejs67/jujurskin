@@ -3,7 +3,7 @@ import { INGREDIENTS } from "@/lib/ingredients";
 import { ARTICLES } from "@/lib/articles";
 import { PRODUCTS } from "@/lib/products";
 
-const BASE = "https://jujurskin.vercel.app";
+const BASE = "https://jujurskin.com";
 
 const STATIC_PAGES = [
   { url: "/", priority: 1.0, changeFrequency: "weekly" as const },

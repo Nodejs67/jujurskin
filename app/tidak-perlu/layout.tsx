@@ -20,11 +20,11 @@ export const metadata: Metadata = {
   openGraph: {
     title,
     description,
-    url: "https://jujurskin.vercel.app/tidak-perlu",
+    url: "https://jujurskin.com/tidak-perlu",
     type: "website",
   },
   twitter: { card: "summary", title, description },
-  alternates: { canonical: "https://jujurskin.vercel.app/tidak-perlu" },
+  alternates: { canonical: "https://jujurskin.com/tidak-perlu" },
 };
 
 export default function TidakPerluLayout({ children }: { children: React.ReactNode }) {

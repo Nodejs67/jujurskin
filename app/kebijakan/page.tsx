@@ -10,7 +10,7 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
-  alternates: { canonical: "https://jujurskin.vercel.app/kebijakan" },
+  alternates: { canonical: "https://jujurskin.com/kebijakan" },
 };
 
 export default function KebijakanPage() {

@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     "produk skincare ilegal",
     "skincare merkuri bahaya",
   ],
-  openGraph: { title, description, url: "https://jujurskin.vercel.app/cek-bpom", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/cek-bpom", type: "website" },
   twitter: { card: "summary", title, description },
-  alternates: { canonical: "https://jujurskin.vercel.app/cek-bpom" },
+  alternates: { canonical: "https://jujurskin.com/cek-bpom" },
 };
 
 export default function CekBpomLayout({ children }: { children: React.ReactNode }) {

@@ -18,11 +18,11 @@ export const metadata: Metadata = {
   openGraph: {
     title,
     description,
-    url: "https://jujurskin.vercel.app/iklim",
+    url: "https://jujurskin.com/iklim",
     type: "website",
   },
   twitter: { card: "summary", title, description },
-  alternates: { canonical: "https://jujurskin.vercel.app/iklim" },
+  alternates: { canonical: "https://jujurskin.com/iklim" },
 };
 
 export default function IklimLayout({ children }: { children: React.ReactNode }) {

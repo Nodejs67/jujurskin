@@ -18,11 +18,11 @@ export const metadata: Metadata = {
   openGraph: {
     title,
     description,
-    url: "https://jujurskin.vercel.app/simulasi",
+    url: "https://jujurskin.com/simulasi",
     type: "website",
   },
   twitter: { card: "summary", title, description },
-  alternates: { canonical: "https://jujurskin.vercel.app/simulasi" },
+  alternates: { canonical: "https://jujurskin.com/simulasi" },
 };
 
 export default function SimulasiLayout({ children }: { children: React.ReactNode }) {

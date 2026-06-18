@@ -18,11 +18,11 @@ export const metadata: Metadata = {
   openGraph: {
     title,
     description,
-    url: "https://jujurskin.vercel.app/mitos-fakta",
+    url: "https://jujurskin.com/mitos-fakta",
     type: "website",
   },
   twitter: { card: "summary", title, description },
-  alternates: { canonical: "https://jujurskin.vercel.app/mitos-fakta" },
+  alternates: { canonical: "https://jujurskin.com/mitos-fakta" },
 };
 
 export default function MitosFaktaLayout({ children }: { children: React.ReactNode }) {

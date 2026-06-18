@@ -23,7 +23,7 @@ export async function generateMetadata({
     openGraph: {
       title: article.title,
       description: article.excerpt,
-      url: `https://jujurskin.vercel.app/artikel/${article.slug}`,
+      url: `https://jujurskin.com/artikel/${article.slug}`,
       type: "article",
       publishedTime: article.date,
     },
@@ -33,7 +33,7 @@ export async function generateMetadata({
       description: article.excerpt,
     },
     alternates: {
-      canonical: `https://jujurskin.vercel.app/artikel/${article.slug}`,
+      canonical: `https://jujurskin.com/artikel/${article.slug}`,
     },
   };
 }
@@ -55,12 +55,12 @@ export default async function ArtikelLayout({
         headline: article.title,
         description: article.excerpt,
         keywords: article.tags.join(", "),
-        url: `https://jujurskin.vercel.app/artikel/${article.slug}`,
+        url: `https://jujurskin.com/artikel/${article.slug}`,
         datePublished: article.date,
         publisher: {
           "@type": "Organization",
           name: "JujurSkin",
-          url: "https://jujurskin.vercel.app",
+          url: "https://jujurskin.com",
         },
       }
     : null;

@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     "kulit lembap berkeringat",
     "masalah kulit cuaca panas indonesia",
   ],
-  openGraph: { title, description, url: "https://jujurskin.vercel.app/kulit-tropis", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/kulit-tropis", type: "website" },
   twitter: { card: "summary", title, description },
-  alternates: { canonical: "https://jujurskin.vercel.app/kulit-tropis" },
+  alternates: { canonical: "https://jujurskin.com/kulit-tropis" },
 };
 
 export default function KulitTropisLayout({ children }: { children: React.ReactNode }) {

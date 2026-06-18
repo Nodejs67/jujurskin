@@ -46,7 +46,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `https://jujurskin.vercel.app/produk/${product.id}`,
+      url: `https://jujurskin.com/produk/${product.id}`,
       type: "website",
     },
     twitter: {
@@ -55,7 +55,7 @@ export async function generateMetadata({
       description,
     },
     alternates: {
-      canonical: `https://jujurskin.vercel.app/produk/${product.id}`,
+      canonical: `https://jujurskin.com/produk/${product.id}`,
     },
   };
 }

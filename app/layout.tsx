@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://jujurskin.vercel.app"),
+  metadataBase: new URL("https://jujurskin.com"),
   title: {
     default: "JujurSkin — Platform Skincare Jujur Indonesia",
     template: "%s | JujurSkin",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "JujurSkin — Platform Skincare Jujur Indonesia",
     description: "Rekomendasi skincare berbasis kondisi kulit & budget, bukan iklan. 100% gratis.",
-    url: "https://jujurskin.vercel.app",
+    url: "https://jujurskin.com",
     siteName: "JujurSkin",
     locale: "id_ID",
     type: "website",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     description: "Rekomendasi skincare berbasis kondisi kulit & budget, bukan iklan. 100% gratis.",
   },
   alternates: {
-    canonical: "https://jujurskin.vercel.app",
+    canonical: "https://jujurskin.com",
   },
   icons: {
     icon: "/icon-192.png",

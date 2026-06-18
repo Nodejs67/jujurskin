@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     "kulit berminyak cek",
     "skin analysis indonesia",
   ],
-  openGraph: { title, description, url: "https://jujurskin.vercel.app/analisis-foto", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/analisis-foto", type: "website" },
   twitter: { card: "summary", title, description },
-  alternates: { canonical: "https://jujurskin.vercel.app/analisis-foto" },
+  alternates: { canonical: "https://jujurskin.com/analisis-foto" },
 };
 
 export default function AnalisisFotoLayout({ children }: { children: React.ReactNode }) {
