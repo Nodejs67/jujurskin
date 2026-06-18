@@ -134,6 +134,14 @@
     @apply font-sans;
     scroll-behavior: smooth;
   }
+  /* Cegah geser horizontal di HP (elemen dekoratif/lebar tak boleh bikin
+     halaman melar ke kanan). `clip` dipilih, bukan `hidden`, supaya tidak
+     membuat body jadi scroll-container → position: sticky tetap jalan. */
+  html,
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+  }
 }
 
 @layer utilities {

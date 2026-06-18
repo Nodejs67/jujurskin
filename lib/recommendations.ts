@@ -47,6 +47,13 @@ export interface AnalysisInput {
   // Faktor hormonal perempuan tambahan
   siklus_haid?: "teratur" | "tidak_teratur" | "tidak_yakin";
   diagnosis_hormonal?: boolean;
+  // Hasil Analisis Foto (opsional) — diukur on-device, BUKAN diagnosis.
+  // Level mengikuti mesin lib/skin-analysis.ts: "rendah" | "sedang" | "tinggi".
+  foto_redness?: "rendah" | "sedang" | "tinggi";
+  foto_oiliness?: "rendah" | "sedang" | "tinggi";
+  foto_evenness?: "rendah" | "sedang" | "tinggi"; // sebaran warna (tinggi = kurang merata)
+  foto_tone?: string; // label ITA°: "Sangat terang".."Gelap"
+  foto_confidence?: number; // 0–100, keyakinan hasil ukur
 }
 
 export interface Recommendation {
@@ -261,6 +268,18 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   const wantMin = tier === "hemat";   // hanya esensial
   const wantMax = tier === "maksimal"; // rutinitas lebih lengkap
 
+  // ── Sinyal dari Analisis Foto (opsional). Hanya dipercaya bila keyakinan
+  //    hasil ukur cukup (>=45%) supaya foto buruk tak menyesatkan rekomendasi.
+  const fotoOk = (input.foto_confidence ?? 0) >= 45;
+  const fotoRednessHigh = fotoOk && input.foto_redness === "tinggi";
+  const fotoRednessMed = fotoOk && input.foto_redness === "sedang";
+  const fotoOilHigh = fotoOk && input.foto_oiliness === "tinggi";
+  const fotoUnevenHigh = fotoOk && input.foto_evenness === "tinggi";
+  // Tone gelap/sawo-matang lebih rentan whitecast & PIH → arahkan ke sunscreen
+  // tepat (bukan ke produk "pemutih"). Sejalan janji brand: sehat ≠ putih.
+  const fotoToneDeep =
+    fotoOk && /sawo matang|cokelat|gelap/i.test(input.foto_tone ?? "");
+
   // ── Lifestyle notes
   if (isStressed || poorSleep) {
     lifestyleNotes.push("Stres tinggi dan kurang tidur memperlambat regenerasi kulit dan memperparah jerawat hormonal. Prioritas utama: barrier repair dan jangan over-exfoliate.");
@@ -302,6 +321,30 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
   }
   if (irregularCycle || diagnosedHormonal) {
     lifestyleNotes.push("Siklus haid tidak teratur / kondisi hormonal yang kamu tandai bisa berkaitan dengan jerawat hormonal yang membandel. Niacinamide + Zinc dan konsistensi membantu, tapi untuk kasus menetap sebaiknya cek ke dokter (edukatif, bukan diagnosis).");
+  }
+
+  // ── Temuan dari Analisis Foto (on-device, BUKAN diagnosis) ────────────
+  if (fotoOk) {
+    const temuan: string[] = [];
+    if (fotoRednessHigh) temuan.push("kemerahan tinggi");
+    else if (fotoRednessMed) temuan.push("kemerahan sedang");
+    if (fotoOilHigh) temuan.push("kilap/minyak tinggi di T-zone");
+    if (fotoUnevenHigh) temuan.push("warna kulit kurang merata");
+    lifestyleNotes.push(
+      `📸 Dari analisis foto wajahmu${temuan.length ? ` kami mengukur: ${temuan.join(", ")}` : " hasilnya relatif tenang/seimbang"}. Ini pengukuran warna & cahaya di perangkatmu, bukan diagnosis medis — kami pakai untuk menajamkan saran di bawah.`
+    );
+    if (fotoRednessHigh) {
+      lifestyleNotes.push("Kemerahan yang terukur tinggi: utamakan menenangkan & perbaiki skin barrier (Centella/Cica, Niacinamide kadar wajar, pelembap ber-ceramide). Tunda dulu eksfoliasi keras/retinoid kuat sampai kemerahan reda.");
+    }
+    if (fotoOilHigh) {
+      lifestyleNotes.push("Minyak T-zone terukur tinggi: Niacinamide 4–5% dan BHA (Salicylic Acid) lembut 1–2x/minggu membantu mengontrol sebum tanpa bikin kering. Jangan over-cleansing — itu malah memicu minyak berlebih.");
+    }
+    if (fotoUnevenHigh) {
+      lifestyleNotes.push("Warna kulit terukur kurang merata: kombinasi Niacinamide / Vitamin C pagi + sunscreen disiplin memudarkan ketidakrataan secara bertahap. Tanpa sunscreen, hasilnya jalan di tempat.");
+    }
+    if (fotoToneDeep) {
+      lifestyleNotes.push(`Perkiraan warna kulitmu (${input.foto_tone}) lebih rentan whitecast dari sunscreen mineral & noda gelap (PIH) lebih awet. Pilih sunscreen tanpa whitecast (umumnya filter kimia/hybrid) — dan ingat, kulit sehat tidak harus putih; fokus kita merawat, bukan memutihkan.`);
+    }
   }
 
   // ── 1. SUNSCREEN — selalu prioritas 1

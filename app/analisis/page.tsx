@@ -3,11 +3,21 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Sparkles, CheckCircle, Info } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, CheckCircle, Info, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Problem, SkinType } from "@/lib/recommendations";
+import { SkinPhotoCapture } from "@/components/skin-photo-capture";
+import type { SkinResult, Level } from "@/lib/skin-analysis";
 
-const TOTAL_STEPS = 7;
+const TOTAL_STEPS = 8;
+
+function fotoLevelColor(level: Level) {
+  return level === "tinggi"
+    ? "text-rose-700 bg-rose-400/10 border-rose-400/20"
+    : level === "sedang"
+    ? "text-amber-700 bg-amber-400/10 border-amber-400/20"
+    : "text-green-700 bg-green-400/10 border-green-400/20";
+}
 
 type FormData = {
   nama: string;
@@ -129,6 +139,7 @@ export default function AnalisisPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [fotoResult, setFotoResult] = useState<SkinResult | null>(null);
   const [form, setForm] = useState<FormData>({
     nama: "", usia: "", kota: "", jenis_kelamin: "",
     tipe_kulit: "", tipe_kulit_custom: "", masalah: [], budget: 0, tier_preferensi: "seimbang", produk_existing: "",
@@ -169,9 +180,10 @@ export default function AnalisisPage() {
     if (step === 1) return form.usia && form.kota && form.jenis_kelamin;
     if (step === 2) return form.tipe_kulit !== "" || form.tipe_kulit_custom.trim() !== "";
     if (step === 3) return form.masalah.length > 0;
-    if (step === 4) return form.penggunaan_sunscreen && form.paparan_matahari && form.lingkungan && form.kualitas_tidur && form.tingkat_stress;
-    if (step === 5) return (!isWanita || form.status_kehamilan !== "") && form.pengalaman_retinoid !== "";
-    if (step === 6) return form.budget > 0;
+    if (step === 4) return true; // Analisis Foto — opsional, boleh dilewati
+    if (step === 5) return form.penggunaan_sunscreen && form.paparan_matahari && form.lingkungan && form.kualitas_tidur && form.tingkat_stress;
+    if (step === 6) return (!isWanita || form.status_kehamilan !== "") && form.pengalaman_retinoid !== "";
+    if (step === 7) return form.budget > 0;
     return true;
   };
 
@@ -201,6 +213,14 @@ export default function AnalisisPage() {
       sedang_obat_jerawat: form.sedang_obat_jerawat ?? undefined,
       siklus_haid: (form.siklus_haid || undefined) as "teratur" | "tidak_teratur" | "tidak_yakin" | undefined,
       diagnosis_hormonal: form.diagnosis_hormonal ?? undefined,
+      // Hasil Analisis Foto (opsional) — hanya angka level & tone, foto tak dikirim
+      ...(fotoResult ? {
+        foto_redness: fotoResult.metrics.find(m => m.key === "redness")?.level,
+        foto_oiliness: fotoResult.metrics.find(m => m.key === "oil")?.level,
+        foto_evenness: fotoResult.metrics.find(m => m.key === "even")?.level,
+        foto_tone: fotoResult.skinTone.label,
+        foto_confidence: fotoResult.confidence,
+      } : {}),
     };
 
     try {
@@ -452,10 +472,56 @@ export default function AnalisisPage() {
               </motion.div>
             )}
 
-            {/* ── STEP 4: Gaya Hidup & Lingkungan ── */}
+            {/* ── STEP 4: Analisis Foto (opsional) ── */}
             {step === 4 && (
               <motion.div key="step4" variants={slide} initial="hidden" animate="show" exit="exit" className="space-y-6">
-                <StepLabel step={4} label="Gaya Hidup & Lingkungan" />
+                <StepLabel step={4} label="Analisis Foto (opsional)" />
+                <div>
+                  <h1 className="text-2xl font-bold text-foreground mb-1">Mau hasil lebih akurat? 📸</h1>
+                  <p className="text-sm text-muted-foreground">
+                    Scan wajahmu sebentar — kami ukur kemerahan, minyak, kerataan & warna kulit, lalu pakai untuk
+                    menajamkan rekomendasi. <strong className="text-foreground">Opsional</strong> — boleh dilewati,
+                    tekan <em>Lanjut</em> kalau mau skip.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 flex gap-2.5">
+                  <ShieldCheck className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <p className="text-xs text-foreground leading-relaxed">
+                    <strong>100% di perangkatmu.</strong> Foto/video tidak diunggah, tidak disimpan, tidak dikirim ke
+                    mana pun. Yang dipakai untuk rekomendasi hanya angka hasil ukur.
+                  </p>
+                </div>
+
+                {!fotoResult ? (
+                  <SkinPhotoCapture onResult={(res) => setFotoResult(res)} />
+                ) : (
+                  <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-primary shrink-0" />
+                      <p className="text-sm font-semibold text-foreground">Hasil foto terukur · keyakinan {fotoResult.confidence}%</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {fotoResult.metrics.map((m) => (
+                        <span key={m.key} className={`text-xs font-medium px-2.5 py-1 rounded-full border capitalize ${fotoLevelColor(m.level)}`}>
+                          {m.label}: {m.level}
+                        </span>
+                      ))}
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary">
+                        Tone: {fotoResult.skinTone.label}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Angka ini akan digabungkan ke rekomendasimu. Ini pengukuran visual, bukan diagnosis medis.</p>
+                    <button onClick={() => setFotoResult(null)} className="text-xs text-muted-foreground hover:text-foreground underline">Ulangi scan</button>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* ── STEP 5: Gaya Hidup & Lingkungan ── */}
+            {step === 5 && (
+              <motion.div key="step5" variants={slide} initial="hidden" animate="show" exit="exit" className="space-y-6">
+                <StepLabel step={5} label="Gaya Hidup & Lingkungan" />
                 <div>
                   <h1 className="text-2xl font-bold text-foreground mb-1">Cerita soal keseharianmu 🌿</h1>
                   <p className="text-sm text-muted-foreground">Lingkungan dan gaya hidup sangat mempengaruhi kondisi kulit.</p>
@@ -593,10 +659,10 @@ export default function AnalisisPage() {
               </motion.div>
             )}
 
-            {/* ── STEP 5: Riwayat Kulit ── */}
-            {step === 5 && (
-              <motion.div key="step5" variants={slide} initial="hidden" animate="show" exit="exit" className="space-y-6">
-                <StepLabel step={5} label="Riwayat Kulit" />
+            {/* ── STEP 6: Riwayat Kulit ── */}
+            {step === 6 && (
+              <motion.div key="step6" variants={slide} initial="hidden" animate="show" exit="exit" className="space-y-6">
+                <StepLabel step={6} label="Riwayat Kulit" />
                 <div>
                   <h1 className="text-2xl font-bold text-foreground mb-1">Riwayat kulit & pengalamanmu</h1>
                   <p className="text-sm text-muted-foreground">Ini membantu kami memilih bahan yang aman dan sesuai kondisimu.</p>
@@ -699,10 +765,10 @@ export default function AnalisisPage() {
               </motion.div>
             )}
 
-            {/* ── STEP 6: Budget ── */}
-            {step === 6 && (
-              <motion.div key="step6" variants={slide} initial="hidden" animate="show" exit="exit" className="space-y-6">
-                <StepLabel step={6} label="Budget" />
+            {/* ── STEP 7: Budget ── */}
+            {step === 7 && (
+              <motion.div key="step7" variants={slide} initial="hidden" animate="show" exit="exit" className="space-y-6">
+                <StepLabel step={7} label="Budget" />
                 <div>
                   <h1 className="text-2xl font-bold text-foreground mb-1">Budget skincare per bulan?</h1>
                   <p className="text-sm text-muted-foreground">Kami akan pastikan rekomendasinya sesuai budget — tidak lebih, tidak kurang.</p>
@@ -771,10 +837,10 @@ export default function AnalisisPage() {
               </motion.div>
             )}
 
-            {/* ── STEP 7: Produk Existing ── */}
-            {step === 7 && (
-              <motion.div key="step7" variants={slide} initial="hidden" animate="show" exit="exit" className="space-y-6">
-                <StepLabel step={7} label="Produk Saat Ini" />
+            {/* ── STEP 8: Produk Existing ── */}
+            {step === 8 && (
+              <motion.div key="step8" variants={slide} initial="hidden" animate="show" exit="exit" className="space-y-6">
+                <StepLabel step={8} label="Produk Saat Ini" />
                 <div>
                   <h1 className="text-2xl font-bold text-foreground mb-1">Produk yang sudah kamu pakai?</h1>
                   <p className="text-sm text-muted-foreground">Ini membantu kami tahu apa yang sudah ada dan apa yang tidak perlu dibeli lagi.</p>
@@ -801,6 +867,9 @@ export default function AnalisisPage() {
                     <div><span className="text-muted-foreground">Sunscreen:</span> <span className="text-foreground">{form.penggunaan_sunscreen || "—"}</span></div>
                     <div><span className="text-muted-foreground">Status:</span> <span className="text-foreground">{form.status_kehamilan || "—"}</span></div>
                     <div><span className="text-muted-foreground">Retinoid:</span> <span className="text-foreground">{form.pengalaman_retinoid || "—"}</span></div>
+                    {fotoResult && (
+                      <div className="col-span-2"><span className="text-muted-foreground">Analisis foto:</span> <span className="text-primary font-medium">{fotoResult.skinTone.label} · {fotoResult.metrics.map(m => `${m.label.split(" ")[0].toLowerCase()} ${m.level}`).join(", ")}</span></div>
+                    )}
                   </div>
                 </div>
               </motion.div>
