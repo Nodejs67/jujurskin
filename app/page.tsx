@@ -1,1307 +1,493 @@
 "use client";
 
-import { motion, type Variants, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { useState as useNavState } from "react";
-import {
-  Shield, TrendingDown, TrendingUp, BookOpen, MapPin, AlertTriangle, Sparkles,
-  ArrowRight, CheckCircle, XCircle, ChevronDown, Repeat,
-  FlaskConical, Brain, User, ShoppingBag, Menu, X, DollarSign, Star
-} from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { NumberTicker } from "@/components/magicui/number-ticker";
-import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { BorderBeam } from "@/components/magicui/border-beam";
-import { WordRotate } from "@/components/magicui/word-rotate";
-import { SparklesText } from "@/components/magicui/sparkles-text";
+import { useRouter } from "next/navigation";
+import {
+  Search, Menu, X, ArrowRight, Check, ChevronRight, ChevronLeft,
+  Shield, FlaskConical, Ban, Sparkles, Heart, Star, Upload,
+  Droplet, Sun, Activity, Layers, ShieldCheck, Smile,
+} from "lucide-react";
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
-};
-const stagger: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
-};
+/* ─────────────────────────────────────────────────────────────
+   JujurSkin — Homepage redesign (pink-peach beauty-tech)
+   Self-contained styling (tidak mengubah tema halaman lain).
+   Foto digenerate lokal via ComfyUI (RTX 5080) -> /public/redesign
+   Responsif: mobile-first, breakpoint sm/md/lg.
+   ───────────────────────────────────────────────────────────── */
 
-// ─── DATA ───────────────────────────────────────────────
-const features = [
-  { icon: TrendingDown, title: "Skincare Priority Engine", desc: "Dengan budget Rp 100.000, kami tunjukkan beli produk apa dulu — berdasarkan kondisi kulitmu.", color: "text-green-700", bg: "bg-green-400/10" },
-  { icon: XCircle, title: "Produk Tidak Perlu Checker", desc: "Kami berani bilang jujur: 'Toner ini percuma karena serummu sudah punya fungsi yang sama.'", color: "text-amber-700", bg: "bg-amber-400/10" },
-  { icon: Shield, title: "Skor Keamanan Produk", desc: "Skor keamanan tiap produk dari status BPOM, transparansi ingredient, dan perkiraan risiko iritasi.", color: "text-blue-700", bg: "bg-blue-400/10" },
-  { icon: BookOpen, title: "Edukasi Ingredient", desc: "Pahami apa yang kamu oleskan ke kulit — penjelasan sederhana tanpa jargon medis.", color: "text-purple-700", bg: "bg-purple-400/10" },
-  { icon: MapPin, title: "Rekomendasi Berbasis Lokasi", desc: "Skincare di Kupang (UV 11) berbeda dengan di Bandung. Rekomendasiku menyesuaikan iklim kotamu.", color: "text-rose-700", bg: "bg-rose-400/10" },
-  { icon: AlertTriangle, title: "Fake Claim Analyzer", desc: "'Memutihkan dalam 3 hari' — bohong. Kami analisis klaim marketing dan tunjukkan faktanya.", color: "text-orange-700", bg: "bg-orange-400/10" },
-  { icon: Repeat, title: "Rutinitas AM/PM Builder", desc: "Setelah analisis, dapatkan urutan produk yang tepat untuk pagi dan malam — dengan alasan ilmiah tiap langkah.", color: "text-teal-700", bg: "bg-teal-400/10" },
-  { icon: TrendingUp, title: "Skin Progress Tracker", desc: "Catat kondisi kulitmu setiap minggu dan lihat grafik perkembangannya. Skincare yang bekerja akan terlihat di sini.", color: "text-indigo-700", bg: "bg-indigo-400/10" },
+const PINK = "#FB4E78";
+
+const NAV = [
+  { label: "Analisis Kulit", href: "/analisis" },
+  { label: "Produk", href: "/produk" },
+  { label: "Edukasi", href: "/edukasi" },
+  { label: "Komunitas", href: "/feedback" },
+  { label: "Cek Produk", href: "/cek-bpom" },
+  { label: "Simulasi", href: "/simulasi" },
+];
+const MORE = [
+  { label: "Cek Konflik", href: "/cek-konflik" },
+  { label: "Produk Tidak Perlu", href: "/tidak-perlu" },
+  { label: "Bandingkan Produk", href: "/bandingkan-produk" },
+  { label: "Kalkulator Budget", href: "/kalkulator" },
+  { label: "Mitos vs Fakta", href: "/mitos-fakta" },
+  { label: "Kamus Skincare", href: "/kamus" },
+  { label: "Iklim & UV", href: "/iklim" },
+  { label: "Rutinitas AM/PM", href: "/rutinitas" },
+  { label: "Progress Kulit", href: "/progress" },
 ];
 
-const compare = [
-  { label: "Rekomendasikan produk terbanyak", us: false, them: true },
-  { label: "Bilang 'produk ini tidak kamu butuhkan'", us: true, them: false },
-  { label: "Berbasis data & ilmu pengetahuan", us: true, them: false },
-  { label: "Iklan & endorsement berbayar", us: false, them: true },
-  { label: "Menyesuaikan budget user", us: true, them: false },
-  { label: "Cek keamanan produk (BPOM)", us: true, them: false },
-  { label: "Mendorong standar kulit putih", us: false, them: true },
+const TRUST = [
+  { icon: ShieldCheck, title: "100% Gratis", sub: "Tanpa kartu kredit" },
+  { icon: Shield, title: "Privasi Terjaga", sub: "Foto tak dikirim ke server" },
+  { icon: FlaskConical, title: "Berdasarkan Evidence", sub: "Research-based" },
+  { icon: Ban, title: "Tidak Ada Iklan", sub: "Bukan endorsement" },
 ];
 
-const steps = [
-  { num: "01", title: "Ceritakan Kondisi Kulitmu", desc: "Isi questionnaire singkat — tipe kulit, masalah utama, budget, dan lokasi kamu." },
-  { num: "02", title: "Dapat Rekomendasi Jujur", desc: "Kami analisis dan tunjukkan produk apa yang benar-benar kamu butuhkan, dalam urutan prioritas." },
-  { num: "03", title: "Hemat & Konsisten", desc: "Track progres kulitmu, cek keamanan produk, dan bangun rutinitas yang benar-benar bekerja." },
+const METRICS = [
+  { label: "Skin Barrier", val: 85, icon: ShieldCheck, color: "#3b82f6" },
+  { label: "Hydration", val: 78, icon: Droplet, color: "#06b6d4" },
+  { label: "Acne Control", val: 65, icon: Activity, color: "#f43f5e" },
+  { label: "UV Protection", val: 72, icon: Sun, color: "#f59e0b" },
+  { label: "Anti-aging", val: 80, icon: Layers, color: "#a855f7" },
+  { label: "Sensitivitas", val: 70, icon: Smile, color: "#ec4899" },
 ];
 
-const skinConditions = [
-  { emoji: "😤", name: "Kulit Berjerawat", desc: "Jerawat aktif, komedo, pori tersumbat.", ciri: ["Bruntusan", "Beruntus merah", "Komedo"], color: "text-rose-700", bg: "bg-rose-400/10", border: "border-rose-400/20" },
-  { emoji: "🛡️", name: "Skin Barrier Rusak", desc: "Pelindung kulit melemah — mudah perih & merah.", ciri: ["Perih", "Kemerahan", "Mengelupas"], color: "text-amber-700", bg: "bg-amber-400/10", border: "border-amber-400/20" },
-  { emoji: "🌑", name: "Hiperpigmentasi", desc: "Noda gelap & bekas jerawat (PIH).", ciri: ["Flek hitam", "Bekas jerawat", "Warna tak rata"], color: "text-purple-700", bg: "bg-purple-400/10", border: "border-purple-400/20" },
-  { emoji: "💧", name: "Kulit Berminyak", desc: "Produksi sebum berlebih, wajah cepat kilap.", ciri: ["Mengilap", "Pori besar", "Mudah jerawat"], color: "text-blue-700", bg: "bg-blue-400/10", border: "border-blue-400/20" },
-  { emoji: "🌵", name: "Kulit Kering", desc: "Kurang kelembapan, terasa kencang & kasar.", ciri: ["Kencang", "Bersisik", "Kusam"], color: "text-orange-700", bg: "bg-orange-400/10", border: "border-orange-400/20" },
-  { emoji: "🌿", name: "Kulit Sehat", desc: "Tujuan kita: barrier kuat, lembap, terlindungi.", ciri: ["Lembap", "Merata", "Terlindungi UV"], color: "text-green-700", bg: "bg-green-400/10", border: "border-green-400/20" },
+const STORIES = [
+  { id: "dina", name: "Dina", age: 23, city: "Bekasi", from: 52, to: 84, weeks: 6 },
+  { id: "rika", name: "Rika", age: 26, city: "Bandung", from: 48, to: 79, weeks: 8 },
+  { id: "salsa", name: "Salsa", age: 21, city: "Surabaya", from: 60, to: 86, weeks: 10 },
+  { id: "alya", name: "Alya", age: 24, city: "Jakarta", from: 55, to: 82, weeks: 7 },
 ];
 
-const skinScoreBreakdown = [
-  { label: "Barrier Health", score: 82, color: "bg-green-400", text: "text-green-700" },
-  { label: "Hydration", score: 71, color: "bg-blue-400", text: "text-blue-700" },
-  { label: "UV Protection", score: 55, color: "bg-yellow-400", text: "text-yellow-700" },
-  { label: "Acne Control", score: 80, color: "bg-purple-400", text: "text-purple-700" },
+const PRODUCTS = [
+  { name: "CeraVe Foaming Cleanser", rating: 4.8, reviews: "2.1k", price: "89.000", cocok: "Acne, Berminyak", tidak: "Kulit Kering", tone: "from-sky-50 to-blue-50", best: true },
+  { name: "The Ordinary Niacinamide 10%", rating: 4.7, reviews: "1.8k", price: "129.000", cocok: "Berminyak, Acne", tidak: "Sensitif", tone: "from-amber-50 to-orange-50" },
+  { name: "Azarine Hydrasoothe SS", rating: 4.8, reviews: "1.3k", price: "75.000", cocok: "Semua Jenis Kulit", tidak: "—", tone: "from-rose-50 to-pink-50" },
+  { name: "Skintific Ceramide Moist.", rating: 4.7, reviews: "980", price: "139.000", cocok: "Barrier Rusak", tidak: "Berminyak berat", tone: "from-teal-50 to-emerald-50" },
+  { name: "Somethinc Niacinamide", rating: 4.6, reviews: "1.3k", price: "98.000", cocok: "Pori, Berminyak", tidak: "Sensitif", tone: "from-violet-50 to-purple-50" },
 ];
 
-const cities = [
-  {
-    name: "Medan", province: "Sumatera Utara", emoji: "☀️",
-    humidity: 82, uv: 10, temp: 32,
-    tips: ["Lightweight gel moisturizer", "Sunscreen SPF 50+ wajib", "Oil-control gentle cleanser"],
-    warn: "UV Ekstrem", warnColor: "text-red-700 bg-red-400/10 border-red-400/20",
-  },
-  {
-    name: "Bandung", province: "Jawa Barat", emoji: "⛅",
-    humidity: 60, uv: 8, temp: 22,
-    tips: ["Moisturizer rich boleh dipakai", "SPF 30+ sudah cukup", "Hydrating toner sangat dianjurkan"],
-    warn: "Fokus Hidrasi", warnColor: "text-blue-700 bg-blue-400/10 border-blue-400/20",
-  },
-  {
-    name: "Surabaya", province: "Jawa Timur", emoji: "🌤️",
-    humidity: 70, uv: 9, temp: 30,
-    tips: ["Water-based moisturizer", "Sunscreen SPF 40+ reapply siang", "Niacinamide untuk oil control"],
-    warn: "UV Tinggi", warnColor: "text-orange-700 bg-orange-400/10 border-orange-400/20",
-  },
+const DISCUSSIONS = [
+  { name: "Naya", when: "2 jam lalu", q: "Kulit berjerawat cocok pakai apa ya?", tags: ["Jerawat", "Pemula"], ans: 24 },
+  { name: "Ricky", when: "5 jam lalu", q: "Review jujur Azelaic Acid 10% dari pengalaman", tags: ["Review", "Azelaic Acid"], ans: 18 },
+  { name: "Putri", when: "8 jam lalu", q: "Niacinamide bikin purging? Ini pengalaman aku", tags: ["Niacinamide", "Purging"], ans: 31 },
 ];
 
-const conflictProducts = [
-  { name: "Vitacid (Tretinoin 0.025%)", type: "Retinoid" },
-  { name: "Retinol 0.5%", type: "Retinoid" },
-  { name: "Exfoliating Toner (AHA 10%)", type: "Exfoliant" },
+const EDU = [
+  { t: "Cara Memperbaiki Skin Barrier", m: "5 menit baca", href: "/edukasi" },
+  { t: "Kenali Urutan Skincare yang Benar", m: "7 menit baca", href: "/panduan" },
+  { t: "Benarkah Pori Bisa Mengecil?", m: "6 menit baca", href: "/mitos-fakta" },
 ];
 
-const vsGPT = [
-  "Menyimpan riwayat kondisi kulitmu",
-  "Tracking progress foto mingguan",
-  "Mencatat budget & pengeluaran skincaremu",
-  "Data iklim & UV real-time kotamu",
-  "Riwayat produk yang pernah kamu gunakan",
-  "Rekomendasi berubah sesuai perkembangan kulitmu",
-  "Menghitung potensi penghematan bulananmu",
-];
-
-const NAV_LINKS = [
-  { href: "#demo", label: "Demo" },
-  { href: "/panduan", label: "Panduan" },
-  { href: "/edukasi", label: "Edukasi" },
-  { href: "/produk", label: "Produk" },
-  { href: "/cek-konflik", label: "Cek Konflik" },
-  { href: "/tidak-perlu", label: "Tidak Perlu" },
-  { href: "/simulasi", label: "Simulasi" },
-  { href: "/cek-klaim", label: "Cek Klaim" },
-  { href: "/mitos-fakta", label: "Mitos/Fakta" },
-  { href: "/iklim", label: "Iklim" },
-  { href: "/bandingkan-produk", label: "Bandingkan Produk" },
-  { href: "/rutinitas", label: "Rutinitas" },
-  { href: "/progress", label: "Progress" },
-];
+function ScoreRing({ value, size = 64, stroke = 6, color = PINK }: { value: number; size?: number; stroke?: number; color?: string }) {
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  return (
+    <svg width={size} height={size} className="-rotate-90 shrink-0">
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#F1E4E7" strokeWidth={stroke} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={stroke}
+        strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - value / 100)} />
+    </svg>
+  );
+}
 
 export default function Home() {
   const router = useRouter();
-  const [menuOpen, setMenuOpen] = useNavState(false);
+  const [menu, setMenu] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-background overflow-x-hidden">
+    <main className="min-h-screen bg-white text-slate-800 font-sans antialiased">
+      {/* ── NAV ─────────────────────────────────────── */}
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Sparkles className="w-6 h-6" style={{ color: PINK }} fill={PINK} />
+            <span className="text-xl font-extrabold tracking-tight text-slate-900">JujurSkin</span>
+          </Link>
 
-      {/* ── NAVBAR ───────────────────────────────────── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
-              <Sparkles className="w-3.5 h-3.5 text-primary" />
-            </div>
-            <span className="font-semibold tracking-tight">JujurSkin</span>
-          </div>
-          <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="hover:text-foreground transition-colors">{l.label}</a>
+          <div className="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600">
+            {NAV.map((l) => (
+              <Link key={l.href} href={l.href} className="hover:text-slate-900 transition-colors">{l.label}</Link>
             ))}
-          </div>
-          <div className="flex items-center gap-2">
-            <Button size="sm" onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-medium">
-              Mulai Gratis
-            </Button>
-            <button aria-label={menuOpen ? "Tutup menu" : "Buka menu"} aria-expanded={menuOpen} className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
-              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-        {/* Mobile menu */}
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.22, ease: "easeOut" as const }}
-              className="md:hidden border-t border-border bg-background/95 backdrop-blur-md overflow-hidden"
-            >
-              <div className="px-6 py-4 space-y-1">
-                {NAV_LINKS.map((l) => (
-                  <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}
-                    className="block px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors">
-                    {l.label}
-                  </a>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-
-      {/* ── HERO ─────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 pt-16">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-primary/5 blur-[120px]" />
-          <div className="absolute top-1/3 right-0 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px]" />
-          {[...Array(14)].map((_, i) => (
-            <motion.div key={i} className="absolute w-1 h-1 rounded-full bg-primary/25"
-              style={{ top: `${8 + i * 6.5}%`, left: `${4 + i * 7}%` }}
-              animate={{ opacity: [0.1, 0.7, 0.1], scale: [1, 1.6, 1] }}
-              transition={{ duration: 3 + i * 0.3, repeat: Infinity, delay: i * 0.25 }}
-            />
-          ))}
-        </div>
-
-        <motion.div className="relative z-10 max-w-4xl mx-auto text-center" variants={stagger} initial="hidden" animate="show">
-          <motion.div variants={fadeUp} className="flex justify-center mb-6">
-            <AnimatedGradientText>
-              <Sparkles className="w-3 h-3 text-primary mr-1.5" />
-              <span className="text-primary font-medium">Platform Kecantikan Jujur Indonesia</span>
-            </AnimatedGradientText>
-          </motion.div>
-          <motion.h1 variants={fadeUp} className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight mb-4">
-            Kulit{" "}
-            <WordRotate
-              words={["Sehat", "Bersih", "Cerah", "Terlindungi"]}
-              className="gradient-text"
-              duration={2200}
-            />
-            <br />
-            <SparklesText className="gradient-text" sparklesCount={8}>
-              Bukan Kulit Putih
-            </SparklesText>
-          </motion.h1>
-          <motion.p variants={fadeUp} className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
-            Platform skincare pertama Indonesia yang{" "}
-            <span className="text-foreground font-medium">jujur bilang apa yang tidak kamu butuhkan.</span>{" "}
-            Rekomendasi berbasis kondisi kulit & budget — bukan iklan.
-          </motion.p>
-          <motion.p variants={fadeUp} className="text-sm text-muted-foreground mb-10">
-            Untuk pria & wanita · Seluruh Indonesia · 100% Gratis
-          </motion.p>
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
-            <ShimmerButton
-              onClick={() => router.push("/analisis")}
-              className="px-8 py-3 rounded-xl font-medium gap-2 text-base"
-            >
-              Analisis Kulit Saya <ArrowRight className="w-4 h-4" />
-            </ShimmerButton>
-            <Button size="lg" variant="outline" className="border-border hover:bg-secondary gap-2 px-8" onClick={() => document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" })}>
-              Lihat Demo <ChevronDown className="w-4 h-4" />
-            </Button>
-          </motion.div>
-
-          {/* ── Hero Mockup Card ─── */}
-          <motion.div variants={fadeUp} className="relative max-w-sm mx-auto mb-10 animate-float">
-            <div className="relative isolate rounded-2xl border border-primary/20 bg-card/80 backdrop-blur-md p-5 shadow-2xl shadow-primary/10 overflow-hidden">
-              <BorderBeam duration={5} colorFrom="#86efac" colorTo="#d4af37" />
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-sm">🌿</div>
-                <div className="text-left">
-                  <p className="text-xs font-semibold text-foreground">Rani A · 23 th · Jakarta</p>
-                  <p className="text-[10px] text-primary">Kulit Kombinasi · Berjerawat</p>
-                </div>
-                <div className="ml-auto text-right">
-                  <p className="text-2xl font-bold text-primary">87</p>
-                  <p className="text-[10px] text-muted-foreground">/100</p>
-                </div>
-              </div>
-              <div className="space-y-2 mb-4">
-                {[
-                  { label: "Barrier Health", score: 82, color: "bg-green-400" },
-                  { label: "Hydration", score: 76, color: "bg-blue-400" },
-                  { label: "UV Protection", score: 55, color: "bg-yellow-400" },
-                  { label: "Acne Control", score: 80, color: "bg-purple-400" },
-                ].map((m) => (
-                  <div key={m.label}>
-                    <div className="flex justify-between mb-0.5">
-                      <span className="text-[10px] text-muted-foreground">{m.label}</span>
-                      <span className="text-[10px] font-semibold text-foreground">{m.score}</span>
-                    </div>
-                    <div className="h-1 bg-secondary rounded-full overflow-hidden">
-                      <motion.div className={`h-full ${m.color} rounded-full`}
-                        initial={{ width: 0 }} whileInView={{ width: `${m.score}%` }}
-                        viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="space-y-1.5 mb-3">
-                {[
-                  { icon: "🛡️", text: "Sunscreen SPF50 — Prioritas Utama" },
-                  { icon: "🌿", text: "Niacinamide 5% — Kontrol minyak" },
-                  { icon: "💧", text: "Ceramide Moisturizer — Barrier" },
-                ].map((r) => (
-                  <div key={r.text} className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                    <span>{r.icon}</span><span>{r.text}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                <CheckCircle className="w-3 h-3 text-primary" />
-                Analisis selesai dalam 45 detik · Tidak perlu daftar
-              </div>
-            </div>
-            {/* Glow */}
-            <div className="absolute inset-0 rounded-2xl blur-2xl bg-primary/8 -z-10 scale-95" />
-          </motion.div>
-          <motion.div variants={fadeUp} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
-            {[
-              { num: 100, suffix: "+", label: "Ingredient terdokumentasi" },
-              { num: 50, suffix: "+", label: "Produk terkurasi" },
-              { num: 7, suffix: " tanya", label: "Quiz personal mendalam" },
-              { num: 100, suffix: "%", label: "Gratis selamanya" },
-            ].map((stat, i) => (
-              <div key={stat.label} className="relative isolate text-center p-4 rounded-xl border border-border/50 bg-card/50 overflow-hidden">
-                <BorderBeam duration={12} delay={i * 1.5} />
-                <p className="text-2xl font-bold text-primary mb-0.5">
-                  <NumberTicker value={stat.num} />{stat.suffix}
-                </p>
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
-              </div>
-            ))}
-          </motion.div>
-          <motion.div variants={fadeUp} className="mt-6 flex flex-wrap justify-center gap-5 text-xs text-muted-foreground">
-            {["Tidak ada iklan berbayar", "Tidak terafiliasi brand apapun", "Data pribadimu aman", "Bahasa Indonesia"].map((t) => (
-              <div key={t} className="flex items-center gap-1.5">
-                <CheckCircle className="w-3.5 h-3.5 text-primary" /> {t}
-              </div>
-            ))}
-          </motion.div>
-        </motion.div>
-
-        <motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2" animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-          <ChevronDown className="w-5 h-5 text-muted-foreground/30" />
-        </motion.div>
-      </section>
-
-      {/* ── MARQUEE INGREDIENT SHOWCASE ─────────────── */}
-      <div className="relative py-4 border-y border-border/30 overflow-hidden bg-card/20">
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-        {/* Bisa di-swipe / scroll manual (tidak perlu menunggu animasi) */}
-        <div className="flex gap-3 overflow-x-auto px-6 pb-1 snap-x cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {[
-            { emoji: "🌿", name: "Niacinamide" }, { emoji: "🍊", name: "Vitamin C" },
-            { emoji: "⭐", name: "Retinol" }, { emoji: "💧", name: "Hyaluronic Acid" },
-            { emoji: "🛡️", name: "Ceramide" }, { emoji: "🌸", name: "Centella Asiatica" },
-            { emoji: "✨", name: "Alpha Arbutin" }, { emoji: "🧴", name: "Salicylic Acid" },
-            { emoji: "🍑", name: "Bakuchiol" }, { emoji: "💚", name: "Azelaic Acid" },
-            { emoji: "🌙", name: "Tranexamic Acid" }, { emoji: "🔬", name: "Peptide" },
-            { emoji: "🐌", name: "Snail Mucin" }, { emoji: "☘️", name: "Mugwort" },
-          ].map((ing) => (
-            <a
-              key={ing.name}
-              href={`/edukasi/ingredient/${ing.name.toLowerCase().replace(/\s+/g, "-")}`}
-              className="snap-start shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border border-border/50 bg-card/50 text-xs text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors whitespace-nowrap"
-            >
-              <span>{ing.emoji}</span> {ing.name}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* ── KONDISI KULIT (visual) ───────────────────── */}
-      <section className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Kenali Kulitmu</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Kondisi kulit yang kami pahami</h2>
-            <p className="text-muted-foreground">Apa pun kondisimu sekarang, JujurSkin bantu menuju kulit sehat — bukan sekadar putih.</p>
-          </motion.div>
-
-          <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-3 gap-4"
-          >
-            {skinConditions.map((c) => (
-              <motion.div variants={fadeUp} key={c.name}
-                className={`rounded-2xl border ${c.border} bg-card p-5 transition-transform hover:-translate-y-1`}
-              >
-                <div className={`w-12 h-12 rounded-xl ${c.bg} flex items-center justify-center text-2xl mb-3`}>{c.emoji}</div>
-                <h3 className={`font-semibold mb-1 ${c.color}`}>{c.name}</h3>
-                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{c.desc}</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {c.ciri.map((t) => (
-                    <span key={t} className="text-[10px] px-2 py-0.5 rounded-full border border-border text-muted-foreground">{t}</span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <div className="text-center mt-8">
-            <Button onClick={() => router.push("/analisis")} className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
-              Cari tahu kondisi kulitku <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 1. DEMO HASIL ANALISIS ────────────────────── */}
-      <section id="demo" className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Contoh Nyata</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Ini yang kamu dapat dari JujurSkin</h2>
-            <p className="text-muted-foreground">Bukan sekedar tips umum — ini analisis spesifik untuk kondisi kulitmu.</p>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}
-            className="rounded-2xl border border-border bg-card overflow-hidden"
-          >
-            {/* Header profil */}
-            <div className="bg-secondary/40 border-b border-border px-6 py-4 flex items-center justify-between flex-wrap gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
-                  <User className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground text-sm">Sarah, 24 tahun</p>
-                  <p className="text-xs text-muted-foreground">Surabaya · Kulit Kombinasi</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="text-center">
-                  <p className="text-xs text-muted-foreground">Budget</p>
-                  <p className="font-semibold text-accent">Rp 150.000</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-muted-foreground">Masalah</p>
-                  <p className="font-semibold text-foreground">Jerawat + Bekas</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-6 grid md:grid-cols-2 gap-6">
-              {/* Hasil analisis */}
-              <div className="space-y-3">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Hasil Analisis</p>
-
-                {[
-                  { type: "ok", num: 1, product: "Sunscreen SPF 50+", price: "Rp 35.000", reason: "UV protection adalah fondasi. Tanpa ini, bekas jerawatmu tidak akan memudar." },
-                  { type: "ok", num: 2, product: "Azelaic Acid 10%", price: "Rp 45.000", reason: "Efektif untuk jerawat ringan sekaligus memudakan bekas. Dua masalah, satu produk." },
-                  { type: "ok", num: 3, product: "Gentle Cleanser", price: "Rp 25.000", reason: "Fondasi routine. Pilih yang tidak mengandung SLS untuk kulit kombinasimu." },
-                  { type: "skip", product: "Brightening Toner baru", reason: "Niacinamide di moisturizermu sudah cukup. Fungsinya sama persis." },
-                ].map((item, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                    className={`flex items-start gap-3 p-4 rounded-xl border ${item.type === "ok" ? "bg-primary/5 border-primary/15" : "bg-destructive/5 border-destructive/15"}`}
-                  >
-                    {item.type === "ok"
-                      ? <CheckCircle className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                      : <XCircle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
-                    }
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2 mb-0.5">
-                        <p className="text-sm font-medium text-foreground">
-                          {item.type === "ok" ? `Prioritas #${item.num} — ${item.product}` : `❌ Skip: ${item.product}`}
-                        </p>
-                        {item.type === "ok" && <span className="text-xs text-accent font-medium shrink-0">{item.price}</span>}
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{item.reason}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Summary card */}
-              <div className="space-y-4">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Ringkasan</p>
-
-                <div className="rounded-xl border border-border bg-secondary/30 p-5 space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Total rekomendasi</span>
-                    <span className="font-semibold text-foreground">3 produk</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Estimasi biaya</span>
-                    <span className="font-semibold text-foreground">Rp 105.000</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Sisa budget</span>
-                    <span className="font-semibold text-primary">Rp 45.000 ✓</span>
-                  </div>
-                  <div className="border-t border-border pt-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-foreground">💰 Potensi penghematan</span>
-                      <span className="font-bold text-accent text-lg">Rp 85.000</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">Dari 1 produk yang tidak kamu butuhkan</p>
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
-                  <p className="text-xs text-primary font-medium mb-1">💡 Insight JujurSkin</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Dengan 3 produk ini saja, kamu sudah mengatasi 90% masalah kulitmu. Tambahkan treatment lain setelah konsisten 1 bulan.
-                  </p>
-                </div>
-
-                <Button onClick={() => router.push("/analisis")} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
-                  Analisis Kulit Saya <ArrowRight className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 2. HEALTHY SKIN SCORE ─────────────────────── */}
-      <section id="score" className="py-24 px-6 bg-secondary/20">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Healthy Skin Score</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Satu angka untuk kesehatan kulitmu</h2>
-            <p className="text-muted-foreground">Bukan sekedar “kulitmu bagus/jelek” — tapi breakdown detail yang bisa kamu perbaiki.</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-6 items-center">
-            {/* Score ring */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-              className="rounded-2xl border border-border bg-card p-8 text-center"
-            >
-              <div className="relative w-44 h-44 mx-auto mb-6">
-                <svg viewBox="0 0 120 120" className="w-full h-full -rotate-90">
-                  <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" strokeWidth="8" className="text-border" />
-                  <motion.circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" strokeWidth="8"
-                    strokeLinecap="round" className="text-primary"
-                    strokeDasharray={`${2 * Math.PI * 50}`}
-                    initial={{ strokeDashoffset: 2 * Math.PI * 50 }}
-                    whileInView={{ strokeDashoffset: 2 * Math.PI * 50 * (1 - 76 / 100) }}
-                    viewport={{ once: true }} transition={{ duration: 1.5, ease: "easeOut" }}
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <motion.span className="text-5xl font-bold text-foreground"
-                    initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.5 }}
-                  >76</motion.span>
-                  <span className="text-sm text-muted-foreground">/ 100</span>
-                </div>
-              </div>
-              <h3 className="font-semibold text-foreground mb-1">Healthy Skin Score</h3>
-              <p className="text-xs text-muted-foreground mb-4">Sarah · Update minggu lalu</p>
-              <Badge variant="outline" className="border-primary/30 text-primary bg-primary/10 text-xs">
-                ↑ +8 dari bulan lalu
-              </Badge>
-            </motion.div>
-
-            {/* Breakdown */}
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-              className="space-y-4"
-            >
-              {skinScoreBreakdown.map((item, i) => (
-                <div key={item.label} className="rounded-xl border border-border bg-card p-4">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-sm font-medium text-foreground">{item.label}</span>
-                    <span className={`text-sm font-bold ${item.text}`}>{item.score}/100</span>
-                  </div>
-                  <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                    <motion.div className={`h-full ${item.color} rounded-full`}
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${item.score}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, delay: i * 0.15, ease: "easeOut" }}
-                    />
-                  </div>
-                  {item.score < 60 && (
-                    <p className="text-xs text-muted-foreground mt-2">
-                      ⚠️ Perlu perhatian — {item.label === "UV Protection" ? "rutin pakai sunscreen SPF 50+" : "tingkatkan rutinitas"}
-                    </p>
-                  )}
-                </div>
-              ))}
-              <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
-                <p className="text-xs text-primary font-medium mb-1">🎯 Tips untuk naik ke 85</p>
-                <p className="text-xs text-muted-foreground">UV Protection kamu rendah (55). Mulai pakai sunscreen setiap pagi — ini akan langsung menaikkan score-mu.</p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3. COST SAVING COUNTER ───────────────────── */}
-      <section className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Hemat Lebih Banyak</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Skincare yang lebih murah, hasil yang lebih baik</h2>
-            <p className="text-muted-foreground">Rata-rata user JujurSkin menghemat ratusan ribu rupiah per bulan — tanpa mengorbankan kualitas.</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-4 mb-8">
-            {[
-              { icon: DollarSign, label: "Potensi penghematan bulan ini", value: "Rp 235.000", sub: "Dari 3 produk tidak perlu", color: "text-accent", bg: "bg-accent/10", border: "border-accent/20" },
-              { icon: XCircle, label: "Produk yang tidak kamu butuhkan", value: "3 produk", sub: "Fungsinya sudah ada di produkmu", color: "text-rose-700", bg: "bg-rose-400/10", border: "border-rose-400/20" },
-              { icon: Star, label: "Efisiensi routine", value: "89%", sub: "Setiap produk punya fungsi jelas", color: "text-primary", bg: "bg-primary/10", border: "border-primary/20" },
-            ].map((stat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.12 }}
-                className={`rounded-2xl border ${stat.border} bg-card p-6 text-center`}
-              >
-                <div className={`w-12 h-12 rounded-xl ${stat.bg} flex items-center justify-center mx-auto mb-4`}>
-                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
-                </div>
-                <p className="text-xs text-muted-foreground mb-2">{stat.label}</p>
-                <p className={`text-2xl font-bold ${stat.color} mb-1`}>{stat.value}</p>
-                <p className="text-xs text-muted-foreground">{stat.sub}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Breakdown produk tidak perlu */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="rounded-2xl border border-border bg-card p-6"
-          >
-            <p className="text-sm font-medium text-foreground mb-4">Produk yang tidak kamu butuhkan bulan ini:</p>
-            <div className="space-y-3">
-              {[
-                { name: "Brightening Toner Ms. Glow", reason: "Niacinamide-nya sama persis dengan moisturizermu", hemat: "Rp 75.000" },
-                { name: "Eye Cream Wardah", reason: "Kulitmu 24 tahun, belum perlu eye cream. Moisturizer biasa sudah cukup", hemat: "Rp 95.000" },
-                { name: "Vitamin C Serum (kedua)", reason: "Kamu sudah punya vitamin C di pagi hari. Dua serum vitamin C tidak perlu", hemat: "Rp 65.000" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center justify-between gap-4 p-3 rounded-lg bg-destructive/5 border border-destructive/10">
-                  <div className="flex items-start gap-3">
-                    <XCircle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{item.name}</p>
-                      <p className="text-xs text-muted-foreground">{item.reason}</p>
-                    </div>
-                  </div>
-                  <span className="text-sm font-semibold text-accent shrink-0">{item.hemat}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 pt-4 border-t border-border flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Total bisa dihemat bulan ini</span>
-              <span className="text-xl font-bold text-accent">Rp 235.000</span>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 4. PROGRESS TRACKING + BEFORE/AFTER ──────── */}
-      <section className="py-24 px-6 bg-secondary/20">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Progress Tracking</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Lihat perubahan kulitmu setiap minggu</h2>
-            <p className="text-muted-foreground">Fitur yang tidak bisa diberikan TikTok, influencer, atau ChatGPT.</p>
-          </motion.div>
-
-          {/* 3 foto progress */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
-            {[
-              { week: "Minggu 1", status: "Awal Perjalanan", detail: "Jerawat aktif 8 titik", img: "/skin/week1.jpg", score: 52 },
-              { week: "Minggu 4", status: "Mulai Membaik", detail: "Jerawat berkurang 50%", img: "/skin/week4.jpg", score: 64 },
-              { week: "Minggu 8", status: "Jauh Lebih Baik", detail: "Kulit merata & bersih", img: "/skin/week8.jpg", score: 76 },
-            ].map((week, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }}
-                className="rounded-2xl border border-border overflow-hidden bg-card"
-              >
-                <div className="h-44 relative overflow-hidden">
-                  <Image src={week.img} alt={`Kondisi kulit ${week.week}`} fill sizes="(max-width: 768px) 33vw, 300px" className="object-cover" />
-                  <div className="absolute top-3 left-3">
-                    <Badge variant="outline" className="text-xs border-white/20 text-white/60 bg-black/30">{week.week}</Badge>
-                  </div>
-                  <div className="absolute bottom-3 right-3 bg-black/40 rounded-lg px-2 py-1">
-                    <span className="text-xs font-bold text-white">{week.score}/100</span>
-                  </div>
-                </div>
-                <div className="p-3">
-                  <p className="text-xs font-semibold text-foreground">{week.status}</p>
-                  <p className="text-xs text-muted-foreground">{week.detail}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Before vs After */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="rounded-2xl border border-border bg-card overflow-hidden"
-          >
-            <div className="p-4 border-b border-border flex items-center justify-between">
-              <p className="text-sm font-semibold text-foreground">Before vs After — Minggu 1 vs Minggu 8</p>
-              <Badge variant="outline" className="text-xs border-primary/30 text-primary bg-primary/10">2 Bulan</Badge>
-            </div>
-            <div className="grid grid-cols-2">
-              <div className="relative">
-                <div className="h-52 relative overflow-hidden">
-                  <Image src="/skin/week1.jpg" alt="Kulit minggu 1" fill sizes="(max-width: 768px) 50vw, 350px" className="object-cover" />
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                  <p className="text-white text-xs font-medium">Minggu 1</p>
-                  <p className="text-white/60 text-xs">Jerawat aktif · Bekas hitam</p>
-                </div>
-              </div>
-              <div className="relative border-l border-border">
-                <div className="h-52 relative overflow-hidden">
-                  <Image src="/skin/week8.jpg" alt="Kulit minggu 8" fill sizes="(max-width: 768px) 50vw, 350px" className="object-cover" />
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                  <p className="text-white text-xs font-medium">Minggu 8</p>
-                  <p className="text-white/60 text-xs">Jauh lebih merata & bersih</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 bg-secondary/20 flex flex-wrap gap-4 justify-center">
-              {[
-                { label: "Acne visibility", value: "−34%", color: "text-primary" },
-                { label: "Skin tone evenness", value: "+28%", color: "text-primary" },
-                { label: "Healthy Skin Score", value: "52 → 76", color: "text-accent" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <p className={`text-lg font-bold ${stat.color}`}>{stat.value}</p>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 5. CLIMATE INTELLIGENCE ──────────────────── */}
-      <section id="iklim" className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Climate Intelligence</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Skincare yang cocok di sana, belum tentu cocok di sini</h2>
-            <p className="text-muted-foreground">Indonesia punya 17.000+ pulau dengan iklim yang sangat beragam. Rekomendasimu disesuaikan.</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-4">
-            {cities.map((city, i) => (
-              <motion.div key={city.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.12 }}
-                className="glow-card rounded-2xl border border-border bg-card p-5"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-lg">{city.emoji}</span>
-                      <h3 className="font-semibold text-foreground">{city.name}</h3>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{city.province}</p>
-                  </div>
-                  <Badge variant="outline" className={`text-xs ${city.warnColor}`}>{city.warn}</Badge>
-                </div>
-
-                <div className="grid grid-cols-3 gap-2 mb-4">
-                  {[
-                    { label: "Humidity", value: `${city.humidity}%` },
-                    { label: "UV Index", value: city.uv },
-                    { label: "Suhu", value: `${city.temp}°C` },
-                  ].map((stat) => (
-                    <div key={stat.label} className="rounded-lg bg-secondary/50 p-2 text-center">
-                      <p className="text-xs font-semibold text-foreground">{stat.value}</p>
-                      <p className="text-xs text-muted-foreground">{stat.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="space-y-1.5">
-                  <p className="text-xs text-muted-foreground font-medium mb-2">Rekomendasi khusus:</p>
-                  {city.tips.map((tip) => (
-                    <div key={tip} className="flex items-start gap-2">
-                      <CheckCircle className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
-                      <span className="text-xs text-muted-foreground">{tip}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <Button onClick={() => router.push("/iklim")} variant="outline" className="border-border gap-2">
-              <MapPin className="w-4 h-4" /> Cek UV & kelembapan real-time kotamu
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 6. PRODUCT CONFLICT CHECKER ──────────────── */}
-      <section className="py-24 px-6 bg-secondary/20">
-        <div className="max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Conflict Checker</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Apakah produkmu aman dipakai bersamaan?</h2>
-            <p className="text-muted-foreground">Banyak yang pakai produk bertentangan tanpa sadar — dan kulit mereka makin rusak karenanya.</p>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="rounded-2xl border border-border bg-card overflow-hidden"
-          >
-            <div className="px-6 pt-5 pb-3 flex items-center justify-between">
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">Contoh Analisis:</p>
-              <button onClick={() => router.push("/cek-konflik")} className="text-xs text-primary hover:underline">Coba sendiri →</button>
-            </div>
-            <div className="p-6 border-t border-border">
-              <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Produk yang diinput:</p>
-              <div className="flex flex-wrap gap-2">
-                {conflictProducts.map((p) => (
-                  <div key={p.name} className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-secondary/50 text-sm">
-                    <FlaskConical className="w-3.5 h-3.5 text-muted-foreground" />
-                    <span className="text-foreground font-medium text-xs">{p.name}</span>
-                    <Badge variant="outline" className="text-xs px-1.5 py-0 border-muted-foreground/20 text-muted-foreground">{p.type}</Badge>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="p-6 space-y-3">
-              <p className="text-xs text-muted-foreground mb-4 uppercase tracking-wide">Hasil Analisis:</p>
-
-              {[
-                { level: "danger", icon: "🚨", title: "Risiko Iritasi Tinggi", msg: "Vitacid + Retinol bersamaan = over-retinoid. Keduanya punya fungsi yang sama. Pilih salah satu saja — Vitacid lebih kuat.", color: "border-destructive/25 bg-destructive/8" },
-                { level: "warning", icon: "⚠️", title: "Jangan Pakai Malam yang Sama", msg: "Retinoid + AHA (Exfoliating Toner) di malam yang sama meningkatkan risiko iritasi dan kerusakan skin barrier.", color: "border-yellow-400/25 bg-yellow-400/5" },
-                { level: "info", icon: "💡", title: "Saran Jadwal Aman", msg: "Vitacid: Senin, Rabu, Jumat malam. AHA Toner: Selasa, Kamis malam. Hari lain: skip semua aktif, fokus moisturizer.", color: "border-primary/25 bg-primary/5" },
-              ].map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                  className={`flex items-start gap-3 p-4 rounded-xl border ${item.color}`}
-                >
-                  <span className="text-lg shrink-0">{item.icon}</span>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground mb-1">{item.title}</p>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{item.msg}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 7. KENAPA BUKAN CHATGPT? ─────────────────── */}
-      <section className="py-24 px-6">
-        <div className="max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Kenapa Bukan AI Umum?</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Kenapa tidak langsung pakai ChatGPT?</h2>
-            <p className="text-muted-foreground">ChatGPT pintar, tapi tidak mengenalmu. JujurSkin dibangun khusus untuk kulitmu — dan mengingat semuanya.</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* ChatGPT */}
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-              className="rounded-2xl border border-border bg-card p-6"
-            >
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
-                  <Brain className="w-5 h-5 text-muted-foreground" />
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground">ChatGPT / AI Umum</p>
-                  <p className="text-xs text-muted-foreground">Tiap sesi dimulai dari nol</p>
-                </div>
-              </div>
-              <div className="space-y-2.5">
-                {vsGPT.map((item) => (
-                  <div key={item} className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <XCircle className="w-4 h-4 text-destructive shrink-0" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* JujurSkin */}
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-              className="rounded-2xl border border-primary/25 bg-primary/5 p-6"
-            >
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground">JujurSkin</p>
-                  <p className="text-xs text-primary">Dibangun khusus untuk kulitmu</p>
-                </div>
-              </div>
-              <div className="space-y-2.5">
-                {vsGPT.map((item) => (
-                  <div key={item} className="flex items-center gap-3 text-sm text-foreground">
-                    <CheckCircle className="w-4 h-4 text-primary shrink-0" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
-            className="mt-6 rounded-xl border border-accent/20 bg-accent/5 p-5 text-center"
-          >
-            <p className="text-sm text-foreground">
-              <span className="font-semibold text-accent">Intinya:</span>{" "}
-              ChatGPT akan memberi saran skincare umum yang sama untuk semua orang.
-              JujurSkin mengenal kondisi kulitmu, budgetmu, kotamu, dan perkembangan kulitmu dari waktu ke waktu.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── EDUKASI + PRODUK ─────────────────────────── */}
-      <section className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Lebih dari Sekadar Rekomendasi</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Belajar, cari produk, analisis — semua di sini</h2>
-            <p className="text-muted-foreground">Ekosistem lengkap untuk kamu yang ingin benar-benar paham skincare.</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-5">
-            {/* Edukasi Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              className="glow-card rounded-2xl border border-border bg-card p-8 flex flex-col"
-            >
-              <div className="w-12 h-12 rounded-xl bg-purple-400/10 flex items-center justify-center mb-5">
-                <BookOpen className="w-6 h-6 text-purple-700" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground mb-2">Edukasi Ingredient</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
-                Pahami 100+ ingredient skincare yang paling penting — cara kerja, cara pakai, apa yang bisa dikombinasikan, dan mitos yang harus dihapus. Dalam bahasa Indonesia yang sederhana.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-5">
-                {["Niacinamide", "Retinol", "BHA/AHA", "Vitamin C", "Ceramide"].map((i) => (
-                  <Badge key={i} variant="outline" className="text-xs border-purple-400/20 text-purple-700/80 bg-purple-400/5">{i}</Badge>
-                ))}
-              </div>
-              <Button variant="outline" onClick={() => router.push("/edukasi")} className="border-purple-400/30 text-purple-700 hover:bg-purple-400/10 gap-2">
-                <BookOpen className="w-4 h-4" /> Buka Edukasi
-              </Button>
-            </motion.div>
-
-            {/* Produk Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-              className="glow-card rounded-2xl border border-border bg-card p-8 flex flex-col"
-            >
-              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
-                <ShoppingBag className="w-6 h-6 text-accent" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground mb-2">Produk Indonesia</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
-                90+ produk skincare terkurasi berdasarkan ingredient — bukan popularitas. Mayoritas terdaftar BPOM (yang belum kami tandai jelas), ada info harga, dan penjelasan kenapa produk itu efektif.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-5">
-                {["Sunscreen", "Cleanser", "Moisturizer", "Serum", "Treatment"].map((c) => (
-                  <Badge key={c} variant="outline" className="text-xs border-accent/20 text-accent/80 bg-accent/5">{c}</Badge>
-                ))}
-              </div>
-              <Button variant="outline" onClick={() => router.push("/produk")} className="border-accent/30 text-accent hover:bg-accent/10 gap-2">
-                <ShoppingBag className="w-4 h-4" /> Lihat Produk
-              </Button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── MASALAH ───────────────────────────────────── */}
-      <section className="py-20 px-6 bg-secondary/20">
-        <div className="max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="rounded-2xl border border-border bg-card p-8 md:p-10"
-          >
-            <p className="text-xs text-muted-foreground uppercase tracking-widest mb-3">Kenyataan yang sering terjadi</p>
-            <h2 className="text-2xl md:text-3xl font-bold mb-7">Kenapa kita beli skincare yang tidak kita butuhkan?</h2>
-            <div className="grid md:grid-cols-2 gap-2.5">
-              {["Beli karena influencer, bukan karena butuh", "Tidak paham kandungan produk yang dipakai", "Takut dianggap kurang cantik jika tidak ikut tren", "Menghabiskan uang untuk produk yang redundan", "Mengejar kulit putih, bukan kulit sehat", "Pakai produk berisiko tanpa sadar"].map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-                  className="flex items-start gap-3 p-3 rounded-lg bg-destructive/5 border border-destructive/10"
-                >
-                  <XCircle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
-                  <span className="text-sm text-muted-foreground">{item}</span>
-                </motion.div>
-              ))}
-            </div>
-            <div className="mt-7 pt-7 border-t border-border">
-              <p className="text-foreground font-medium">JujurSkin hadir untuk mengubah ini. <span className="text-primary">Dengan pendekatan yang sama sekali berbeda.</span></p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── FITUR ─────────────────────────────────────── */}
-      <section id="fitur" className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Semua Fitur</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Semua yang kamu butuhkan, <span className="gradient-text">tidak lebih</span></h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">Setiap fitur dirancang untuk membantu kulitmu sehat dengan cara yang paling efisien.</p>
-          </motion.div>
-          <motion.div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
-            {features.map((f, i) => (
-              <motion.div key={f.title} variants={fadeUp} className="relative isolate glow-card rounded-2xl border border-border bg-card p-6 overflow-hidden group">
-                <BorderBeam duration={10} delay={i * 1.2} colorFrom="#86efac" colorTo="#d4af37" />
-                <div className={`w-10 h-10 rounded-xl ${f.bg} flex items-center justify-center mb-4`}>
-                  <f.icon className={`w-5 h-5 ${f.color}`} />
-                </div>
-                <h3 className="font-semibold text-foreground mb-2">{f.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── CARA KERJA ───────────────────────────────── */}
-      <section className="py-24 px-6 bg-secondary/20">
-        <div className="max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Cara Kerja</p>
-            <h2 className="text-3xl md:text-4xl font-bold">Sederhana dan langsung</h2>
-          </motion.div>
-          <div className="space-y-4">
-            {steps.map((step, i) => (
-              <motion.div key={step.num} initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }}
-                className="flex gap-5 p-6 rounded-2xl border border-border bg-card"
-              >
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                  <span className="text-primary font-bold text-sm">{step.num}</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PERBANDINGAN ─────────────────────────────── */}
-      <section className="py-24 px-6">
-        <div className="max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Perbedaan Kami</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Tidak seperti platform lain</h2>
-            <p className="text-muted-foreground">Semua platform lain punya kepentingan komersial. Kami tidak.</p>
-          </motion.div>
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-2xl border border-border overflow-hidden">
-            <div className="grid grid-cols-3 bg-secondary/50 px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              <span>Fitur</span>
-              <span className="text-center text-primary">JujurSkin</span>
-              <span className="text-center">Platform Lain</span>
-            </div>
-            {compare.map((row, i) => (
-              <motion.div key={i} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-                className="grid grid-cols-3 px-6 py-4 border-t border-border items-center hover:bg-secondary/20 transition-colors"
-              >
-                <span className="text-sm text-muted-foreground">{row.label}</span>
-                <div className="flex justify-center">
-                  {row.us ? <CheckCircle className="w-5 h-5 text-primary" /> : <XCircle className="w-5 h-5 text-muted-foreground/25" />}
-                </div>
-                <div className="flex justify-center">
-                  {row.them ? <CheckCircle className="w-5 h-5 text-muted-foreground" /> : <XCircle className="w-5 h-5 text-destructive/45" />}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIAL ──────────────────────────────── */}
-      <section className="py-24 px-6 bg-secondary/20">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Cerita Pengguna</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Yang mereka rasakan setelah pakai JujurSkin</h2>
-            <p className="text-muted-foreground">Bukan testimoni berbayar — ini feedback asli dari penguji beta kami.</p>
-          </motion.div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              {
-                name: "Rania, 22",
-                city: "Jakarta",
-                avatar: "R",
-                avatarColor: "bg-rose-400/20 text-rose-700",
-                text: "\"Saya sudah buang uang beli 5 produk serum yang ternyata fungsinya sama semua. JujurSkin yang bilang saya cuma butuh 2. Sejak pakai rekomendasinya, kulit lebih bersih dan dompet lebih tebal.\"",
-                saving: "Hemat Rp 180.000/bulan",
-              },
-              {
-                name: "Bima, 28",
-                city: "Surabaya",
-                avatar: "B",
-                avatarColor: "bg-blue-400/20 text-blue-700",
-                text: "\"Sebagai cowok yang baru mulai skincare, saya bingung mau mulai dari mana. JujurSkin kasih urutan yang jelas dan tidak berlebihan. 3 produk, kulit mending dalam 6 minggu.\"",
-                saving: "Routine 3 produk saja",
-              },
-              {
-                name: "Lestari, 31",
-                city: "Bandung",
-                avatar: "L",
-                avatarColor: "bg-purple-400/20 text-purple-700",
-                text: "\"Cek Konflik Ingredient-nya super berguna. Saya tidak tahu retinol saya konflik dengan toner AHA. Sekarang saya jadwalkan dengan benar dan kulit tidak iritasi lagi.\"",
-                saving: "Tidak ada lagi iritasi",
-              },
-            ].map((t, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.12 }}
-                className="glow-card rounded-2xl border border-border bg-card p-6 flex flex-col"
-              >
-                <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1 italic">{t.text}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 rounded-full ${t.avatarColor} border border-current/20 flex items-center justify-center text-sm font-bold`}>
-                      {t.avatar}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.city}</p>
-                    </div>
-                  </div>
-                  <Badge variant="outline" className="text-xs border-primary/30 text-primary bg-primary/10 shrink-0">{t.saving}</Badge>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ──────────────────────────────────────── */}
-      <section className="py-24 px-6">
-        <div className="max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">FAQ</p>
-            <h2 className="text-3xl md:text-4xl font-bold">Pertanyaan yang sering ditanya</h2>
-          </motion.div>
-          <div className="space-y-3">
-            {[
-              {
-                q: "Apakah JujurSkin benar-benar gratis?",
-                a: "Ya, 100% gratis. Tidak ada biaya berlangganan, tidak ada fitur premium tersembunyi. Kami tidak punya model bisnis berbasis iklan atau komisi produk — kami dibuat untuk jujur.",
-              },
-              {
-                q: "Data kulitku aman? Apakah disimpan?",
-                a: "Data tersimpan secara anonim di database kami untuk meningkatkan akurasi rekomendasi. Kami tidak menjual atau berbagi data dengan pihak ketiga apapun.",
-              },
-              {
-                q: "Mengapa rekomendasinya bisa berbeda dengan yang di marketplace?",
-                a: "Karena rekomendasimu berdasarkan kondisi kulitmu yang spesifik — bukan yang paling laris atau yang bayar iklan terbesar. Kami justru akan bilang jika kamu tidak butuh produk tertentu.",
-              },
-              {
-                q: "Apakah cocok untuk pria juga?",
-                a: "Ya! Skin barrier, masalah jerawat, dan kebutuhan hidrasi tidak mengenal gender. Formulir analisis kami menyesuaikan rekomendasi untuk pria dan wanita.",
-              },
-              {
-                q: "Seberapa akurat rekomendasinya?",
-                a: "Akurasi bergantung pada seberapa lengkap data yang kamu isi. Rekomendasi kami berbasis literatur dermatologi dan tidak menggantikan konsultasi dokter kulit untuk kondisi medis serius.",
-              },
-              {
-                q: "Ingredient conflict checker bekerja bagaimana?",
-                a: "Kami mencocokkan nama ingredient yang kamu input dengan database 100+ ingredient dan mengecek konflik yang terdokumentasi secara ilmiah — seperti Retinol + AHA atau Benzoyl Peroxide + Retinol.",
-              },
-            ].map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-                className="rounded-xl border border-border bg-card p-5"
-              >
-                <p className="text-sm font-semibold text-foreground mb-2">❓ {item.q}</p>
-                <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ─────────────────────────────── */}
-      <section className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-xs text-primary uppercase tracking-widest mb-3">Yang Mereka Rasakan</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ribuan pengguna sudah <span className="gradient-text">jujur ke kulitnya</span></h2>
-          </motion.div>
-          <motion.div className="grid md:grid-cols-3 gap-5" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
-            {[
-              {
-                name: "Rani A.", age: 23, city: "Jakarta", skin: "Kombinasi · Berjerawat",
-                text: "Akhirnya tahu kenapa skincare aku nggak works — ternyata aku pakai terlalu banyak produk yang fungsinya sama. JujurSkin bilang cut 3 produk dan hemat Rp 280rb/bulan. Kulit membaik setelah 3 minggu.",
-                stars: 5, emoji: "🌿",
-                badge: "Hemat Rp 280rb/bln",
-              },
-              {
-                name: "Dinda P.", age: 28, city: "Surabaya", skin: "Kering · Sensitif",
-                text: "Lagi hamil dan bingung produk mana yang aman. JujurSkin langsung filter otomatis yang berbahaya untuk kehamilan. Seneng banget ada yang perhatiin hal ini. Niacinamide dan ceramide jadi andalan.",
-                stars: 5, emoji: "🤰",
-                badge: "Aman untuk hamil",
-              },
-              {
-                name: "Rizky M.", age: 19, city: "Bandung", skin: "Berminyak · Pemula",
-                text: "Pertama kali coba skincare, bingung mulai dari mana. Ternyata cukup 3 produk dulu — cleanser, niacinamide, sunscreen. Pakai budget 120rb. Muka lebih bersih dan nggak kilap lagi.",
-                stars: 5, emoji: "✨",
-                badge: "Mulai dari Rp 120rb",
-              },
-            ].map((t, i) => (
-              <motion.div key={t.name} variants={fadeUp} className="relative isolate rounded-2xl border border-border bg-card p-6 overflow-hidden">
-                <BorderBeam duration={8} delay={i * 1.3} />
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center text-lg">{t.emoji}</div>
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.age} th · {t.city} · {t.skin}</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: t.stars }).map((_, i) => (
-                      <Star key={i} className="w-3 h-3 fill-accent text-accent" />
+            <div className="relative" onMouseEnter={() => setMoreOpen(true)} onMouseLeave={() => setMoreOpen(false)}>
+              <button className="flex items-center gap-1 hover:text-slate-900 transition-colors">
+                Lainnya <ChevronRight className={`w-4 h-4 transition-transform ${moreOpen ? "rotate-90" : ""}`} />
+              </button>
+              {moreOpen && (
+                <div className="absolute right-0 top-full pt-3">
+                  <div className="w-56 rounded-2xl border border-slate-100 bg-white shadow-xl p-2">
+                    {MORE.map((m) => (
+                      <Link key={m.href} href={m.href} className="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-rose-50 hover:text-slate-900 transition-colors">{m.label}</Link>
                     ))}
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4">“{t.text}”</p>
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
-                  <CheckCircle className="w-3 h-3" /> {t.badge}
-                </span>
-              </motion.div>
-            ))}
-          </motion.div>
-          {/* Trust bar */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-10 flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
-            {[
-              { icon: "🔒", text: "Tidak menyimpan data sensitif" },
-              { icon: "📵", text: "Tidak ada iklan tersembunyi" },
-              { icon: "🤝", text: "Tidak terafiliasi brand apapun" },
-              { icon: "💚", text: "Selalu gratis" },
-            ].map((t) => (
-              <div key={t.text} className="flex items-center gap-1.5">
-                <span>{t.icon}</span> {t.text}
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button aria-label="Cari" className="hidden sm:grid place-items-center w-9 h-9 rounded-full hover:bg-slate-100 text-slate-600 transition-colors">
+              <Search className="w-4.5 h-4.5" />
+            </button>
+            <Link href="/masuk" className="hidden sm:inline-flex items-center px-4 h-9 rounded-full border border-slate-200 text-sm font-semibold text-slate-700 hover:border-slate-300 transition-colors">Masuk</Link>
+            <button onClick={() => router.push("/analisis")} className="inline-flex items-center px-4 sm:px-5 h-9 rounded-full text-sm font-semibold text-white shadow-sm transition-transform hover:scale-105" style={{ backgroundColor: PINK }}>Mulai Gratis</button>
+            <button aria-label="Menu" onClick={() => setMenu(!menu)} className="lg:hidden grid place-items-center w-9 h-9 rounded-full hover:bg-slate-100 text-slate-700">
+              {menu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </nav>
+
+        {menu && (
+          <div className="lg:hidden border-t border-slate-100 bg-white max-h-[70vh] overflow-y-auto">
+            <div className="px-4 py-3 grid grid-cols-2 gap-1">
+              {[...NAV, ...MORE].map((l) => (
+                <Link key={l.href} href={l.href} onClick={() => setMenu(false)} className="px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-rose-50">{l.label}</Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* ── HERO ────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#FFF6F3] via-[#FFEFEF] to-[#FFE5EC]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16 grid lg:grid-cols-12 gap-8 lg:gap-6 items-center">
+          {/* Left: copy */}
+          <div className="lg:col-span-5">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-xs font-bold tracking-wide shadow-sm" style={{ color: PINK }}>
+              <Sparkles className="w-3.5 h-3.5" /> AI SKIN ANALYZER
+            </span>
+            <h1 className="mt-5 text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.05] tracking-tight text-slate-900">
+              Berhenti beli skincare yang{" "}
+              <span style={{ color: PINK }}>tidak kamu butuhkan.</span>
+            </h1>
+            <p className="mt-5 text-base sm:text-lg text-slate-600 leading-relaxed max-w-md">
+              AI menganalisis kondisi kulitmu dan memberi rekomendasi jujur, bukan rekomendasi yang dibayar brand.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <button onClick={() => router.push("/analisis")} className="inline-flex items-center gap-2 px-6 h-12 rounded-full text-white font-semibold shadow-lg shadow-rose-200 transition-transform hover:scale-105" style={{ backgroundColor: PINK }}>
+                Analisis Kulit Gratis <ArrowRight className="w-4 h-4" />
+              </button>
+              <button onClick={() => router.push("/analisis-foto")} className="inline-flex items-center px-6 h-12 rounded-full bg-white border border-slate-200 font-semibold text-slate-700 hover:border-slate-300 transition-colors">
+                Lihat Demo
+              </button>
+            </div>
+            <div className="mt-6 flex items-center gap-3">
+              <div className="flex -space-x-2">
+                {["dina", "rika", "salsa", "alya"].map((p) => (
+                  <span key={p} className="relative w-8 h-8 rounded-full ring-2 ring-white overflow-hidden bg-rose-100">
+                    <Image src={`/redesign/${p}-after.jpg`} alt="" fill sizes="32px" className="object-cover" />
+                  </span>
+                ))}
+              </div>
+              <p className="text-sm text-slate-500"><span className="font-bold text-slate-800">Ribuan</span> analisis kulit sudah dibuat</p>
+            </div>
+          </div>
+
+          {/* Middle: photo */}
+          <div className="lg:col-span-4 order-first lg:order-none">
+            <div className="relative mx-auto max-w-sm aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl shadow-rose-200/60 ring-1 ring-white/60">
+              <Image src="/redesign/hero.jpg" alt="Analisis kulit JujurSkin" fill priority sizes="(max-width:1024px) 80vw, 360px" className="object-cover" />
+            </div>
+          </div>
+
+          {/* Right: floating cards */}
+          <div className="lg:col-span-3 space-y-3">
+            <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4 flex items-center gap-3">
+              <div>
+                <p className="text-xs text-slate-500">Healthy Skin Score</p>
+                <p className="text-3xl font-extrabold text-slate-900 leading-none">82<span className="text-sm text-slate-400 font-semibold">/100</span></p>
+                <p className="text-xs font-semibold text-emerald-600 mt-0.5">Kulitmu sehat</p>
+              </div>
+              <div className="ml-auto"><ScoreRing value={82} /></div>
+            </div>
+            <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4">
+              <p className="text-xs font-semibold text-slate-700 mb-2">Masalah Utama</p>
+              <ul className="space-y-1.5 text-sm text-slate-600">
+                {["Produksi minyak berlebih", "Bekas jerawat kemerahan", "Pori-pori terlihat"].map((t) => (
+                  <li key={t} className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: PINK }} />{t}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4">
+              <p className="text-xs text-slate-500 mb-1">Rekomendasi Utama</p>
+              <p className="text-sm font-semibold text-slate-800 leading-snug">Fokus perbaikan skin barrier dan kontrol minyak berlebih</p>
+              <button onClick={() => router.push("/analisis")} className="mt-2 inline-flex items-center gap-1 text-sm font-semibold" style={{ color: PINK }}>Lihat detail <ArrowRight className="w-3.5 h-3.5" /></button>
+            </div>
+          </div>
+        </div>
+
+        {/* Trust badges */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-10">
+          <div className="rounded-2xl bg-white/70 backdrop-blur border border-white shadow-sm grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-rose-50">
+            {TRUST.map((t) => (
+              <div key={t.title} className="flex items-center gap-3 p-4">
+                <span className="grid place-items-center w-9 h-9 rounded-full bg-rose-50 shrink-0" style={{ color: PINK }}><t.icon className="w-4.5 h-4.5" /></span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-slate-800 truncate">{t.title}</p>
+                  <p className="text-xs text-slate-500 truncate">{t.sub}</p>
+                </div>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* ── CTA ──────────────────────────────────────── */}
-      <section className="py-24 px-6 bg-secondary/20">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-3xl mx-auto text-center">
-          <div className="relative rounded-3xl border border-primary/20 bg-card p-10 md:p-16 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
-            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-primary/5 blur-[60px]" />
-            <div className="relative z-10">
-              <Badge variant="outline" className="mb-6 border-primary/30 text-primary bg-primary/10 text-xs">Gratis Selamanya</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Mulai rawat kulitmu <span className="gradient-text">dengan jujur</span></h2>
-              <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
-                Tidak perlu kartu kredit. Tidak ada biaya tersembunyi. Tidak ada agenda untuk menyuruhmu beli lebih banyak.
-              </p>
-              <ShimmerButton
-                onClick={() => router.push("/analisis")}
-                className="px-10 h-12 rounded-xl font-medium gap-2 text-base"
-              >
-                Analisis Kulit Saya Sekarang <ArrowRight className="w-4 h-4" />
-              </ShimmerButton>
-              <p className="mt-4 text-xs text-muted-foreground">Untuk pria & wanita · Seluruh Indonesia</p>
+      {/* ── AI ANALYSIS SHOWCASE ────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
+        <div className="grid lg:grid-cols-12 gap-8 items-center">
+          {/* info */}
+          <div className="lg:col-span-4">
+            <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Analisis AI</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight">Analisis kulit dalam <span style={{ color: PINK }}>30 detik</span></h2>
+            <p className="mt-4 text-slate-600 leading-relaxed">Foto wajahmu dianalisis langsung di HP-mu, lalu AI memberi insight yang akurat — tanpa diagnosis berlebihan.</p>
+            <ul className="mt-5 space-y-3">
+              {["Deteksi 6 dimensi kulit", "Rekomendasi personal", "Tips & produk yang cocok"].map((t) => (
+                <li key={t} className="flex items-center gap-3 text-slate-700"><span className="grid place-items-center w-5 h-5 rounded-full text-white shrink-0" style={{ backgroundColor: PINK }}><Check className="w-3 h-3" /></span>{t}</li>
+              ))}
+            </ul>
+            <button onClick={() => router.push("/analisis-foto")} className="mt-7 inline-flex items-center gap-2 px-6 h-12 rounded-full text-white font-semibold shadow-lg shadow-rose-200 hover:scale-105 transition-transform" style={{ backgroundColor: PINK }}>Coba Sekarang Gratis <ArrowRight className="w-4 h-4" /></button>
+          </div>
+
+          {/* upload demo */}
+          <div className="lg:col-span-4">
+            <div className="rounded-3xl border border-rose-100 bg-gradient-to-b from-rose-50/50 to-white p-4 shadow-sm">
+              <p className="text-center text-xs font-bold mb-3" style={{ color: PINK }}>Upload foto wajah</p>
+              <div className="relative aspect-square rounded-2xl overflow-hidden ring-1 ring-rose-100">
+                <Image src="/redesign/ai-face.jpg" alt="Contoh analisis wajah" fill sizes="(max-width:1024px) 90vw, 340px" className="object-cover" />
+                {/* mesh overlay */}
+                <div className="absolute inset-0 opacity-40" style={{ backgroundImage: "linear-gradient(rgba(251,78,120,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(251,78,120,.4) 1px,transparent 1px)", backgroundSize: "26px 26px" }} />
+              </div>
+              <p className="text-center text-[11px] text-slate-400 mt-2">Dianalisis 100% di HP-mu — foto tidak pernah dikirim ke server</p>
+              <button onClick={() => router.push("/analisis-foto")} className="mt-3 w-full inline-flex items-center justify-center gap-2 h-11 rounded-full text-white font-semibold" style={{ backgroundColor: PINK }}><Upload className="w-4 h-4" /> Upload Foto</button>
             </div>
           </div>
-        </motion.div>
+
+          {/* results */}
+          <div className="lg:col-span-4">
+            <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
+              <p className="text-sm font-bold text-slate-900 mb-3">Hasil Analisis</p>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-xs text-slate-500">Healthy Skin Score</span>
+                <span className="ml-auto text-2xl font-extrabold text-slate-900">82<span className="text-xs text-slate-400 font-semibold">/100</span></span>
+                <span className="text-xs font-semibold text-emerald-600">Bagus</span>
+              </div>
+              <div className="space-y-3">
+                {METRICS.map((m) => (
+                  <div key={m.label}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <m.icon className="w-3.5 h-3.5" style={{ color: m.color }} />
+                      <span className="text-xs text-slate-600">{m.label}</span>
+                      <span className="ml-auto text-xs font-bold text-slate-800">{m.val}</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                      <div className="h-full rounded-full" style={{ width: `${m.val}%`, backgroundColor: m.color }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 rounded-2xl bg-rose-50/70 p-3">
+                <p className="text-xs font-bold mb-1" style={{ color: PINK }}>AI Insight</p>
+                <p className="text-xs text-slate-600 leading-relaxed">Kulitmu tidak membutuhkan toner baru. Fokus pada perbaikan skin barrier dan kontrol minyak berlebih.</p>
+                <button onClick={() => router.push("/hasil")} className="mt-2 inline-flex items-center gap-1 text-xs font-semibold" style={{ color: PINK }}>Lihat Rekomendasi <ArrowRight className="w-3 h-3" /></button>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* ── FOOTER ───────────────────────────────────── */}
-      <footer className="border-t border-border py-12 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            {/* Brand */}
-            <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
-                  <Sparkles className="w-3 h-3 text-primary" />
-                </div>
-                <span className="text-sm font-semibold">JujurSkin</span>
-              </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Platform skincare pertama Indonesia yang jujur bilang apa yang tidak kamu butuhkan.
-              </p>
-            </div>
-
-            {/* Fitur */}
+      {/* ── BEFORE / AFTER ──────────────────────────── */}
+      <section className="bg-gradient-to-b from-white to-rose-50/40 py-14 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-end justify-between gap-4 mb-8">
             <div>
-              <p className="text-xs font-semibold text-foreground mb-3 uppercase tracking-wide">Fitur</p>
-              <div className="space-y-2">
-                {[
-                  { label: "Analisis Kulit", href: "/analisis" },
-                  { label: "Rutinitas AM/PM", href: "/rutinitas" },
-                  { label: "Progress Kulit", href: "/progress" },
-                  { label: "Cek Konflik Ingredient", href: "/cek-konflik" },
-                  { label: "Produk Tidak Perlu", href: "/tidak-perlu" },
-                  { label: "Beri Feedback", href: "/feedback" },
-                ].map((link) => (
-                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    {link.label}
-                  </a>
-                ))}
-              </div>
+              <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Hasil Nyata dari Pengguna</p>
+              <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900">Perubahan yang bisa kamu lihat</h2>
+              <p className="mt-2 text-slate-600 max-w-xl">Pengguna kami merasakan hasilnya dengan rekomendasi yang tepat — bukan dengan beli lebih banyak produk.</p>
             </div>
-
-            {/* Belajar */}
-            <div>
-              <p className="text-xs font-semibold text-foreground mb-3 uppercase tracking-wide">Belajar</p>
-              <div className="space-y-2">
-                {[
-                  { label: "Edukasi Ingredient", href: "/edukasi" },
-                  { label: "Panduan Pemula", href: "/panduan" },
-                  { label: "Produk Indonesia", href: "/produk" },
-                  { label: "Budget Planner", href: "/kalkulator" },
-                  { label: "Rutinitas AM/PM", href: "/rutinitas" },
-                  { label: "Progress Kulit", href: "/progress" },
-                ].map((link) => (
-                  <a key={link.href} href={link.href} className="block text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Tentang */}
-            <div>
-              <p className="text-xs font-semibold text-foreground mb-3 uppercase tracking-wide">Tentang</p>
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">Tidak ada iklan</p>
-                <p className="text-xs text-muted-foreground">Tidak terafiliasi brand</p>
-                <p className="text-xs text-muted-foreground">Berbasis data & sains</p>
-                <p className="text-xs text-muted-foreground">100% Gratis</p>
-              </div>
-            </div>
+            <Link href="/progress" className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold shrink-0" style={{ color: PINK }}>Lihat Semua Cerita <ArrowRight className="w-4 h-4" /></Link>
           </div>
 
-          <div className="border-t border-border/50 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-muted-foreground">© 2026 JujurSkin Indonesia</p>
-            <p className="text-xs text-muted-foreground text-center">Rekomendasi berbasis data & ilmu pengetahuan, bukan endorsement berbayar</p>
+          <div className="flex gap-4 overflow-x-auto snap-x pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+            {STORIES.map((s) => (
+              <div key={s.id} className="snap-start shrink-0 w-[78%] sm:w-auto rounded-2xl bg-white border border-rose-50 shadow-sm overflow-hidden">
+                <div className="grid grid-cols-2">
+                  {(["before", "after"] as const).map((k) => (
+                    <div key={k} className="relative aspect-[3/4]">
+                      <Image src={`/redesign/${s.id}-${k}.jpg`} alt={`${s.name} ${k}`} fill sizes="(max-width:640px) 40vw, 160px" className="object-cover" />
+                      <span className={`absolute top-2 ${k === "before" ? "left-2 bg-slate-900/60" : "right-2"} text-[10px] font-bold text-white px-1.5 py-0.5 rounded`} style={k === "after" ? { backgroundColor: PINK } : {}}>{k === "before" ? "Before" : "After"}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="p-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-bold text-slate-900">{s.name} · {s.age} th</p>
+                    <p className="text-sm font-extrabold" style={{ color: PINK }}>{s.from} → {s.to}</p>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">{s.city} · {s.weeks} minggu</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRODUCT RECOMMENDATIONS ─────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
+        <div className="flex items-end justify-between gap-4 mb-8">
+          <div>
+            <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Produk yang Benar-benar Kamu Butuhkan</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900">Rekomendasi produk untukmu</h2>
+          </div>
+          <Link href="/produk" className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold shrink-0" style={{ color: PINK }}>Lihat Semua Produk <ArrowRight className="w-4 h-4" /></Link>
+        </div>
+
+        <div className="flex gap-4 overflow-x-auto snap-x pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-5">
+          {PRODUCTS.map((p) => (
+            <div key={p.name} className="snap-start shrink-0 w-[62%] sm:w-auto rounded-2xl bg-white border border-slate-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+              <div className={`relative aspect-square bg-gradient-to-br ${p.tone} grid place-items-center`}>
+                {p.best && <span className="absolute top-2 left-2 text-[10px] font-bold text-white px-2 py-0.5 rounded-full" style={{ backgroundColor: PINK }}>BEST MATCH</span>}
+                <Droplet className="w-10 h-10 text-slate-300" />
+                <Heart className="absolute top-2 right-2 w-4 h-4 text-slate-300" />
+              </div>
+              <div className="p-3 flex flex-col flex-1">
+                <p className="text-sm font-bold text-slate-900 leading-snug line-clamp-2">{p.name}</p>
+                <div className="flex items-center gap-1 mt-1">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  <span className="text-xs font-semibold text-slate-700">{p.rating}</span>
+                  <span className="text-xs text-slate-400">({p.reviews})</span>
+                </div>
+                <p className="text-sm font-extrabold text-slate-900 mt-1">Rp {p.price}</p>
+                <div className="mt-2 space-y-1 text-[11px]">
+                  <p className="text-emerald-700"><Check className="w-3 h-3 inline -mt-0.5" /> Cocok: {p.cocok}</p>
+                  <p className="text-rose-600"><X className="w-3 h-3 inline -mt-0.5" /> Tidak cocok: {p.tidak}</p>
+                </div>
+                <button onClick={() => router.push("/produk")} className="mt-3 h-9 rounded-full border border-slate-200 text-xs font-semibold text-slate-700 hover:border-slate-300 transition-colors">Lihat Detail</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── COMMUNITY + EDUKASI ─────────────────────── */}
+      <section className="bg-gradient-to-b from-rose-50/40 to-white py-14 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-3">
+            <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Komunitas JujurSkin</p>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">Tempat berbagi, bertanya, dan belajar bersama.</h2>
+            <button onClick={() => router.push("/feedback")} className="mt-5 inline-flex items-center gap-2 px-5 h-11 rounded-full text-white font-semibold" style={{ backgroundColor: PINK }}>Gabung Komunitas</button>
+          </div>
+
+          <div className="lg:col-span-6 grid sm:grid-cols-3 gap-4">
+            {DISCUSSIONS.map((d) => (
+              <div key={d.name} className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4 flex flex-col">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="grid place-items-center w-8 h-8 rounded-full bg-rose-100 text-xs font-bold" style={{ color: PINK }}>{d.name[0]}</span>
+                  <div>
+                    <p className="text-xs font-bold text-slate-800">{d.name}</p>
+                    <p className="text-[10px] text-slate-400">{d.when}</p>
+                  </div>
+                </div>
+                <p className="text-sm font-semibold text-slate-800 leading-snug flex-1">{d.q}</p>
+                <div className="flex flex-wrap gap-1.5 mt-3">
+                  {d.tags.map((t) => <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-rose-50 text-rose-600">{t}</span>)}
+                </div>
+                <p className="text-xs text-slate-400 mt-2">{d.ans} jawaban</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="lg:col-span-3">
+            <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-3">Edukasi Pilihan</p>
+            <div className="space-y-2">
+              {EDU.map((e) => (
+                <Link key={e.t} href={e.href} className="flex items-center gap-3 rounded-xl bg-white border border-slate-100 p-3 hover:border-rose-200 transition-colors">
+                  <span className="grid place-items-center w-9 h-9 rounded-lg bg-rose-50 shrink-0" style={{ color: PINK }}><Sparkles className="w-4 h-4" /></span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-slate-800 leading-snug">{e.t}</p>
+                    <p className="text-[11px] text-slate-400">{e.m}</p>
+                  </div>
+                </Link>
+              ))}
+              <Link href="/artikel" className="inline-flex items-center gap-1 text-sm font-semibold mt-1" style={{ color: PINK }}>Lihat Semua Artikel <ArrowRight className="w-4 h-4" /></Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA BANNER ──────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#FFE5EC] via-[#FFEDEA] to-[#FFE0E8] p-8 lg:p-12 grid lg:grid-cols-2 gap-6 items-center">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Mulai rawat kulitmu dengan jujur.</h2>
+            <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
+              {["Gratis selamanya", "Analisis 30 detik", "Tanpa kartu kredit"].map((t) => (
+                <li key={t} className="flex items-center gap-1.5"><Check className="w-4 h-4" style={{ color: PINK }} /> {t}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex flex-col sm:flex-row lg:justify-end items-start sm:items-center gap-4">
+            <button onClick={() => router.push("/analisis")} className="inline-flex items-center gap-2 px-7 h-13 py-3 rounded-full text-white font-semibold shadow-lg shadow-rose-200 hover:scale-105 transition-transform" style={{ backgroundColor: PINK }}>
+              Analisis Kulit Saya Sekarang <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOOTER ──────────────────────────────────── */}
+      <footer className="border-t border-slate-100 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div className="col-span-2">
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="w-5 h-5" style={{ color: PINK }} fill={PINK} />
+              <span className="text-lg font-extrabold text-slate-900">JujurSkin</span>
+            </div>
+            <p className="text-sm text-slate-500 leading-relaxed max-w-xs">Platform skincare pertama Indonesia yang jujur bilang apa yang tidak perlu kamu beli.</p>
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-800 mb-3">Fitur</p>
+            <ul className="space-y-2 text-sm text-slate-500">
+              {[["Analisis Kulit", "/analisis"], ["Rutinitas AM/PM", "/rutinitas"], ["Progress Kulit", "/progress"], ["Cek Konflik", "/cek-konflik"], ["Produk Tidak Perlu", "/tidak-perlu"], ["Beri Feedback", "/feedback"]].map(([l, h]) => (
+                <li key={h}><Link href={h} className="hover:text-slate-900 transition-colors">{l}</Link></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-800 mb-3">Belajar</p>
+            <ul className="space-y-2 text-sm text-slate-500">
+              {[["Edukasi Ingredient", "/edukasi"], ["Panduan Pemula", "/panduan"], ["Produk Indonesia", "/produk"], ["Budget Planner", "/kalkulator"], ["Kamus Skincare", "/kamus"]].map(([l, h]) => (
+                <li key={h}><Link href={h} className="hover:text-slate-900 transition-colors">{l}</Link></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-800 mb-3">Tentang</p>
+            <ul className="space-y-2 text-sm text-slate-500">
+              <li>Tidak ada iklan</li>
+              <li>Tidak terafiliasi brand</li>
+              <li>Berbasis data & sains</li>
+              <li><Link href="/kebijakan" className="hover:text-slate-900 transition-colors">Kebijakan Privasi</Link></li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-slate-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+            <p>© 2026 JujurSkin Indonesia</p>
+            <p>Rekomendasi berbasis ilmu pengetahuan, bukan endorsement berbayar.</p>
           </div>
         </div>
       </footer>
 
+      {/* ── Floating mascot ─────────────────────────── */}
+      <button onClick={() => router.push("/analisis-foto")} className="fixed bottom-5 right-5 z-40 flex items-center gap-2 group" aria-label="JujurAI">
+        <span className="hidden sm:block rounded-2xl bg-white shadow-lg border border-rose-50 px-3 py-2 text-xs text-slate-600">Hai! Aku <span className="font-bold" style={{ color: PINK }}>JujurAI</span></span>
+        <span className="relative w-14 h-14 rounded-full overflow-hidden shadow-lg ring-2 ring-white bg-rose-100 group-hover:scale-110 transition-transform">
+          <Image src="/redesign/mascot.jpg" alt="JujurAI" fill sizes="56px" className="object-cover" />
+        </span>
+      </button>
     </main>
   );
 }
