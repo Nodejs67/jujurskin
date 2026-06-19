@@ -48,3 +48,4 @@ next-env.d.ts
 lighthouse-report.json
 lh.json
 lh-a11y.json
+dev.log
