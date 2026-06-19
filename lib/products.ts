@@ -619,6 +619,8 @@ export const PRODUCTS: Product[] = [
   // ── CLEANSER (tambahan) ─────────────────────────
   {
     id: "cerave-hydrating-cleanser",
+    image: "/products/cerave-hydrating-cleanser.jpg",
+    full_ingredients: ["Aqua/Water", "Glycerin", "Cetearyl Alcohol", "Phenoxyethanol", "Stearyl Alcohol", "Cetyl Alcohol", "PEG-40 Stearate", "Behentrimonium Methosulfate", "Glyceryl Stearate", "Polysorbate 20", "Ethylhexylglycerin", "Potassium Phosphate", "Disodium EDTA", "Dipotassium Phosphate", "Sodium Lauroyl Lactylate", "Ceramide NP", "Ceramide AP", "Phytosphingosine", "Cholesterol", "Sodium Hyaluronate", "Xanthan Gum", "Carbomer", "Tocopherol", "Ceramide EOP"],
     name: "Hydrating Facial Cleanser",
     brand: "CeraVe",
     category: "cleanser",
@@ -1693,6 +1695,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "laroche-posay-effaclar-duo",
+    image: "/products/laroche-posay-effaclar-duo.jpg",
+    full_ingredients: ["Aqua/Water", "Glycerin", "Dimethicone", "Isocetyl Stearate", "Niacinamide", "Isopropyl Lauroyl Sarcosinate", "Silica", "Ammonium Polyacryloyldimethyl Taurate", "Methyl Methacrylate Crosspolymer", "Potassium Cetyl Phosphate", "Sorbitan Oleate", "Zinc PCA", "Glyceryl Stearate SE", "Isohexadecane", "Sodium Hydroxide", "Myristyl Myristate", "2-Oleamido-1,3-Octadecanediol", "Aluminum Starch Octenylsuccinate", "Mannose", "Poloxamer 338", "Disodium EDTA", "Capryloyl Salicylic Acid", "Caprylyl Glycol", "Vitreoscilla Ferment", "Xanthan Gum", "Polysorbate 80", "Acrylamide/Sodium Acryloyldimethyltaurate Copolymer", "Salicylic Acid", "Piroctone Olamine", "Parfum/Fragrance"],
     name: "Effaclar Duo (+M)",
     brand: "La Roche-Posay",
     category: "treatment_jerawat",
@@ -1775,6 +1779,7 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "beautyofjoseon-relief-sun-spf50",
+    image: "/products/beautyofjoseon-relief-sun-spf50.jpg",
     name: "Relief Sun: Rice + Probiotics SPF 50+ PA++++",
     brand: "Beauty of Joseon",
     category: "sunscreen",
@@ -2060,6 +2065,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "cerave-foaming-cleanser",
+    image: "/products/cerave-foaming-cleanser.jpg",
+    full_ingredients: ["Purified Water", "Glycerin", "Behentrimonium Methosulfate", "Cetearyl Alcohol", "Ceramide 3", "Ceramide 6 II", "Ceramide 1", "Hyaluronic Acid", "Cholesterol", "Polyoxyl 40 Stearate", "Glyceryl Monostearate", "Stearyl Alcohol", "Polysorbate 20", "Potassium Phosphate", "Dipotassium Phosphate", "Sodium Lauroyl Lactylate", "Cetyl Alcohol", "Disodium EDTA", "Phytosphingosine", "Methylparaben", "Propylparaben", "Carbomer", "Xanthan Gum"],
     name: "Foaming Facial Cleanser",
     brand: "CeraVe",
     category: "cleanser",
@@ -2078,6 +2085,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "the-ordinary-haluronic-b5",
+    image: "/products/the-ordinary-haluronic-b5.jpg",
+    full_ingredients: ["Aqua (Water)", "Sodium Hyaluronate", "Pentylene Glycol", "Propanediol", "Sodium Hyaluronate Crosspolymer", "Panthenol", "Ahnfeltia Concinna Extract", "Glycerin", "Trisodium Ethylenediamine Disuccinate", "Citric Acid", "Isoceteth-20", "Ethoxydiglycol", "Ethylhexylglycerin", "Hexylene Glycol", "1,2-Hexanediol", "Phenoxyethanol", "Caprylyl Glycol"],
     name: "Hyaluronic Acid 2% + B5",
     brand: "The Ordinary",
     category: "toner",
@@ -3403,6 +3412,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "cosrx-low-ph-cleanser",
+    image: "/products/cosrx-low-ph-cleanser.jpg",
+    full_ingredients: ["Water", "Cocamidopropyl Betaine", "Sodium Lauroyl Methyl Isethionate", "Sodium Chloride", "Polysorbate 20", "Styrax Japonicus Branch/Fruit/Leaf Extract", "Butylene Glycol", "Saccharomyces Ferment", "Cryptomeria Japonica Leaf Extract", "Nelumbo Nucifera Leaf Extract", "Pinus Palustris Leaf Extract", "Ulmus Davidiana Root Extract", "Oenothera Biennis (Evening Primrose) Flower Extract", "Pueraria Lobata Root Extract", "Melaleuca Alternifolia (Tea Tree) Leaf Oil", "Allantoin", "Caprylyl Glycol", "Ethylhexylglycerin", "Betaine Salicylate", "Citric Acid", "Ethyl Hexanediol", "1,2-Hexanediol", "Trisodium Ethylenediamine Disuccinate", "Sodium Benzoate", "Disodium EDTA"],
     name: "Low pH Good Morning Gel Cleanser",
     brand: "Cosrx",
     category: "cleanser",
