@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Sparkles, CheckCircle, Info, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, CheckCircle, Info, ShieldCheck, Home, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Problem, SkinType } from "@/lib/recommendations";
 import { SkinPhotoCapture } from "@/components/skin-photo-capture";
@@ -140,6 +140,8 @@ export default function AnalisisPage() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [fotoResult, setFotoResult] = useState<SkinResult | null>(null);
+  const [tried, setTried] = useState(false); // user menekan Lanjut padahal belum lengkap
+  const alertRef = useRef<HTMLDivElement | null>(null);
   const [form, setForm] = useState<FormData>({
     nama: "", usia: "", kota: "", jenis_kelamin: "",
     tipe_kulit: "", tipe_kulit_custom: "", masalah: [], budget: 0, tier_preferensi: "seimbang", produk_existing: "",
@@ -186,6 +188,45 @@ export default function AnalisisPage() {
     if (step === 7) return form.budget > 0;
     return true;
   };
+
+  // Daftar isian yang masih kosong di langkah ini → ditampilkan ke user
+  const missingFields = (): string[] => {
+    const m: string[] = [];
+    if (step === 1) {
+      if (!form.usia) m.push("Usia");
+      if (!form.kota) m.push("Kota");
+      if (!form.jenis_kelamin) m.push("Jenis kelamin");
+    } else if (step === 2) {
+      if (form.tipe_kulit === "" && form.tipe_kulit_custom.trim() === "") m.push("Tipe kulit (pilih salah satu atau jelaskan sendiri)");
+    } else if (step === 3) {
+      if (form.masalah.length === 0) m.push("Minimal 1 masalah kulit");
+    } else if (step === 5) {
+      if (!form.penggunaan_sunscreen) m.push("Frekuensi pakai sunscreen");
+      if (!form.paparan_matahari) m.push("Paparan matahari");
+      if (!form.lingkungan) m.push("Lingkungan");
+      if (!form.kualitas_tidur) m.push("Kualitas tidur");
+      if (!form.tingkat_stress) m.push("Tingkat stres");
+    } else if (step === 6) {
+      if (isWanita && form.status_kehamilan === "") m.push("Status kehamilan / menyusui");
+      if (form.pengalaman_retinoid === "") m.push("Pengalaman dengan retinol / vitamin A");
+    } else if (step === 7) {
+      if (!form.budget) m.push("Budget bulanan");
+    }
+    return m;
+  };
+
+  const goNext = () => {
+    if (canNext()) {
+      setTried(false);
+      setStep((s) => s + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      setTried(true); // tampilkan daftar yang kurang + scroll ke peringatan
+      requestAnimationFrame(() => alertRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
+    }
+  };
+  const goBack = () => { setTried(false); setStep((s) => s - 1); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const goHome = () => { setTried(false); router.push("/"); };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -252,14 +293,14 @@ export default function AnalisisPage() {
       {/* Header */}
       <div className="border-b border-border/50 bg-background/90 backdrop-blur-md sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-6 h-14 flex items-center justify-between">
-          <button onClick={() => step > 1 ? setStep(s => s - 1) : router.push("/")}
+          <button onClick={() => (step > 1 ? goBack() : goHome())}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Kembali
+            {step > 1 ? <><ArrowLeft className="w-4 h-4" /> Kembali</> : <><Home className="w-4 h-4" /> Beranda</>}
           </button>
-          <div className="flex items-center gap-2">
+          <button onClick={goHome} className="flex items-center gap-2 hover:opacity-80 transition-opacity" aria-label="Ke beranda">
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium">JujurSkin</span>
-          </div>
+          </button>
           <span className="text-xs text-muted-foreground">{step} / {TOTAL_STEPS}</span>
         </div>
         <div className="h-0.5 bg-border">
@@ -877,16 +918,29 @@ export default function AnalisisPage() {
 
           </AnimatePresence>
 
+          {/* Peringatan: apa yang masih kurang untuk lanjut */}
+          {tried && !canNext() && (
+            <div ref={alertRef} className="mt-6 rounded-xl border border-destructive/40 bg-destructive/10 p-3.5 flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
+              <div className="text-xs text-destructive">
+                <p className="font-semibold mb-1">Belum bisa lanjut — lengkapi dulu:</p>
+                <ul className="list-disc pl-4 space-y-0.5">
+                  {missingFields().map((f) => <li key={f}>{f}</li>)}
+                </ul>
+              </div>
+            </div>
+          )}
+
           {/* Navigation */}
-          <div className="mt-8 flex gap-3">
+          <div className="mt-4 flex gap-3">
             {step > 1 && (
-              <Button variant="outline" onClick={() => setStep(s => s - 1)} className="border-border flex-1">
+              <Button variant="outline" onClick={goBack} className="border-border flex-1">
                 <ArrowLeft className="w-4 h-4 mr-2" /> Sebelumnya
               </Button>
             )}
             {step < TOTAL_STEPS ? (
-              <Button onClick={() => setStep(s => s + 1)} disabled={!canNext()}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1 gap-2">
+              <Button onClick={goNext}
+                className={`flex-1 gap-2 ${canNext() ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-primary/50 text-primary-foreground hover:bg-primary/60"}`}>
                 Lanjut <ArrowRight className="w-4 h-4" />
               </Button>
             ) : (

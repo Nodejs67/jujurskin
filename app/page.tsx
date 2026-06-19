@@ -14,7 +14,6 @@ import { Badge } from "@/components/ui/badge";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { Marquee } from "@/components/magicui/marquee";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { WordRotate } from "@/components/magicui/word-rotate";
 import { SparklesText } from "@/components/magicui/sparkles-text";
@@ -319,7 +318,8 @@ export default function Home() {
       <div className="relative py-4 border-y border-border/30 overflow-hidden bg-card/20">
         <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-        <Marquee pauseOnHover className="[--duration:30s]">
+        {/* Bisa di-swipe / scroll manual (tidak perlu menunggu animasi) */}
+        <div className="flex gap-3 overflow-x-auto px-6 pb-1 snap-x cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {[
             { emoji: "🌿", name: "Niacinamide" }, { emoji: "🍊", name: "Vitamin C" },
             { emoji: "⭐", name: "Retinol" }, { emoji: "💧", name: "Hyaluronic Acid" },
@@ -332,12 +332,12 @@ export default function Home() {
             <a
               key={ing.name}
               href={`/edukasi/ingredient/${ing.name.toLowerCase().replace(/\s+/g, "-")}`}
-              className="mx-4 flex items-center gap-2 px-4 py-2 rounded-full border border-border/50 bg-card/50 text-xs text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors whitespace-nowrap"
+              className="snap-start shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border border-border/50 bg-card/50 text-xs text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors whitespace-nowrap"
             >
               <span>{ing.emoji}</span> {ing.name}
             </a>
           ))}
-        </Marquee>
+        </div>
       </div>
 
       {/* ── KONDISI KULIT (visual) ───────────────────── */}

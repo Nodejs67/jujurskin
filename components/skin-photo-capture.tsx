@@ -98,17 +98,18 @@ export function SkinPhotoCapture({
     <div>
       {mode === "pilih" && (
         <div className="grid sm:grid-cols-2 gap-4">
+          <button onClick={() => setMode("upload")}
+            className="relative rounded-2xl border-2 border-primary/40 bg-primary/5 p-6 text-center hover:border-primary/60 transition-colors">
+            <span className="absolute top-2.5 right-2.5 text-[10px] font-semibold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full">Disarankan</span>
+            <Upload className="w-8 h-8 text-primary mx-auto mb-2" />
+            <p className="text-sm font-semibold text-foreground">Upload Foto</p>
+            <p className="text-xs text-muted-foreground mt-1">Pakai foto yang sudah ada di galeri (JPG/PNG). Paling cepat & gampang — tanpa kamera live.</p>
+          </button>
           <button onClick={() => setMode("kamera")}
             className="rounded-2xl border-2 border-border bg-card p-6 text-center hover:border-primary/40 hover:bg-primary/5 transition-colors">
-            <Camera className="w-8 h-8 text-primary mx-auto mb-2" />
+            <Camera className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
             <p className="text-sm font-semibold text-foreground">Pakai Kamera</p>
-            <p className="text-xs text-muted-foreground mt-1">Dipandu langsung: posisi, cahaya, jarak. Paling akurat.</p>
-          </button>
-          <button onClick={() => setMode("upload")}
-            className="rounded-2xl border-2 border-border bg-card p-6 text-center hover:border-primary/40 hover:bg-primary/5 transition-colors">
-            <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-            <p className="text-sm font-semibold text-foreground">Upload Foto</p>
-            <p className="text-xs text-muted-foreground mt-1">Punya foto depan/kiri/kanan? Unggah di sini.</p>
+            <p className="text-xs text-muted-foreground mt-1">Dipandu langsung & paling akurat. Butuh izin kamera dan sedikit waktu memuat.</p>
           </button>
         </div>
       )}
