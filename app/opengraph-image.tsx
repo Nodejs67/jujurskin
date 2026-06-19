@@ -52,7 +52,7 @@ export default function OpengraphImage() {
           }}
         >
           Skincare yang berani bilang apa yang
-          <span style={{ color: "#4f7a5b", marginLeft: "16px" }}>TIDAK</span>
+          <span style={{ color: "#FB4E78", marginLeft: "16px" }}>TIDAK</span>
           <span style={{ marginLeft: "16px" }}>perlu kamu beli.</span>
         </div>
 

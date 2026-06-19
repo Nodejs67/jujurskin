@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Platform skincare jujur Indonesia: rekomendasi berbasis kondisi kulit & budget, bukan iklan.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f3f6ef",
-    theme_color: "#4f7a5b",
+    background_color: "#ffffff",
+    theme_color: "#FB4E78",
     lang: "id",
     icons: [
       { src: "/icon-192.png", sizes: "192x192", type: "image/png" },

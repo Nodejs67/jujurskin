@@ -37,7 +37,7 @@ export function SparklesText({
   children,
   className,
   sparklesCount = 6,
-  colors = { first: "#86efac", second: "#d4af37" },
+  colors = { first: "#FB4E78", second: "#FF8FA3" },
 }: SparklesTextProps) {
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);
 

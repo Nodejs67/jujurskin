@@ -48,7 +48,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#4f7a5b",
+  themeColor: "#FB4E78",
   width: "device-width",
   initialScale: 1,
   // jangan kunci zoom — biarkan user perbesar (aksesibilitas)

@@ -10,7 +10,7 @@ export function AnimatedGradientText({ children, className }: AnimatedGradientTe
   return (
     <div
       className={cn(
-        "group relative flex items-center justify-center rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium backdrop-blur-sm transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#86efac40] dark:bg-primary/10",
+        "group relative flex items-center justify-center rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium backdrop-blur-sm transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#FB4E7840] dark:bg-primary/10",
         className,
       )}
     >
