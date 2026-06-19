@@ -114,6 +114,7 @@ export const PRODUCTS: Product[] = [
   // ── CLEANSER ──────────────────────────────────────
   {
     id: "cetaphil-gentle-cleanser",
+    image: "/products/cetaphil-gentle-cleanser.jpg",
     name: "Gentle Skin Cleanser",
     brand: "Cetaphil",
     category: "cleanser",
@@ -171,6 +172,7 @@ export const PRODUCTS: Product[] = [
   // ── MOISTURIZER ──────────────────────────────────────
   {
     id: "cerave-moisturizing-cream",
+    image: "/products/cerave-moisturizing-cream.jpg",
     name: "Moisturizing Cream",
     brand: "CeraVe",
     category: "moisturizer",
@@ -696,6 +698,7 @@ export const PRODUCTS: Product[] = [
   // ── TONER (tambahan) ────────────────────────────
   {
     id: "some-by-mi-aha-bha-pha",
+    image: "/products/some-by-mi-aha-bha-pha.jpg",
     name: "AHA BHA PHA 30 Days Miracle Toner",
     brand: "Some By Mi",
     category: "toner",
@@ -716,6 +719,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "cosrx-snail-mucin-essence",
+    image: "/products/cosrx-snail-mucin-essence.jpg",
     name: "Advanced Snail 96 Mucin Power Essence",
     brand: "Cosrx",
     category: "toner",
@@ -1810,6 +1814,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "anua-heartleaf-77-toner",
+    image: "/products/anua-heartleaf-77-toner.jpg",
     name: "Heartleaf 77% Soothing Toner",
     brand: "Anua",
     category: "toner",
@@ -1848,6 +1853,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "the-ordinary-niacinamide-zinc",
+    image: "/products/the-ordinary-niacinamide-zinc.jpg",
     name: "Niacinamide 10% + Zinc 1%",
     brand: "The Ordinary",
     category: "serum_niacinamide",

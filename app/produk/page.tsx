@@ -92,7 +92,12 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
     >
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">{product.emoji}</span>
+          {product.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={product.image} alt={product.name} loading="lazy" className="w-12 h-12 rounded-lg object-contain bg-white border border-border shrink-0" />
+          ) : (
+            <span className="text-2xl">{product.emoji}</span>
+          )}
           <div className="text-left">
             <p className="text-xs text-muted-foreground font-medium">{product.brand}</p>
             <h2 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
@@ -170,7 +175,12 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
               )}
             </div>
             <div className="flex items-center gap-3 mb-1">
-              <span className="text-4xl">{product.emoji}</span>
+              {product.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={product.image} alt={product.name} className="w-16 h-16 rounded-xl object-contain bg-white border border-border shrink-0" />
+              ) : (
+                <span className="text-4xl">{product.emoji}</span>
+              )}
               <div>
                 <p className="text-sm text-muted-foreground font-medium">{product.brand}</p>
                 <h1 className="text-xl font-bold text-foreground">{product.name}</h1>
