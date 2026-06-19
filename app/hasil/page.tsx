@@ -768,7 +768,7 @@ function HasilContent() {
               <ShoppingBag className="w-4 h-4 text-accent shrink-0" />
               <div>
                 <p className="text-xs font-medium text-foreground">Produk Indonesia</p>
-                <p className="text-xs text-muted-foreground">25+ produk terkurasi</p>
+                <p className="text-xs text-muted-foreground">150+ produk terkurasi</p>
               </div>
             </button>
             <button
