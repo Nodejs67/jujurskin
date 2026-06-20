@@ -232,6 +232,7 @@ export const PRODUCTS: Product[] = [
   // ── SERUM NIACINAMIDE ──────────────────────────────────────
   {
     id: "somethinc-niacinamide",
+    image: "/products/somethinc-niacinamide.jpg",
     name: "Niacinamide + Moisture Beet Serum",
     brand: "Somethinc",
     category: "serum_niacinamide",
@@ -1051,12 +1052,14 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "somethinc-hyaluronic-serum",
+    image: "/products/somethinc-hyaluronic-serum.jpg",
     name: "Hyaluronic Acid + B5 Serum",
     brand: "Somethinc",
     category: "serum_niacinamide",
     emoji: "🫧",
     tagline: "HA + B5 — duo hidrasi terbaik untuk kulit kering dan dehidrasi",
     key_ingredients: ["Hyaluronic Acid", "Panthenol (B5)", "Glycerin"],
+    full_ingredients: ["Onsen-Sui","Water","Butylene Glycol","Dipropylene Glycol","Glycereth-26","Methyl Gluceth-20","Pentylene Glycol","Panthenol","Chondrus Crispus Extract","1,2-Hexanediol","Glucose","Chlorella Vulgaris Extract","C12-14 Pareth-12","Saccharum Officinarum Extract","Fructose","Fructooligosaccharides","Caprylyl Glycol","Carbomer","Ammonium Acryloyldimethyltaurate/VP Copolymer","Tromethamine","Sodium Hyaluronate","Adenosine","Ethylhexylglycerin","Hyaluronic Acid","Sodium Phytate","Plumeria Alba Flower Oil","Hydrolyzed Hyaluronic Acid","Hydroxypropyltrimonium Hyaluronate","Hydrolyzed Sodium Hyaluronate","Sodium Acetylated Hyaluronate","PEG-9 Diglycidyl Ether/Sodium Hyaluronate Crosspolymer","Potassium Hyaluronate","Propanediol","Tocopherol","Dimethylsilanol Hyaluronate","Sodium Benzoate"],
     skin_types: ["kering", "sensitif", "normal", "kombinasi"],
     concerns: ["Dehidrasi", "Kulit kering", "Skin barrier", "Kemerahan"],
     price_min: 75000,
