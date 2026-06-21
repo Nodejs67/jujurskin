@@ -136,7 +136,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "somethinc-low-ph-cleanser",
-    name: "Low pH Hello Gentle Cleanser",
+    name: "Low pH Gentle Jelly Cleanser",
     brand: "Somethinc",
     category: "cleanser",
     emoji: "🫧",
@@ -1077,7 +1077,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "somethinc-aha-bha-toner",
-    name: "AHA BHA PHA Clarifying Toner",
+    name: "Glow Maker AHA BHA PHA Clarifying Treatment Toner",
     brand: "Somethinc",
     category: "serum_aha_bha",
     emoji: "⚗️",
@@ -3769,12 +3769,12 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "somethinc-copper-peptide-serum",
-    name: "Copper Peptide Glow Maker Serum",
+    name: "Skinlift 1% Copper Peptide Resveratrol Serum",
     brand: "Somethinc",
     category: "serum_brightening",
     emoji: "🧬",
     tagline: "Serum copper peptide lokal yang naik daun",
-    key_ingredients: ["Copper Tripeptide-1", "Niacinamide", "Panthenol"],
+    key_ingredients: ["Copper Tripeptide-1", "Resveratrol", "Niacinamide"],
     skin_types: ["normal", "kombinasi", "kering"],
     concerns: ["Penuaan dini", "Skin barrier", "Kulit kusam"],
     price_min: 100000,
