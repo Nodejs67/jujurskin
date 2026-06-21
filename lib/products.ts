@@ -341,6 +341,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "azarine-aha-toner",
+    image: "/products/azarine-aha-toner.jpg",
     name: "Daily Beginner Exfoliating Toner",
     brand: "Azarine",
     category: "serum_aha_bha",
