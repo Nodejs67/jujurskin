@@ -1644,6 +1644,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "elsheskin-acne-spot-serum",
+    image: "/products/elsheskin-acne-spot-serum.jpg",
     name: "Acne Care Serum",
     brand: "Elsheskin",
     category: "treatment_jerawat",
