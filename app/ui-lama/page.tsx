@@ -1,32 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import {
   Search, Menu, X, ArrowRight, Check, ChevronRight, ChevronLeft,
   Shield, FlaskConical, Ban, Sparkles, Heart, Star, Upload,
   Droplet, Sun, Activity, Layers, ShieldCheck, Smile,
 } from "lucide-react";
-import { AuroraBackground } from "@/components/ui/aurora-background";
-import { CountUp } from "@/components/ui/count-up";
-import { BrandMarquee } from "@/components/ui/brand-marquee";
-import { GlowBorder } from "@/components/ui/glow-border";
-
-const BRANDS = [
-  "Skintific", "Somethinc", "Avoskin", "Wardah", "Azarine", "COSRX",
-  "The Ordinary", "Hada Labo", "Emina", "NPURE", "Beauty of Joseon", "CeraVe",
-];
-
-/** animasi reveal saat section masuk viewport (dipakai berulang) */
-const reveal = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-};
 
 /* ─────────────────────────────────────────────────────────────
    JujurSkin — Homepage redesign (pink-peach beauty-tech)
@@ -116,19 +98,11 @@ export default function Home() {
   const router = useRouter();
   const [menu, setMenu] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <main className="min-h-screen bg-white text-slate-800 font-sans antialiased">
       {/* ── NAV ─────────────────────────────────────── */}
-      <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/70 backdrop-blur-xl shadow-lg shadow-rose-100/40 border-b border-white/40" : "bg-white/90 backdrop-blur-md border-b border-slate-100"}`}>
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <Sparkles className="w-6 h-6" style={{ color: PINK }} fill={PINK} />
@@ -179,7 +153,7 @@ export default function Home() {
       </header>
 
       {/* ── HERO ────────────────────────────────────── */}
-      <AuroraBackground className="relative overflow-hidden">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#FFF6F3] via-[#FFEFEF] to-[#FFE5EC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16 grid lg:grid-cols-12 gap-8 lg:gap-6 items-center">
           {/* Left: copy */}
           <div className="lg:col-span-5">
@@ -188,13 +162,13 @@ export default function Home() {
             </span>
             <h1 className="mt-5 text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.05] tracking-tight text-slate-900">
               Berhenti beli skincare yang{" "}
-              <span className="text-shimmer bg-gradient-to-r from-[#FB4E78] via-[#FF8FB1] to-[#A855F7] bg-clip-text text-transparent">tidak kamu butuhkan.</span>
+              <span style={{ color: PINK }}>tidak kamu butuhkan.</span>
             </h1>
             <p className="mt-5 text-base sm:text-lg text-slate-600 leading-relaxed max-w-md">
               AI menganalisis kondisi kulitmu dan memberi rekomendasi jujur, bukan rekomendasi yang dibayar brand.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <button onClick={() => router.push("/analisis")} className="inline-flex items-center gap-2 px-6 h-12 rounded-full text-white font-semibold shadow-lg shadow-rose-200 hover:shadow-[0_0_28px_rgba(251,78,120,0.5)] transition-transform hover:scale-105" style={{ backgroundColor: PINK }}>
+              <button onClick={() => router.push("/analisis")} className="inline-flex items-center gap-2 px-6 h-12 rounded-full text-white font-semibold shadow-lg shadow-rose-200 transition-transform hover:scale-105" style={{ backgroundColor: PINK }}>
                 Analisis Kulit Gratis <ArrowRight className="w-4 h-4" />
               </button>
               <button onClick={() => router.push("/analisis-foto")} className="inline-flex items-center px-6 h-12 rounded-full bg-white border border-slate-200 font-semibold text-slate-700 hover:border-slate-300 transition-colors">
@@ -215,28 +189,22 @@ export default function Home() {
 
           {/* Middle: photo */}
           <div className="lg:col-span-4 order-first lg:order-none">
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="relative mx-auto max-w-sm aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl shadow-rose-200/60 ring-1 ring-white/60"
-            >
+            <div className="relative mx-auto max-w-sm aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl shadow-rose-200/60 ring-1 ring-white/60">
               <Image src="/redesign/hero.jpg" alt="Analisis kulit JujurSkin" fill priority sizes="(max-width:1024px) 80vw, 360px" className="object-cover" />
-            </motion.div>
+            </div>
           </div>
 
           {/* Right: floating cards */}
           <div className="lg:col-span-3 space-y-3">
-            <GlowBorder rounded="rounded-2xl" className="shadow-xl shadow-rose-200/40">
-              <div className="flex items-center gap-3 p-4">
-                <div>
-                  <p className="text-xs text-slate-500">Healthy Skin Score</p>
-                  <p className="text-3xl font-extrabold text-slate-900 leading-none"><CountUp value={82} /><span className="text-sm text-slate-400 font-semibold">/100</span></p>
-                  <p className="text-xs font-semibold text-emerald-600 mt-0.5">Kulitmu sehat</p>
-                </div>
-                <div className="ml-auto"><ScoreRing value={82} /></div>
+            <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4 flex items-center gap-3">
+              <div>
+                <p className="text-xs text-slate-500">Healthy Skin Score</p>
+                <p className="text-3xl font-extrabold text-slate-900 leading-none">82<span className="text-sm text-slate-400 font-semibold">/100</span></p>
+                <p className="text-xs font-semibold text-emerald-600 mt-0.5">Kulitmu sehat</p>
               </div>
-            </GlowBorder>
-            <div className="rounded-2xl bg-white/55 backdrop-blur-md shadow-xl shadow-rose-200/40 border border-white/70 p-4">
+              <div className="ml-auto"><ScoreRing value={82} /></div>
+            </div>
+            <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4">
               <p className="text-xs font-semibold text-slate-700 mb-2">Masalah Utama</p>
               <ul className="space-y-1.5 text-sm text-slate-600">
                 {["Produksi minyak berlebih", "Bekas jerawat kemerahan", "Pori-pori terlihat"].map((t) => (
@@ -244,7 +212,7 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl bg-white/55 backdrop-blur-md shadow-xl shadow-rose-200/40 border border-white/70 p-4">
+            <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4">
               <p className="text-xs text-slate-500 mb-1">Rekomendasi Utama</p>
               <p className="text-sm font-semibold text-slate-800 leading-snug">Fokus perbaikan skin barrier dan kontrol minyak berlebih</p>
               <button onClick={() => router.push("/analisis")} className="mt-2 inline-flex items-center gap-1 text-sm font-semibold" style={{ color: PINK }}>Lihat detail <ArrowRight className="w-3.5 h-3.5" /></button>
@@ -266,16 +234,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        {/* Brand marquee terverifikasi */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-8">
-          <p className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-slate-400">Brand terverifikasi di JujurSkin</p>
-          <BrandMarquee brands={BRANDS} />
-        </div>
-      </AuroraBackground>
+      </section>
 
       {/* ── AI ANALYSIS SHOWCASE ────────────────────── */}
-      <motion.section {...reveal} className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           {/* info */}
           <div className="lg:col-span-4">
@@ -287,12 +249,12 @@ export default function Home() {
                 <li key={t} className="flex items-center gap-3 text-slate-700"><span className="grid place-items-center w-5 h-5 rounded-full text-white shrink-0" style={{ backgroundColor: PINK }}><Check className="w-3 h-3" /></span>{t}</li>
               ))}
             </ul>
-            <button onClick={() => router.push("/analisis-foto")} className="mt-7 inline-flex items-center gap-2 px-6 h-12 rounded-full text-white font-semibold shadow-lg shadow-rose-200 hover:shadow-[0_0_28px_rgba(251,78,120,0.5)] hover:scale-105 transition-transform" style={{ backgroundColor: PINK }}>Coba Sekarang Gratis <ArrowRight className="w-4 h-4" /></button>
+            <button onClick={() => router.push("/analisis-foto")} className="mt-7 inline-flex items-center gap-2 px-6 h-12 rounded-full text-white font-semibold shadow-lg shadow-rose-200 hover:scale-105 transition-transform" style={{ backgroundColor: PINK }}>Coba Sekarang Gratis <ArrowRight className="w-4 h-4" /></button>
           </div>
 
           {/* upload demo */}
           <div className="lg:col-span-4">
-            <div className="rounded-3xl border border-white/60 bg-white/50 p-4 shadow-lg shadow-rose-100/40 backdrop-blur-md transition-shadow hover:shadow-xl hover:shadow-rose-200/50">
+            <div className="rounded-3xl border border-rose-100 bg-gradient-to-b from-rose-50/50 to-white p-4 shadow-sm">
               <p className="text-center text-xs font-bold mb-3" style={{ color: PINK }}>Upload foto wajah</p>
               <div className="relative aspect-square rounded-2xl overflow-hidden ring-1 ring-rose-100">
                 <Image src="/redesign/ai-face.jpg" alt="Contoh analisis wajah" fill sizes="(max-width:1024px) 90vw, 340px" className="object-cover" />
@@ -306,11 +268,11 @@ export default function Home() {
 
           {/* results */}
           <div className="lg:col-span-4">
-            <div className="rounded-3xl border border-white/60 bg-white/60 p-5 shadow-lg shadow-rose-100/40 backdrop-blur-md transition-shadow hover:shadow-xl hover:shadow-rose-200/50">
+            <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
               <p className="text-sm font-bold text-slate-900 mb-3">Hasil Analisis</p>
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-xs text-slate-500">Healthy Skin Score</span>
-                <span className="ml-auto text-2xl font-extrabold text-slate-900"><CountUp value={82} /><span className="text-xs text-slate-400 font-semibold">/100</span></span>
+                <span className="ml-auto text-2xl font-extrabold text-slate-900">82<span className="text-xs text-slate-400 font-semibold">/100</span></span>
                 <span className="text-xs font-semibold text-emerald-600">Bagus</span>
               </div>
               <div className="space-y-3">
@@ -322,14 +284,7 @@ export default function Home() {
                       <span className="ml-auto text-xs font-bold text-slate-800">{m.val}</span>
                     </div>
                     <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                      <motion.div
-                        className="h-full rounded-full"
-                        style={{ backgroundColor: m.color }}
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${m.val}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, ease: "easeOut", delay: 0.15 }}
-                      />
+                      <div className="h-full rounded-full" style={{ width: `${m.val}%`, backgroundColor: m.color }} />
                     </div>
                   </div>
                 ))}
@@ -342,10 +297,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* ── BEFORE / AFTER ──────────────────────────── */}
-      <motion.section className="bg-gradient-to-b from-white to-rose-50/40 py-14 lg:py-20">
+      <section className="bg-gradient-to-b from-white to-rose-50/40 py-14 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between gap-4 mb-8">
             <div>
@@ -357,16 +312,8 @@ export default function Home() {
           </div>
 
           <div className="flex gap-4 overflow-x-auto snap-x pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4">
-            {STORIES.map((s, i) => (
-              <motion.div
-                key={s.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -6 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: i * 0.08 }}
-                className="snap-start shrink-0 w-[78%] sm:w-auto rounded-2xl bg-white border border-rose-50 shadow-sm overflow-hidden hover:shadow-xl hover:shadow-rose-100 transition-shadow"
-              >
+            {STORIES.map((s) => (
+              <div key={s.id} className="snap-start shrink-0 w-[78%] sm:w-auto rounded-2xl bg-white border border-rose-50 shadow-sm overflow-hidden">
                 <div className="grid grid-cols-2">
                   {(["before", "after"] as const).map((k) => (
                     <div key={k} className="relative aspect-[3/4]">
@@ -382,14 +329,14 @@ export default function Home() {
                   </div>
                   <p className="text-xs text-slate-500 mt-0.5">{s.city} · {s.weeks} minggu</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* ── PRODUCT RECOMMENDATIONS ─────────────────── */}
-      <motion.section className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
         <div className="flex items-end justify-between gap-4 mb-8">
           <div>
             <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Produk yang Benar-benar Kamu Butuhkan</p>
@@ -399,16 +346,8 @@ export default function Home() {
         </div>
 
         <div className="flex gap-4 overflow-x-auto snap-x pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-5">
-          {PRODUCTS.map((p, i) => (
-            <motion.div
-              key={p.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -6 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: i * 0.07 }}
-              className="snap-start shrink-0 w-[62%] sm:w-auto rounded-2xl bg-white/80 backdrop-blur-sm border border-rose-100/70 shadow-sm overflow-hidden hover:shadow-xl hover:shadow-rose-100 transition-shadow flex flex-col"
-            >
+          {PRODUCTS.map((p) => (
+            <div key={p.name} className="snap-start shrink-0 w-[62%] sm:w-auto rounded-2xl bg-white border border-slate-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col">
               <div className={`relative aspect-square bg-gradient-to-br ${p.tone} grid place-items-center`}>
                 {p.best && <span className="absolute top-2 left-2 text-[10px] font-bold text-white px-2 py-0.5 rounded-full" style={{ backgroundColor: PINK }}>BEST MATCH</span>}
                 <Droplet className="w-10 h-10 text-slate-300" />
@@ -428,13 +367,13 @@ export default function Home() {
                 </div>
                 <button onClick={() => router.push("/produk")} className="mt-3 h-9 rounded-full border border-slate-200 text-xs font-semibold text-slate-700 hover:border-slate-300 transition-colors">Lihat Detail</button>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </motion.section>
+      </section>
 
       {/* ── COMMUNITY + EDUKASI ─────────────────────── */}
-      <motion.section {...reveal} className="bg-gradient-to-b from-rose-50/40 to-white py-14 lg:py-20">
+      <section className="bg-gradient-to-b from-rose-50/40 to-white py-14 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-8">
           <div className="lg:col-span-3">
             <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Komunitas JujurSkin</p>
@@ -477,10 +416,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* ── CTA BANNER ──────────────────────────────── */}
-      <motion.section {...reveal} className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#FFE5EC] via-[#FFEDEA] to-[#FFE0E8] p-8 lg:p-12 grid lg:grid-cols-2 gap-6 items-center">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Mulai rawat kulitmu dengan jujur.</h2>
@@ -491,12 +430,12 @@ export default function Home() {
             </ul>
           </div>
           <div className="flex flex-col sm:flex-row lg:justify-end items-start sm:items-center gap-4">
-            <button onClick={() => router.push("/analisis")} className="inline-flex items-center gap-2 px-7 h-13 py-3 rounded-full text-white font-semibold shadow-lg shadow-rose-200 hover:shadow-[0_0_28px_rgba(251,78,120,0.5)] hover:scale-105 transition-transform" style={{ backgroundColor: PINK }}>
+            <button onClick={() => router.push("/analisis")} className="inline-flex items-center gap-2 px-7 h-13 py-3 rounded-full text-white font-semibold shadow-lg shadow-rose-200 hover:scale-105 transition-transform" style={{ backgroundColor: PINK }}>
               Analisis Kulit Saya Sekarang <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* ── FOOTER ──────────────────────────────────── */}
       <footer className="border-t border-slate-100 bg-white">
