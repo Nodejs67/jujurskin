@@ -845,6 +845,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "hanasui-vitamin-c-serum",
+    image: "/products/hanasui-vitamin-c-serum.jpg",
     name: "Vitamin C Brightening Serum",
     brand: "Hanasui",
     category: "serum_vitamin_c",
@@ -885,6 +886,7 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "scarlett-brightly-serum",
+    image: "/products/scarlett-brightly-serum.jpg",
     name: "Brightly Serum",
     brand: "Scarlett Whitening",
     category: "serum_brightening",
@@ -903,6 +905,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "scarlett-acne-serum",
+    image: "/products/scarlett-acne-serum.jpg",
     name: "Acne Serum",
     brand: "Scarlett Whitening",
     category: "treatment_jerawat",
@@ -1046,6 +1049,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "originote-hyaluronic-toner",
+    image: "/products/originote-hyaluronic-toner.jpg",
     name: "Hyaluronic Acid Toner",
     brand: "The Originote",
     category: "toner",
@@ -1382,6 +1386,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "kahf-facial-wash",
+    image: "/products/kahf-facial-wash.jpg",
     name: "Triple Action Facial Wash",
     brand: "Kahf",
     category: "cleanser",
@@ -1543,6 +1548,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "glad2glow-cica-moisturizer",
+    image: "/products/glad2glow-cica-moisturizer.jpg",
     name: "Cica Centella Soothing Moisturizer",
     brand: "Glad2Glow",
     category: "moisturizer",
@@ -1601,6 +1607,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "glad2glow-niacinamide-serum",
+    image: "/products/glad2glow-niacinamide-serum.jpg",
     name: "Niacinamide Brightening Serum",
     brand: "Glad2Glow",
     category: "serum_niacinamide",
