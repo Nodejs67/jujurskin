@@ -3684,6 +3684,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "hadalabo-gokujyun-premium-lotion",
+    image: "/products/hadalabo-gokujyun-premium-lotion.jpg",
     name: "Gokujyun Premium Hydrating Lotion (Toner)",
     brand: "Hada Labo",
     category: "toner",
