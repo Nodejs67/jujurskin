@@ -4,11 +4,21 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   Search, Menu, X, ArrowRight, Check, ChevronRight, ChevronLeft,
   Shield, FlaskConical, Ban, Sparkles, Heart, Star, Upload,
   Droplet, Sun, Activity, Layers, ShieldCheck, Smile,
 } from "lucide-react";
+import { AuroraBackground } from "@/components/ui/aurora-background";
+
+/** animasi reveal saat section masuk viewport (dipakai berulang) */
+const reveal = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+};
 
 /* ─────────────────────────────────────────────────────────────
    JujurSkin — Homepage redesign (pink-peach beauty-tech)
@@ -153,7 +163,7 @@ export default function Home() {
       </header>
 
       {/* ── HERO ────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#FFF6F3] via-[#FFEFEF] to-[#FFE5EC]">
+      <AuroraBackground className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16 grid lg:grid-cols-12 gap-8 lg:gap-6 items-center">
           {/* Left: copy */}
           <div className="lg:col-span-5">
@@ -162,7 +172,7 @@ export default function Home() {
             </span>
             <h1 className="mt-5 text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.05] tracking-tight text-slate-900">
               Berhenti beli skincare yang{" "}
-              <span style={{ color: PINK }}>tidak kamu butuhkan.</span>
+              <span className="bg-gradient-to-r from-[#FB4E78] via-[#FF8FB1] to-[#A855F7] bg-clip-text text-transparent">tidak kamu butuhkan.</span>
             </h1>
             <p className="mt-5 text-base sm:text-lg text-slate-600 leading-relaxed max-w-md">
               AI menganalisis kondisi kulitmu dan memberi rekomendasi jujur, bukan rekomendasi yang dibayar brand.
@@ -196,7 +206,7 @@ export default function Home() {
 
           {/* Right: floating cards */}
           <div className="lg:col-span-3 space-y-3">
-            <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4 flex items-center gap-3">
+            <div className="rounded-2xl bg-white/55 backdrop-blur-md shadow-xl shadow-rose-200/40 border border-white/70 p-4 flex items-center gap-3">
               <div>
                 <p className="text-xs text-slate-500">Healthy Skin Score</p>
                 <p className="text-3xl font-extrabold text-slate-900 leading-none">82<span className="text-sm text-slate-400 font-semibold">/100</span></p>
@@ -204,7 +214,7 @@ export default function Home() {
               </div>
               <div className="ml-auto"><ScoreRing value={82} /></div>
             </div>
-            <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4">
+            <div className="rounded-2xl bg-white/55 backdrop-blur-md shadow-xl shadow-rose-200/40 border border-white/70 p-4">
               <p className="text-xs font-semibold text-slate-700 mb-2">Masalah Utama</p>
               <ul className="space-y-1.5 text-sm text-slate-600">
                 {["Produksi minyak berlebih", "Bekas jerawat kemerahan", "Pori-pori terlihat"].map((t) => (
@@ -212,7 +222,7 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4">
+            <div className="rounded-2xl bg-white/55 backdrop-blur-md shadow-xl shadow-rose-200/40 border border-white/70 p-4">
               <p className="text-xs text-slate-500 mb-1">Rekomendasi Utama</p>
               <p className="text-sm font-semibold text-slate-800 leading-snug">Fokus perbaikan skin barrier dan kontrol minyak berlebih</p>
               <button onClick={() => router.push("/analisis")} className="mt-2 inline-flex items-center gap-1 text-sm font-semibold" style={{ color: PINK }}>Lihat detail <ArrowRight className="w-3.5 h-3.5" /></button>
@@ -234,10 +244,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </AuroraBackground>
 
       {/* ── AI ANALYSIS SHOWCASE ────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
+      <motion.section {...reveal} className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           {/* info */}
           <div className="lg:col-span-4">
@@ -297,10 +307,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── BEFORE / AFTER ──────────────────────────── */}
-      <section className="bg-gradient-to-b from-white to-rose-50/40 py-14 lg:py-20">
+      <motion.section {...reveal} className="bg-gradient-to-b from-white to-rose-50/40 py-14 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between gap-4 mb-8">
             <div>
@@ -313,7 +323,7 @@ export default function Home() {
 
           <div className="flex gap-4 overflow-x-auto snap-x pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4">
             {STORIES.map((s) => (
-              <div key={s.id} className="snap-start shrink-0 w-[78%] sm:w-auto rounded-2xl bg-white border border-rose-50 shadow-sm overflow-hidden">
+              <div key={s.id} className="snap-start shrink-0 w-[78%] sm:w-auto rounded-2xl bg-white border border-rose-50 shadow-sm overflow-hidden hover:shadow-xl hover:shadow-rose-100 hover:-translate-y-1 transition-all">
                 <div className="grid grid-cols-2">
                   {(["before", "after"] as const).map((k) => (
                     <div key={k} className="relative aspect-[3/4]">
@@ -333,10 +343,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── PRODUCT RECOMMENDATIONS ─────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
+      <motion.section {...reveal} className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
         <div className="flex items-end justify-between gap-4 mb-8">
           <div>
             <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Produk yang Benar-benar Kamu Butuhkan</p>
@@ -347,7 +357,7 @@ export default function Home() {
 
         <div className="flex gap-4 overflow-x-auto snap-x pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-5">
           {PRODUCTS.map((p) => (
-            <div key={p.name} className="snap-start shrink-0 w-[62%] sm:w-auto rounded-2xl bg-white border border-slate-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+            <div key={p.name} className="snap-start shrink-0 w-[62%] sm:w-auto rounded-2xl bg-white/80 backdrop-blur-sm border border-rose-100/70 shadow-sm overflow-hidden hover:shadow-xl hover:shadow-rose-100 hover:-translate-y-1 transition-all flex flex-col">
               <div className={`relative aspect-square bg-gradient-to-br ${p.tone} grid place-items-center`}>
                 {p.best && <span className="absolute top-2 left-2 text-[10px] font-bold text-white px-2 py-0.5 rounded-full" style={{ backgroundColor: PINK }}>BEST MATCH</span>}
                 <Droplet className="w-10 h-10 text-slate-300" />
@@ -370,10 +380,10 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* ── COMMUNITY + EDUKASI ─────────────────────── */}
-      <section className="bg-gradient-to-b from-rose-50/40 to-white py-14 lg:py-20">
+      <motion.section {...reveal} className="bg-gradient-to-b from-rose-50/40 to-white py-14 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-8">
           <div className="lg:col-span-3">
             <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Komunitas JujurSkin</p>
@@ -416,10 +426,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── CTA BANNER ──────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <motion.section {...reveal} className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#FFE5EC] via-[#FFEDEA] to-[#FFE0E8] p-8 lg:p-12 grid lg:grid-cols-2 gap-6 items-center">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Mulai rawat kulitmu dengan jujur.</h2>
@@ -435,7 +445,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── FOOTER ──────────────────────────────────── */}
       <footer className="border-t border-slate-100 bg-white">
