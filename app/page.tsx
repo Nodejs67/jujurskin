@@ -199,9 +199,13 @@ export default function Home() {
 
           {/* Middle: photo */}
           <div className="lg:col-span-4 order-first lg:order-none">
-            <div className="relative mx-auto max-w-sm aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl shadow-rose-200/60 ring-1 ring-white/60">
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="relative mx-auto max-w-sm aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl shadow-rose-200/60 ring-1 ring-white/60"
+            >
               <Image src="/redesign/hero.jpg" alt="Analisis kulit JujurSkin" fill priority sizes="(max-width:1024px) 80vw, 360px" className="object-cover" />
-            </div>
+            </motion.div>
           </div>
 
           {/* Right: floating cards */}
@@ -294,7 +298,14 @@ export default function Home() {
                       <span className="ml-auto text-xs font-bold text-slate-800">{m.val}</span>
                     </div>
                     <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                      <div className="h-full rounded-full" style={{ width: `${m.val}%`, backgroundColor: m.color }} />
+                      <motion.div
+                        className="h-full rounded-full"
+                        style={{ backgroundColor: m.color }}
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${m.val}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, ease: "easeOut", delay: 0.15 }}
+                      />
                     </div>
                   </div>
                 ))}
