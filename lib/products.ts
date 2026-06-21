@@ -1718,24 +1718,6 @@ export const PRODUCTS: Product[] = [
   // LOKAL (tambahan batch 3 — terdaftar BPOM)
   // ══════════════════════════════════════════════════
   {
-    id: "azarine-hydramax-c-gel",
-    name: "Hydramax-C Aqua Gentle Moisturizing Gel",
-    brand: "Azarine",
-    category: "moisturizer",
-    emoji: "🧴",
-    tagline: "Gel moisturizer ringan + vitamin C — hidrasi segar untuk kulit berminyak",
-    key_ingredients: ["Vitamin C", "Hyaluronic Acid", "Niacinamide", "Aloe Vera"],
-    skin_types: ["berminyak", "kombinasi", "normal"],
-    concerns: ["Dehidrasi", "Kulit kusam", "Kulit berminyak", "Hidrasi ringan"],
-    price_min: 35000,
-    price_max: 55000,
-    price_range: "budget",
-    where_to_buy: ["Indomaret", "Alfamart", "Guardian", "Shopee", "Tokopedia"],
-    bpom_registered: true,
-    why_good: "Moisturizer gel yang ringan dan tidak lengket, cocok untuk cuaca tropis dan kulit berminyak. Tambahan vitamin C membantu mencerahkan secara bertahap.",
-    rating_community: 4.4,
-  },
-  {
     id: "npure-cica-care-sunscreen-spf45",
     name: "Cica Care UV Shield SPF 45 PA++++",
     brand: "NPURE",
