@@ -969,6 +969,7 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "msglow-acne-serum",
+    image: "/products/msglow-acne-serum.jpg",
     name: "Acne Serum",
     brand: "Ms Glow",
     category: "treatment_jerawat",
@@ -1406,6 +1407,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "acnes-creamy-wash",
+    image: "/products/acnes-creamy-wash.jpg",
     name: "Creamy Wash",
     brand: "Acnes",
     category: "cleanser",
@@ -1726,6 +1728,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "acnes-spot-care",
+    image: "/products/acnes-spot-care.jpg",
     name: "Sealing Jell Spot Care",
     brand: "Acnes",
     category: "treatment_jerawat",
@@ -2772,6 +2775,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "somebymi-snail-truecica",
+    image: "/products/somebymi-snail-truecica.jpg",
     name: "Snail Truecica Miracle Repair Cream",
     brand: "Some By Mi",
     category: "moisturizer",
