@@ -1,23 +1,36 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import React, { useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 /**
- * AuroraBackground — latar futuristik: gradient "aurora" beranimasi +
- * tech-grid halus + cursor spotlight (glow mengikuti mouse, desktop).
- * Palet brand JujurSkin (pink #FB4E78 + peach + ungu lembut).
- * Responsif (blob lebih kecil di mobile), hormati prefers-reduced-motion.
+ * AuroraBackground — latar futuristik: gradient "aurora" + tech-grid +
+ * cursor spotlight (desktop). Palet brand JujurSkin (pink/peach/ungu).
+ *
+ * Optimasi HP: animasi aurora HANYA jalan di desktop (>=768px) + saat
+ * motion diizinkan. Di mobile gradient-nya STATIS (hemat GPU/baterai),
+ * spotlight juga mati (tidak ada mouse). Hormati prefers-reduced-motion.
  */
 export function AuroraBackground({
   className,
   children,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const reduce = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    // animasikan hanya di layar besar + bukan reduced-motion
+    const mq = window.matchMedia(
+      "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+    );
+    const update = () => setAnimate(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   const onMove = (e: React.MouseEvent) => {
     const root = rootRef.current;
@@ -32,7 +45,7 @@ export function AuroraBackground({
   };
 
   const float = (a: number[], b: number[], scale: number[], dur: number) =>
-    reduce ? undefined : { x: a, y: b, scale, transition: { duration: dur, repeat: Infinity, ease: "easeInOut" as const } };
+    animate ? { x: a, y: b, scale, transition: { duration: dur, repeat: Infinity, ease: "easeInOut" as const } } : undefined;
 
   return (
     <div
@@ -42,7 +55,7 @@ export function AuroraBackground({
       className={cn("relative overflow-hidden bg-[#FFF7F9]", className)}
       {...props}
     >
-      {/* Aurora blobs */}
+      {/* Aurora blobs (statis di mobile, beranimasi di desktop) */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
           className="absolute -top-1/4 left-1/5 h-[26rem] w-[26rem] rounded-full blur-3xl will-change-transform md:h-[42rem] md:w-[42rem]"
@@ -61,7 +74,7 @@ export function AuroraBackground({
         />
       </div>
 
-      {/* Tech grid halus (dengan radial mask) */}
+      {/* Tech grid halus (statis, dengan radial mask) */}
       <div
         className="pointer-events-none absolute inset-0"
         aria-hidden="true"
@@ -75,7 +88,7 @@ export function AuroraBackground({
         }}
       />
 
-      {/* Cursor spotlight (desktop) */}
+      {/* Cursor spotlight (desktop saja) */}
       <div
         ref={glowRef}
         aria-hidden="true"
