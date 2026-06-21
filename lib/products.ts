@@ -1003,7 +1003,8 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "originote-ceramide-moisturizer",
-    name: "Ceramide Moisturizer",
+    image: "/products/originote-ceramide-moisturizer.jpg",
+    name: "Ceratinol Moisturizer",
     brand: "The Originote",
     category: "moisturizer",
     emoji: "🛡️",
@@ -1299,7 +1300,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "avoskin-sunbae-sunscreen-spf50",
-    name: "Your Skin Bae Sunscreen Serum Centella SPF 50 PA++++",
+    image: "/products/avoskin-sunbae-sunscreen-spf50.jpg",
+    name: "Your Skin Bae Shield of Sun Essence SPF 50 PA++++",
     brand: "Avoskin",
     category: "sunscreen",
     emoji: "☀️",
@@ -1548,7 +1550,8 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "whitelab-brightening-serum",
-    name: "Brightening Serum",
+    image: "/products/whitelab-brightening-serum.jpg",
+    name: "Brightening Face Serum",
     brand: "Whitelab",
     category: "serum_brightening",
     emoji: "✨",
