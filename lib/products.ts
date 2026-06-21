@@ -3726,6 +3726,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "somethinc-copper-peptide-serum",
+    image: "/products/somethinc-copper-peptide-serum.jpg",
     name: "Skinlift 1% Copper Peptide Resveratrol Serum",
     brand: "Somethinc",
     category: "serum_brightening",
