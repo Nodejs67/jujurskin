@@ -257,6 +257,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "wardah-lightening-serum",
+    image: "/products/wardah-lightening-serum.jpg",
     name: "Lightening Serum",
     brand: "Wardah",
     category: "serum_niacinamide",
@@ -416,7 +417,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "emina-sunscreen-spf30",
-    name: "Sun Protection Moisturizer SPF 30 PA++",
+    image: "/products/emina-sunscreen-spf30.jpg",
+    name: "Sun Protection Moisturizer SPF 30 PA+++",
     brand: "Emina",
     category: "sunscreen",
     emoji: "☀️",
@@ -535,6 +537,7 @@ export const PRODUCTS: Product[] = [
   // ── MOISTURIZER (tambahan) ──────────────────────
   {
     id: "wardah-aloe-vera-gel",
+    image: "/products/wardah-aloe-vera-gel.jpg",
     name: "Aloe Vera Gel",
     brand: "Wardah",
     category: "moisturizer",
@@ -1502,6 +1505,7 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "emina-bright-stuff-moisturizer",
+    image: "/products/emina-bright-stuff-moisturizer.jpg",
     name: "Bright Stuff Moisturizing Cream",
     brand: "Emina",
     category: "moisturizer",
@@ -1520,6 +1524,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "wardah-hydra-rose-gel",
+    image: "/products/wardah-hydra-rose-gel.jpg",
     name: "Hydra Rose Dewy Aqua Gel",
     brand: "Wardah",
     category: "moisturizer",
