@@ -1895,6 +1895,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "ponds-age-miracle-day-cream",
+    image: "/products/ponds-age-miracle-day-cream.jpg",
     name: "Age Miracle Day Cream SPF 18",
     brand: "Pond's",
     category: "moisturizer",
@@ -3482,6 +3483,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "cetaphil-sun-spf50",
+    image: "/products/cetaphil-sun-spf50.jpg",
     name: "Sun SPF 50+ Light Gel",
     brand: "Cetaphil",
     category: "sunscreen",
