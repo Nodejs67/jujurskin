@@ -1064,6 +1064,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "somethinc-aha-bha-toner",
+    image: "/products/somethinc-aha-bha-toner.jpg",
     name: "Glow Maker AHA BHA PHA Clarifying Treatment Toner",
     brand: "Somethinc",
     category: "serum_aha_bha",
@@ -1258,6 +1259,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "wardah-uv-shield-aqua-fresh-spf50",
+    image: "/products/wardah-uv-shield-aqua-fresh-spf50.jpg",
     name: "UV Shield Aqua Fresh Essence SPF 50 PA++++",
     brand: "Wardah",
     category: "sunscreen",
