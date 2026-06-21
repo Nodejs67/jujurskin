@@ -2425,6 +2425,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "melano-cc-vitamin-c-essence",
+    image: "/products/melano-cc-vitamin-c-essence.jpg",
     name: "Melano CC Intensive Anti-Spot Essence",
     brand: "Melano CC",
     category: "serum_vitamin_c",
