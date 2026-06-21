@@ -946,6 +946,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "msglow-acne-serum",
     image: "/products/msglow-acne-serum.jpg",
+    full_ingredients: ["Aqua", "Glycerin", "Butylene Glycol", "Caprylic/​Capric Triglyceride", "Cocamidopropyl Dimethylamine", "Cetyl Ethylhexanoate", "Dimethicone", "Cetyl Alcohol", "Glyceryl Stearate", "Phenoxyethanol", "Salicylic Acid", "Hydrogenated Lecithin", "Hydroxypropyl Methylcellulose Stearoxy Ether", "PEG-75 Stearate", "Sodium Methyl Stearoyl Taurate", "Ceteth-20", "Steareth-20", "Dipotassium Glycyrrhizinate", "Squalane", "Ethylhexylglycerin", "Polysorbate 80", "Triethanolamine", "Butyrospermum Parkii (Shea) Butter", "Ascorbic Acid", "Benzalkonium Chloride", "Camellia Sinensis Leaf Extract", "Isomerized Safflower Acid", "Palmitoyl Tripeptide-5", "Anthemis Nobilis Flower Extract", "Maltodextrin", "Beeswax", "Silica", "Palmitic Acid", "Kaolin", "Zinc Sulfate", "Fucus Vesiculosus Extract", "Caprylic/Capric Triglyceride", "Read all the geeky details about Glycerin here >>", "Read all the geeky details about Salicylic Acid here >>", "Read all the geeky details about Ascorbic Acid here >>", "Read all the geeky details about Camellia Sinensis Leaf Extract here >>", "[more]"],
     name: "Acne Serum",
     brand: "Ms Glow",
     category: "treatment_jerawat",
@@ -1163,6 +1164,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "skintific-salicylic-acid-toner",
     image: "/products/skintific-salicylic-acid-toner.jpg",
+    full_ingredients: ["Aqua", "Butylene Glycol", "Galactomyces Ferment Filtrate", "Niacinamide", "Propylene Glycol", "Glycolic Acid", "1,2-Hexanediol", "Hydroxyethylpiperazine Ethane Sulfonic Acid", "Lactic Acid", "Salicylic Acid", "Phenoxyethanol", "PEG-60 Almond Glycerides", "Caprylyl Glycol", "Gentiana Scabra Root Extract", "Glycerin", "PEG-40 Hydrogenated Castor Oil", "Sodium Lactate", "O-Cymen-5-Ol", "Ceramide AP", "Ceramide NP", "Polyacrylate Crosspolymer-6", "Ethylhexylglycerin", "Ceramide NS", "Menthol", "Hexyl Cinnamal", "Citric Acid", "Carbomer", "T-Butyl Alcohol", "Nordihydroguaiaretic Acid", "Oleanolic Acid", "Read all the geeky details about Niacinamide here >>", "Read all the geeky details about Propylene Glycol here >>", "Read all the geeky details about Glycolic Acid here >>", "Read all the geeky details about Lactic Acid here >>", "Read all the geeky details about Salicylic Acid here >>", "Read all the geeky details about Glycerin here >>", "[more]"],
     name: "5% AHA BHA PHA Exfoliating Toner",
     brand: "Skintific",
     category: "serum_aha_bha",
@@ -1310,6 +1312,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "avoskin-sunbae-sunscreen-spf50",
     image: "/products/avoskin-sunbae-sunscreen-spf50.jpg",
+    full_ingredients: ["Water", "Butyloctyl Salicylate", "Diethylamino Hydroxybenzoyl Hexyl Benzoate", "Dibutyl Adipate", "Phenethyl Benzoate", "Ethylhexyl Triazone", "Polysilicone-15", "Bis-Ethylhexyloxyphenol Methoxyphenyl Triazine", "Diphenylsiloxy Phenyl Trimethicone", "Polyglyceryl-6 Stearate", "Terephthalylidene Dicamphor Sulfonic Acid", "Nylon-12", "1,2-Hexanediol", "C20-22 Alkyl Phosphate", "Tromethamine", "Caprylic/​Capric Triglyceride", "C20-22 Alcohols", "Hydroxyacetophenone", "Sodium Polyacryloyldimethyl Taurate", "Polyacrylate Crosspolymer-6", "Hydrogenated C6-20 Polyolefin", "Butylene Glycol", "PVP", "Polyglyceryl-6 Behenate", "Sodium Hyaluronate", "3-O-Ethyl Ascorbic Acid", "Allantoin", "Hdi/​Trimethylol Hexyllactone Crosspolymer", "Anthemis Nobilis Flower Extract", "Caprylic/Capric Triglyceride", "Hdi/Trimethylol Hexyllactone Crosspolymer", "[more]"],
     name: "Your Skin Bae Shield of Sun Essence SPF 50 PA++++",
     brand: "Avoskin",
     category: "sunscreen",
@@ -1394,6 +1397,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "acnes-creamy-wash",
     image: "/products/acnes-creamy-wash.jpg",
+    full_ingredients: ["Water", "Glycerin", "Palmitic Acid", "PEG-2 Stearate", "Butylene Glycol", "Myristic Acid", "Lauric Acid", "Potassium Hydroxide", "Olea Europaea (Olive) Fruit Oil", "Lauramide Dea", "Potassium Lauroyl Glutamate", "Salicylic Acid", "Zinc Gluconate", "Zinc Chloride", "Niacinamide", "Saxifraga Sarmentosa Extract", "Sodium Hyaluronate", "Tocopheryl Acetate", "Magnesium Ascorbyl Phosphate", "Dipotassium Glycyrrhizate", "Stearyl Glycyrrhetinate", "Isopropyl Methylphenol", "Lactic Acid", "Polyquaternium-7", "Lauryl Hydroxysultaine", "Potassium Chloride", "Ethanol", "Sodium Hydroxide", "Methylparaben", "Propylparaben", "Fragrance", "Ci 77288", "Ci 77492", "Read all the geeky details about Glycerin here >>", "Read all the geeky details about Salicylic Acid here >>", "Read all the geeky details about Niacinamide here >>", "Read all the geeky details about Lactic Acid here >>", "[more]"],
     name: "Creamy Wash",
     brand: "Acnes",
     category: "cleanser",
@@ -1617,6 +1621,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "avoskin-retinol-ampoule",
     image: "/products/avoskin-retinol-ampoule.jpg",
+    full_ingredients: ["Water", "Propylene Glycol", "Glycerin", "Phenoxyethanol", "Carbomer", "PEG-40 Hydrogenated Castor Oil", "Caprylic/​Capric Triglyceride", "Camellia Sinensis (Green Tea) Leaf Extract", "Methyl Methacrylate Crosspolymer", "Polyglutamic Acid", "Tetrasodium EDTA", "Retinol", "Hydrogenated Lecithin", "Ethylhexylglycerin", "Cholesterol", "Biosaccharide Gum-1", "Tocopheryl Acetate", "Rubus Idaeus (Raspberry) Fruit Extract", "BHT", "Punica Granatum (Fruit) Extract", "Butylene Glycol", "Phaseolus Radiatus Seed Extract", "BHA", "Avena Sativa (Oat) Meal Extract", "Palmitoyl Hexapeptide-12", "Caprylic/Capric Triglyceride", "Read all the geeky details about Propylene Glycol here >>", "Read all the geeky details about Glycerin here >>", "Read all the geeky details about Camellia Sinensis Leaf Extract here >>", "Read all the geeky details about Retinol here >>", "[more]"],
     name: "Miraculous Retinol Ampoule",
     brand: "Avoskin",
     category: "serum_retinol",
@@ -1655,6 +1660,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "elsheskin-acne-spot-serum",
     image: "/products/elsheskin-acne-spot-serum.jpg",
+    full_ingredients: ["Aqua", "Pentylene Glycol", "Niacinamide", "Schizophyllan", "Annona Cherimola Fruit Extract", "Saccharide Isomerate", "Galactosyl Salicylate", "Butylene Glycol", "Bisabolol", "Ethylhexylglycerin", "Sodium Citrate", "Citric Acid", "Phenylpropanol", "Sodium Dehydroacetate", "Sodium Hyaluronate", "Phenoxyethanol", "Magnesium Aspartate", "Zinc Gluconate", "Copper Gluconate", "Laureth-3", "Hydroxyethylcellulose", "Acetyl Dipeptide-1 Cetyl Ester", "Aloe Barbadensis Leaf Extract", "Caprylyl 2-Glyceryl Ascorbate", "Zinc Pca", "Trifolium Pratense Flower Extract", "Glycerin", "Lecithin", "Asiaticoside", "Asiatic Acid", "Madecassic Acid", "Capryloyl Salicylic Acid", "Ammonium Acryloyldimethyltaurate/​VP Copolymer", "Propolis Extract", "Glycyrrhiza Glabra Root Extract", "Disodium EDTA", "Allantoin", "Xanthan Gum", "Dipotassium Glycyrrhizate", "Tocopheryl Acetate", "Ammonium Acryloyldimethyltaurate/VP Copolymer", "Read all the geeky details about Niacinamide here >>", "Read all the geeky details about Glycerin here >>", "[more]"],
     name: "Acne Care Serum",
     brand: "Elsheskin",
     category: "treatment_jerawat",
@@ -3503,6 +3509,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "cetaphil-sun-spf50",
     image: "/products/cetaphil-sun-spf50.jpg",
+    full_ingredients: ["Ethylhexyl Methoxycinnamate", "Bisethylhexyloxyphenol Methoxyphenyl Triazine", "Diethylamino Hydroxybenzoyl Hexyl Benzoate", "Ethylhexyl Triazone", "Methylene Bis-Benzotriazolyl Tetramethylbutylphenol", "[more]"],
     name: "Sun SPF 50+ Light Gel",
     brand: "Cetaphil",
     category: "sunscreen",
@@ -3745,6 +3752,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "somethinc-copper-peptide-serum",
     image: "/products/somethinc-copper-peptide-serum.jpg",
+    full_ingredients: ["Water", "Pentylene Glycol", "Glycerin", "Methylpropanediol", "Copper Tripeptide-1", "1,2-Hexanediol", "Polyacrylate Crosspolymer-6", "Hydrolyzed Ulva Lactuca Extract", "Allantoin", "Panthenol", "Xanthan Gum", "Acetyl Hexapeptide-1", "Nicotiana Benthamiana Hexapeptide-40 SH-Polypeptide-47", "Resveratrol", "Sodium Hyaluronate", "Ethylhexylglycerin", "Hydroxyethylcellulose", "Synthetic Wax", "Caprylyl Glycol", "Sodium Benzoate", "Potassium Sorbate", "Phenoxyethanol", "C20-40 Pareth-10", "Hydroxyethyl Behenamidopropyl Dimonium Chloride", "Polyquaternium-67", "Read all the geeky details about Glycerin here >>", "Read all the geeky details about Copper Tripeptide-1 here >>", "[more]"],
     name: "Skinlift 1% Copper Peptide Resveratrol Serum",
     brand: "Somethinc",
     category: "serum_brightening",
