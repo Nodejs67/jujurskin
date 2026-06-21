@@ -3120,6 +3120,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "medicube-zero-pore-pad",
+    image: "/products/medicube-zero-pore-pad.jpg",
     name: "Zero Pore Pad 2.0",
     brand: "Medicube",
     category: "serum_aha_bha",
@@ -4424,6 +4425,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "eucerin-spotless-serum",
+    image: "/products/eucerin-spotless-serum.jpg",
     name: "UltraWHITE+ Spotless Double Booster Serum",
     brand: "Eucerin",
     category: "serum_brightening",
