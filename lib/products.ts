@@ -77,6 +77,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "wardah-uv-shield-spf50",
     image: "/products/wardah-uv-shield-spf50.jpg",
+    full_ingredients: ["Aqua", "Zinc Oxide", "C12-15 Alkyl Benzoate", "Propanediol", "Maleated Soybean Oil", "Glycerol", "Octyldodecanol", "Esters", "Trisiloxane", "Biosaccharide Gum-1", "Dibutyl Adipate", "Hydroxyethyl Acrylate/​Sodium Acryloyldimethyl Taurate Copolymer", "Bisabolol", "Glycerin", "Allantoin", "Avena Sativa Kernel Flour", "Caprylhydroxamic Acid", "Phenoxyethanol", "Artemisia Capillaris Flower Extract", "Houttuynia Cordata Extract", "Haberlea Rhodopensis Leaf Extract", "Camellia Sinensis Leaf Extract", "Polymethylsilsesquioxane", "1,2-Hexanediol", "Arachidyl Alcohol", "Butylene Glycol", "Triethoxycaprylylsilane", "Polyacrylate Crosspolymer-6", "Polyhydroxystearic Acid", "Behenyl Alcohol", "Chlorphenesin", "Arachidyl Glucoside", "Hydroxyethyl Acrylate/Sodium Acryloyldimethyl Taurate Copolymer", "Read all the geeky details about Glycerin here >>", "Read all the geeky details about Camellia Sinensis Leaf Extract here >>", "[more]"],
     name: "UV Shield Physical Sunscreen Serum SPF 50+ PA++++",
     brand: "Wardah",
     category: "sunscreen",
@@ -138,6 +139,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "somethinc-low-ph-cleanser",
     image: "/products/somethinc-low-ph-cleanser.jpg",
+    full_ingredients: ["Water", "Potassium Laureth Phosphate", "Glycerin", "Potassium Cocoyl Glutamate", "Acrylates/​C10-30 Alkyl Acrylate Crosspolymer", "Butylene Glycol", "Centella Asiatica Leaf Water", "Caprylic/​Capric Triglyceride", "Aspartic Acid", "Caprylyl Glycol", "Sodium Cocoyl Glutamate", "1,2-Hexanediol", "Lauryl Hydroxysultaine", "Coco-Glucoside", "Polyglyceryl-10 Laurate", "Polyglyceryl-10 Myristate", "Glyceryl Caprylate", "Melaleuca Alternifolia (Tea Tree) Leaf Oil", "Sodium Cocoyl Isethionate", "Disodium EDTA", "Calendula Officinalis Flower Extract", "Mentha Piperita (Peppermint Oil) Oil", "Quillaja Saponaria Bark Extract", "Artemisia Capillaris Extract", "Acrylates/C10-30 Alkyl Acrylate Crosspolymer", "Caprylic/Capric Triglyceride", "Read all the geeky details about Glycerin here >>", "[more]"],
     name: "Low pH Gentle Jelly Cleanser",
     brand: "Somethinc",
     category: "cleanser",
@@ -342,6 +344,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "azarine-aha-toner",
     image: "/products/azarine-aha-toner.jpg",
+    full_ingredients: ["Aqua", "Glycerin", "Portulaca Oleracea Extract", "Lactic Acid", "Potassium Azeloyl Diglycinate", "Allantoin", "Lactobionic Acid", "Bacillus Ferment", "Propylene Glycol", "Chlorphenesin", "Salicylic Acid", "Sodium Hyaluronate", "Xanthan Gum", "Phenoxyethanol", "Citric Acid", "Read all the geeky details about Glycerin here >>", "Read all the geeky details about Lactic Acid here >>", "Read all the geeky details about Propylene Glycol here >>", "Read all the geeky details about Salicylic Acid here >>", "[more]"],
     name: "Daily Beginner Exfoliating Toner",
     brand: "Azarine",
     category: "serum_aha_bha",
@@ -465,6 +468,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "skintific-acne-serum",
     image: "/products/skintific-acne-serum.jpg",
+    full_ingredients: ["Water", "Butylene Glycol", "Niacinamide", "Glyserin", "PPG-10 Methyl Glucose Ether", "Pentylene Glycol", "1,2-Hexanediol", "Salicylic Acid", "Acacia Senegal Gum", "Acrylates/​C10-30 Alkyl Acrylate Crosspolymer", "Triethanolamine", "Methylpropanediol", "Ectoin", "Dipotassium Glycyrrhizate", "Pionin", "Ceramide AP", "Ceramide NP", "Ceramide NS", "Ceramide NG", "Centella Asiatica Extract", "Disodium EDTA", "Tartaric Acid", "Malic Acid", "Peumus Boldus Leaf Extract", "PPG-26-Buteth-26", "Allantoin", "O-Cymen-5-Ol", "Ethylhexylglycerin", "Glyceryl Caprylate", "PEG-40 Hydrogenated Castor Oil", "Menthol", "Caprylyl Glycol", "Xanthan Gum", "Hydrolyzed Royal Jelly Protein", "Oligopeptide-1", "Sodium Hyaluronate", "Glycolipids", "Glycosphingolipids", "Propanediol", "Sodium Lactate", "Glycolic Acid", "Sucrose", "Urea", "Sodium Citrate", "Phenoxyethanol", "Acrylates/C10-30 Alkyl Acrylate Crosspolymer", "Read all the geeky details about Niacinamide here >>", "Read all the geeky details about Glycerin here >>", "Read all the geeky details about Salicylic Acid here >>", "Read all the geeky details about Glycolic Acid here >>", "[more]"],
     name: "2% Salicylic Acid Anti-Acne Serum",
     brand: "Skintific",
     category: "treatment_jerawat",
@@ -584,6 +588,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "skintific-niacinamide-serum",
     image: "/products/skintific-niacinamide-serum.jpg",
+    full_ingredients: ["Aqua", "Niacinamide", "Butylene Glycol", "Propylene Glycol", "PEG/​PPG-14/​7 Dimethyl Ether", "Centella Asiatica Extract", "Gentiana Scabra Root Extract", "Avena Sativa (Oat) Kernel Extract", "Yeast Extract", "Crocus Sativus Flower Extract", "Alpha-Arbutin", "Ceramide NP", "Avena Sativa (Oat) Kernel Oil", "Sphingolipids", "Ceramide AS", "Ceramide AP", "Ceramide NS", "Ceramide NG", "1,2-Hexanediol", "Bis-PEG-18 Methyl Ether Dimethyl Silane", "Sodium Polyacryloyldimethyl Taurate", "Allantoin", "Hydrogenated Lecithin", "Acrylates/​C10-30 Alkyl Acrylate Crosspolymer", "Pentylene Glycol", "Isohexadecane", "Tranexamic Acid", "Fructose", "Aminomethyl Propanol", "Propanediol", "Sodium Hyaluronate", "Disodium EDTA", "PEG-7 Glyceryl Cocoate", "Phosphatidylcholine", "Phytosterols", "Sodium Stearoyl Glutamate", "Hydroxyacetophenone", "Fragrance", "Caprylhydroxamic Acid", "Soy Amino Acids", "Phenoxyethanol", "Chlorphenesin", "Ethylhexylglycerin", "PEG/PPG-14/7 Dimethyl Ether", "Acrylates/C10-30 Alkyl Acrylate Crosspolymer", "Read all the geeky details about Niacinamide here >>", "Read all the geeky details about Propylene Glycol here >>", "[more]"],
     name: "10% Niacinamide Brightening Serum",
     brand: "Skintific",
     category: "serum_niacinamide",
@@ -1004,6 +1009,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "originote-ceramide-moisturizer",
     image: "/products/originote-ceramide-moisturizer.jpg",
+    full_ingredients: ["Aloe Barbadensis Leaf Water", "Water", "Glycerin", "Butylene Glycol", "Dimethicone", "Glycosyl Trehalose", "Hydrogenated Starch Hydrolysate", "Cyclopentasiloxane", "Hydroxyacetophenone", "Allantoin", "Cetearyl Alcohol", "PEG/​PPG-17/​6 Copolymer", "Acrylates/​C10-30 Alkyl Acrylate Crosspolymer", "Cetearyl Glucoside", "Arginine", "Methylpropanediol", "Ammonium Acryloyldimethyltaurate/​VP Copolymer", "Sorbitan Olivate", "1,2-Hexanediol", "Glyceryl Glucoside", "Squalane", "Dimethicone Crosspolymer", "Sodium Hyaluronate", "Polysorbate 80", "Camellia Sinensis Extract", "Sorbitan Oleate", "Stephania Tetrandra Extract", "Propylene Glycol", "Caprylic/​Capric Triglyceride", "Beta-Glucan", "Hydrogenated Lecithin", "Ergothioneine", "Phospholipids", "Potassium Sorbate", "Sodium Benzoate", "Hexylene Glycol", "Stearic Acid", "Cholesterol", "Ceramide NP", "Retinol", "Retinal", "Ceramide EOP", "Ceramide AS", "Ceramide NG", "Ceramide AP", "Ubiquinone", "Mannitol", "Pentylene Glycol", "Hydrolyzed Collagen", "Lycopersicon Escelentum Extract", "Nasturtium Officinale Extract", "Hydrolyzed Rice Bran Extract", "Palmitoyl Grape Seed Extract", "Hydroxypinacolone Retinoate", "Oligopeptide-1", "Hexapeptide-9", "EDTA", "PEG/PPG-17/6 Copolymer", "Acrylates/C10-30 Alkyl Acrylate Crosspolymer", "Ammonium Acryloyldimethyltaurate/VP Copolymer", "Caprylic/Capric Triglyceride", "Read all the geeky details about Glycerin here >>", "Read all the geeky details about Camellia Sinensis Leaf Extract here >>", "Read all the geeky details about Propylene Glycol here >>", "Read all the geeky details about Retinol here >>", "[more]"],
     name: "Ceratinol Moisturizer",
     brand: "The Originote",
     category: "moisturizer",
@@ -1066,6 +1072,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "somethinc-aha-bha-toner",
     image: "/products/somethinc-aha-bha-toner.jpg",
+    full_ingredients: ["Water", "Butylene Glycol", "Glycolic Acid", "Arginine", "1,2-Hexanediol", "Betaine", "Allantoin", "Lactobionic Acid", "Anthemis Nobilis Flower Extract", "Salicylic Acid", "Caffeine", "Read all the geeky details about Glycolic Acid here >>", "Read all the geeky details about Salicylic Acid here >>", "[more]"],
     name: "Glow Maker AHA BHA PHA Clarifying Treatment Toner",
     brand: "Somethinc",
     category: "serum_aha_bha",
@@ -1132,6 +1139,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "wardah-hydrating-toner",
     image: "/products/wardah-hydrating-toner.jpg",
+    full_ingredients: ["Aqua", "Triethanolamine", "Glycolic Acid", "PEG-40 Hydrogenated Castor Oil", "Phenoxyethanol", "Trideceth-9", "Niacinamide", "Fragrance", "Ethylhexylglycerin", "Propylene Glycol", "Polysorbate 20", "Tocopheryl Acetate", "Ulva Lactuca Extract", "Glycerin", "Glycyrrhiza Glabra (Licorice) Root Extract", "Potassium Sorbate", "Sodium Benzoate", "Read all the geeky details about Glycolic Acid here >>", "Read all the geeky details about Niacinamide here >>", "Read all the geeky details about Propylene Glycol here >>", "Read all the geeky details about Glycerin here >>", "[more]"],
     name: "Lightening Face Toner",
     brand: "Wardah",
     category: "toner",
@@ -1261,6 +1269,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "wardah-uv-shield-aqua-fresh-spf50",
     image: "/products/wardah-uv-shield-aqua-fresh-spf50.jpg",
+    full_ingredients: ["Aqua", "Ethylhexyl Methoxycinnamate", "Ethylhexyl Salicylate", "Homosalate", "Butyl Methoxydibenzoylmethane", "Octocrylene", "Polymethyl Methacrylate", "Butylene Glycol", "Butyloctyl Salicylate", "Bis-Ethylhexyloxyphenol Methoxyphenyl Triazine", "Cyclopentasiloxane", "Cyclohexasiloxane", "Arachidyl Alcohol", "Polyester-7", "Behenyl Alcohol", "Bisabolol", "Cetyl Alcohol", "Phenoxyethanol", "Stearyl Alcohol", "Neopentyl Glycol Diheptanoate", "Chlorphenesin", "Arachidyl Glucoside", "Propanediol", "Polyacrylate-13", "Disodium EDTA", "Fragrance", "Polyisobutene", "Pongamia Glabra Seed Oil", "Polysorbate 20", "Artemisia Capillaris Flower Extract", "[more]"],
     name: "UV Shield Aqua Fresh Essence SPF 50 PA++++",
     brand: "Wardah",
     category: "sunscreen",
@@ -1551,6 +1560,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "whitelab-brightening-serum",
     image: "/products/whitelab-brightening-serum.jpg",
+    full_ingredients: ["Aqua", "Niacinamide", "Propylene Glycol", "Glycerin", "Phenoxyethanol", "Acrylates Steareth 20 Methacrylate Copolymer", "PEG-7 Glyceryl Cocoate", "Triethanolamine", "Sodium Hyaluronate", "Licorice Glycyrrhiza Glabra Extract", "PEG-40 Hydrogenated Castor Oil", "Allantoin", "Collagen", "Tetrasodium EDTA", "Parfum", "Read all the geeky details about Niacinamide here >>", "Read all the geeky details about Propylene Glycol here >>", "Read all the geeky details about Glycerin here >>", "[more]"],
     name: "Brightening Face Serum",
     brand: "Whitelab",
     category: "serum_brightening",
@@ -1902,6 +1912,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "ponds-age-miracle-day-cream",
     image: "/products/ponds-age-miracle-day-cream.jpg",
+    full_ingredients: ["Water", "Cyclopentasiloxane", "Glycerin", "Ethylhexyl Methoxycinnamate", "Dimethicone Crosspolymer", "Niacinamide", "Caprylic/​Capric Triglyceride", "Titanium Dioxide", "PEG-10 Dimethicone", "Potassium Chloride", "Caprylyl Methicone", "Hydrolyzed Sodium Hyaluronate", "Sodium Hyaluronate", "Sodium Acetylated Hyaluronate", "Sodium Hyaluronate Crosspolymer", "Hydrolyzed Collagen", "Phenoxyethanol", "Mica", "Fragrance", "Alumina", "Disteardimonium Hectorite", "Stearic Acid", "Magnesium Sulfate", "Methicone", "Sucrose Distearate", "Tocopheryl Acetate", "Cholesterol", "Disodium EDTA", "PEG-4 Laurate", "Hexylresorcinol", "PEG-4 Dilaurate", "Aluminum Hydroxide", "Dimethicone", "Cetyl Alcohol", "Retinyl Propionate", "BHT", "PEG-4", "Iodopropynyl Butylcarbamate", "Ceramide NG", "Sodium Ascorbyl Phosphate", "Hydroxystearic Acid", "Butylene Glycol", "Sodium Sulfate", "Sodium Chloride", "Pentylene Glycol", "Sorbitan Laurate", "Tocopherol", "Hydroxyethylcellulose", "Palmitic Acid", "Acetyl Dipeptide-1 Cetyl Ester", "Sodium Benzoate", "Arachidic Acid", "Ethylhexylglycerin", "Ci 17200", "Caprylic/Capric Triglyceride", "Read all the geeky details about Glycerin here >>", "Read all the geeky details about Niacinamide here >>", "Read all the geeky details about Tocopherol here >>", "[more]"],
     name: "Age Miracle Day Cream SPF 18",
     brand: "Pond's",
     category: "moisturizer",
@@ -3127,6 +3138,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "medicube-zero-pore-pad",
     image: "/products/medicube-zero-pore-pad.jpg",
+    full_ingredients: ["Methylpropanediol", "Tromethamine", "Lactic Acid", "Alcohol Denat", "1,2-Hexanediol", "Panthenol", "Glycereth-26", "Salicylic Acid", "Ammonium Acryloyldimethyltaurate/​VP Copolymer", "Betaine", "Trehalose", "Polyglyceryl-10 Laurate", "Ethylhexylglycerin", "Glycerin", "Allantoin", "Polyglyceryl-10 Myristate", "Disodium EDTA", "Butylene Glycol", "Sodium Hyaluronate", "Betaine Salicylate", "Citrus Aurantium Dulcis (Orange) Peel Oil", "Citrus Limon (Lemon) Peel Oil", "Citrus Grandis (Grapefruit) Peel Oil", "Citrus Aurantium Bergamia (Bergamot) Fruit Oil", "Rosmarinus Officinalis (Rosemary) Leaf Oil", "Eucalyptus Globulus Leaf Oil", "Lavandula Angustifolia (Lavender) Oil", "Vitis Vinifera (Grape) Fruit Extract", "Citrus Aurantifolia (Lime) Fruit Extract", "Citrus Limon (Lemon) Fruit Extract", "Pyrus Malus (Apple) Fruit Extract", "Citrus Aurantium Dulcis (Orange) Fruit Extract", "Ethyl Hexanediol", "Centella Asiatica Extract", "Salix Alba (Willow) Bark Extract", "Origanum Vulgare Leaf Extract", "Chamaecyparis Obtusa Leaf Extract", "Lactobacillus/​Soybean Ferment Extract", "Cinnamomum Cassia Bark Extract", "Scutellaria Baicalensis Root Extract", "Portulaca Oleracea Extract", "Oenothera Biennis (Evening Primrose) Flower Extract", "Pinus Palustris Leaf Extract", "Ulmus Davidiana Root Extract", "Pueraria Lobata Root Extract", "Limonene", "Ammonium Acryloyldimethyltaurate/VP Copolymer", "Lactobacillus/Soybean Ferment Extract", "Read all the geeky details about Lactic Acid here >>", "Read all the geeky details about Alcohol Denat. here >>", "Read all the geeky details about Salicylic Acid here >>", "Read all the geeky details about Glycerin here >>", "[more]"],
     name: "Zero Pore Pad 2.0",
     brand: "Medicube",
     category: "serum_aha_bha",
