@@ -136,6 +136,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "somethinc-low-ph-cleanser",
+    image: "/products/somethinc-low-ph-cleanser.jpg",
     name: "Low pH Gentle Jelly Cleanser",
     brand: "Somethinc",
     category: "cleanser",
@@ -461,6 +462,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "skintific-acne-serum",
+    image: "/products/skintific-acne-serum.jpg",
     name: "2% Salicylic Acid Anti-Acne Serum",
     brand: "Skintific",
     category: "treatment_jerawat",
@@ -579,6 +581,7 @@ export const PRODUCTS: Product[] = [
   // ── SERUM NIACINAMIDE (tambahan) ────────────────
   {
     id: "skintific-niacinamide-serum",
+    image: "/products/skintific-niacinamide-serum.jpg",
     name: "10% Niacinamide Brightening Serum",
     brand: "Skintific",
     category: "serum_niacinamide",
@@ -1124,6 +1127,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "wardah-hydrating-toner",
+    image: "/products/wardah-hydrating-toner.jpg",
     name: "Lightening Face Toner",
     brand: "Wardah",
     category: "toner",
@@ -1146,6 +1150,7 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "skintific-salicylic-acid-toner",
+    image: "/products/skintific-salicylic-acid-toner.jpg",
     name: "5% AHA BHA PHA Exfoliating Toner",
     brand: "Skintific",
     category: "serum_aha_bha",
