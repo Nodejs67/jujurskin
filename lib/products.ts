@@ -3509,7 +3509,6 @@ export const PRODUCTS: Product[] = [
   {
     id: "cetaphil-sun-spf50",
     image: "/products/cetaphil-sun-spf50.jpg",
-    full_ingredients: ["Ethylhexyl Methoxycinnamate", "Bisethylhexyloxyphenol Methoxyphenyl Triazine", "Diethylamino Hydroxybenzoyl Hexyl Benzoate", "Ethylhexyl Triazone", "Methylene Bis-Benzotriazolyl Tetramethylbutylphenol", "[more]"],
     name: "Sun SPF 50+ Light Gel",
     brand: "Cetaphil",
     category: "sunscreen",
