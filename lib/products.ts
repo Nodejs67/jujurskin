@@ -1264,6 +1264,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "carasun-solar-smart-spf45",
+    image: "/products/carasun-solar-smart-spf45.jpg",
     name: "Solar Smart UV Protector SPF 45 PA++++",
     brand: "Carasun",
     category: "sunscreen",
@@ -1991,6 +1992,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "viva-face-tonic",
+    image: "/products/viva-face-tonic.jpg",
     name: "Face Tonic Bengkoang",
     brand: "Viva",
     category: "toner",
@@ -2028,6 +2030,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "sariayu-putih-langsat-serum",
+    image: "/products/sariayu-putih-langsat-serum.jpg",
     name: "Putih Langsat Brightening Serum",
     brand: "Sariayu",
     category: "serum_brightening",
