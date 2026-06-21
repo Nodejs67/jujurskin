@@ -76,6 +76,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "wardah-uv-shield-spf50",
+    image: "/products/wardah-uv-shield-spf50.jpg",
     name: "UV Shield Physical Sunscreen Serum SPF 50+ PA++++",
     brand: "Wardah",
     category: "sunscreen",
