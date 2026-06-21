@@ -4143,6 +4143,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "olay-total-effects-cream",
+    image: "/products/olay-total-effects-cream.jpg",
     name: "Total Effects 7 in One Day Cream",
     brand: "Olay",
     category: "moisturizer",
