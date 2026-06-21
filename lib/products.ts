@@ -495,6 +495,7 @@ export const PRODUCTS: Product[] = [
   // ── TONER ──────────────────────────────────────
   {
     id: "somethinc-hyaluronic-toner",
+    image: "/products/somethinc-hyaluronic-toner.jpg",
     name: "Hyaluronic Toning Essence",
     brand: "Somethinc",
     category: "toner",
@@ -513,6 +514,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "skintific-toner-cica",
+    image: "/products/skintific-toner-cica.jpg",
     name: "Centella Calming Toner",
     brand: "Skintific",
     category: "toner",
@@ -1106,6 +1108,7 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "avoskin-miraculous-toner",
+    image: "/products/avoskin-miraculous-toner.jpg",
     name: "Miraculous Refining Toner AHA BHA PHA",
     brand: "Avoskin",
     category: "serum_aha_bha",
@@ -1436,6 +1439,7 @@ export const PRODUCTS: Product[] = [
   // ══════════════════════════════════════════════════
   {
     id: "avoskin-phte-essence",
+    image: "/products/avoskin-phte-essence.jpg",
     name: "Perfect Hydrating Treatment Essence (PHTE)",
     brand: "Avoskin",
     category: "toner",
@@ -1628,6 +1632,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "avoskin-retinol-ampoule",
+    image: "/products/avoskin-retinol-ampoule.jpg",
     name: "Miraculous Retinol Ampoule",
     brand: "Avoskin",
     category: "serum_retinol",
