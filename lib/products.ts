@@ -42,6 +42,13 @@ export interface Product {
   price_range: PriceRange;
 
   where_to_buy: string[];
+  /**
+   * Link affiliate Shopee (opsional). Diisi bertahap dari dashboard Shopee
+   * Affiliate (tombol "Bagikan" per produk). Bila kosong, tombol beli jatuh
+   * ke link PENCARIAN Shopee biasa (tanpa komisi) — jadi tidak ada tombol mati.
+   * JANGAN biarkan komisi memengaruhi urutan rekomendasi (lihat lib/product-matcher.ts).
+   */
+  affiliate_url?: string;
   spf?: number;
   bpom_registered: boolean;
 

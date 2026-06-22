@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PRODUCTS, getActivesWithPercent, type ProductCategory } from "@/lib/products";
 import { productSafety } from "@/lib/safety";
+import { shopeeUrl, shopeeButtonLabel, hasShopeeAffiliate, AFFILIATE_DISCLOSURE } from "@/lib/affiliate";
 import { SiteFooter } from "@/components/site-footer";
 
 const fadeUp = {
@@ -363,12 +364,12 @@ export default function ProdukDetailPage({
           </h2>
           <div className="grid grid-cols-2 gap-2 mb-3">
             <a
-              href={`https://shopee.co.id/search?keyword=${encodeURIComponent(`${product.brand} ${product.name}`)}`}
+              href={shopeeUrl(product)}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer sponsored"
               className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-orange-400/30 bg-orange-400/10 text-sm font-medium text-orange-700 hover:bg-orange-400/20 transition-colors"
             >
-              Cari di Shopee <ExternalLink className="w-3.5 h-3.5" />
+              {shopeeButtonLabel(product)} <ExternalLink className="w-3.5 h-3.5" />
             </a>
             <a
               href={`https://www.tokopedia.com/search?st=product&q=${encodeURIComponent(`${product.brand} ${product.name}`)}`}
@@ -379,6 +380,11 @@ export default function ProdukDetailPage({
               Cari di Tokopedia <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
+          {hasShopeeAffiliate(product) && (
+            <p className="text-[11px] text-muted-foreground leading-relaxed mb-2 italic">
+              {AFFILIATE_DISCLOSURE}
+            </p>
+          )}
           {product.where_to_buy.length > 0 && (
             <p className="text-xs text-muted-foreground">
               Umumnya tersedia di: {product.where_to_buy.join(", ")}. Harga bisa beda tiap toko — bandingkan dulu sebelum beli.
