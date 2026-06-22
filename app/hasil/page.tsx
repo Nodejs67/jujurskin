@@ -410,7 +410,16 @@ function HasilContent() {
                             return (
                               <a key={prod.id} href={`/produk/${prod.id}`} target="_blank" rel="noopener noreferrer"
                                 className={`block p-3 rounded-lg border ${style.ring} hover:brightness-[0.98] transition-all`}>
-                                <div className="flex items-start justify-between gap-3 mb-1">
+                                <div className="flex items-start gap-3 mb-1">
+                                  <div className="w-14 h-14 rounded-lg bg-white border border-border/50 flex items-center justify-center overflow-hidden shrink-0">
+                                    {prod.image ? (
+                                      // eslint-disable-next-line @next/next/no-img-element
+                                      <img src={prod.image} alt={prod.name} loading="lazy" className="w-full h-full object-contain" />
+                                    ) : (
+                                      <span className="text-2xl">{prod.emoji}</span>
+                                    )}
+                                  </div>
+                                  <div className="flex items-start justify-between gap-2 flex-1 min-w-0">
                                   <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-1.5 mb-1 flex-wrap">
                                       <Badge variant="outline" className={`text-[10px] px-1.5 py-0 font-semibold ${style.badge}`}>
@@ -433,6 +442,7 @@ function HasilContent() {
                                   <div className="text-right shrink-0">
                                     <p className="text-xs font-bold text-accent">Rp {prod.price_min.toLocaleString("id")}</p>
                                     <p className="text-[10px] text-muted-foreground">– {prod.price_max.toLocaleString("id")}</p>
+                                  </div>
                                   </div>
                                 </div>
                                 <p className="text-[11px] text-foreground/70 leading-relaxed mt-1.5">{t.honest_note}</p>
