@@ -490,6 +490,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "somethinc-hyaluronic-toner",
     image: "/products/somethinc-hyaluronic-toner.jpg",
+    full_ingredients: ["Aqua","Allantoin","Disodium EDTA","Butylene Glycol","Glycerin","Hydroxyethylcellulose","Hyaluronic Acid","Panthenol","Glutathione","Vitis Vinifera Seed Extract","Phenoxyethanol","Fragrance"],
     name: "Hyaluronic Toning Essence",
     brand: "Somethinc",
     category: "toner",
@@ -509,6 +510,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "skintific-toner-cica",
     image: "/products/skintific-toner-cica.jpg",
+    full_ingredients: ["Water","Sea Water","Centella Asiatica Extract","Butylene Glycol","Glycerin","1,2-Hexanediol","Gentiana Scabra Root Extract","Propanediol","Sodium Citrate","Xanthan Gum","Ectoin","Ceramide NP","Sebacic Acid","10-Hydroxydecanoic Acid","Panthenol","Ceramide EOP","Ceramide AP","Ethylhexylglycerin","Viola Yedoensis Extract","Glyceryl Caprylate","Ceramide AS","Ceramide NS","Ceramide NG","Hydroxyacetophenone","Taraxacum Officinale (Dandelion) Rhizome/Root Extract","Chamomilla Recutita","(Matricaria) Flower Extract","Crocus Sativus Flower Extract","Paeonia Lactiflora Root Extract","Lonicera Japonica (Honeysuckle) Flower Extract","1,10-Decanediol","Malva Sylvestris (Mallow) Flower Extract","Chrysanthemum Indicum Flower Extract","Taraxacum Mongolicum Extract"],
     name: "Centella Calming Toner",
     brand: "Skintific",
     category: "toner",
@@ -844,6 +846,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "scarlett-brightly-serum",
     image: "/products/scarlett-brightly-serum.jpg",
+    full_ingredients: ["Aqua","Nicotinamide","1,3 Butylene Glycol","Lavandula Angustifolia (Lavender) Water","Ascorbyl Glucoside","Arisaema Amurense Extract","Phenoxyethanol","Hydroxyethylcellulose","Glutathione","Aminomethyl Propanol","Ethyl Macadamiate","Decyl Glucoside","Pentylene Glycol","Disodium EDTA","Ethylhexylglycerin","Tamarindus Indica Seed Gum","Biosaccharide Gum-1","1,2-Hexanediol","2-Amino-1-Butanol","Tocopherol","Malic Acid","CI 16255"],
     name: "Brightly Serum",
     brand: "Scarlett Whitening",
     category: "serum_brightening",
@@ -863,6 +866,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "scarlett-acne-serum",
     image: "/products/scarlett-acne-serum.jpg",
+    full_ingredients: ["Aqua","Melaleuca Alternifolia (Tea Tree) Leaf Water","Annona Cherimola Fruit Extract","Isopentyldiol","Centella Asiatica Extract","PEG-8","Phenoxyethanol","Salicylic Acid","Ascorbyl Glucoside","Aminomethyl Propanol","Hydroxyethylcellulose","1,3 Butylene glycol","Pentane - 1,2-Diol","Disodium EDTA","Ethylhexylglycerin","Isostearamidopropyl Ethyldimonium Ethosulfate","Sodium Hydroxide","Sodium Citrate","1.2 Hexanediol","Tamarindus Indica Seed Gum","Biosaccharide Gum-1","Phenylpropanol","Sodium Dehydroacetate","Propylene Glycol","Citric Acid","2-Aminobutanol","Glycyrrhiza Uralensis(Licorice) Root Extract","Olea Europaea (Olive) Fruit Oil","Carthamus Tinctorius (Safflower) Seed Oil"],
     name: "Acne Serum",
     brand: "Scarlett Whitening",
     category: "treatment_jerawat",
@@ -1079,6 +1083,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "avoskin-miraculous-toner",
     image: "/products/avoskin-miraculous-toner.jpg",
+    full_ingredients: ["Water","Glycerin","Glycolic Acid","Butylene Glycol","Propylene Glycol","Gluconolactone","Melaleuca Alternifolia (Tea Tree) Leaf Extract","Hamamelis Virginiana (Witch Hazel) Leaf Extract","Niacinamide","Chamomilla Recutita (Matricaria) Flower Extract","Rubus Idaeus (Raspberry Fruit) Extract","Citrus Limon (Lemon) Fruit Extract","Salicylic Acid","Acer Saccharum (Sugar Maple) Extract","Portulaca Oleracea Extract","Aloe Barbadensis Leaf Juice","Amylopectin","Dextrin","Xanthan Gum","Tetrasodium EDTA","Sodium Hydroxymethylglycinate","Polyglutamic Acid"],
     name: "Miraculous Refining Toner AHA BHA PHA",
     brand: "Avoskin",
     category: "serum_aha_bha",
@@ -1234,6 +1239,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "carasun-solar-smart-spf45",
     image: "/products/carasun-solar-smart-spf45.jpg",
+    full_ingredients: ["Aqua","Propylene Glycol","Glycerin","Caprylyl Methicone","Butyl Methoxydibenzoylmethane","Ethylhexyl Methoxycinnamate","Isononyl Isononanoate","Caprylic/Capric Triglyceride","Butylene Glycol","Niacinamide","Octocrylene","Polyglyceryl-2 Stearate","PEG-12 Dimethicone/PPG-20 Crosspolymer","Glyceryl Stearate","Silica","Diisopropyl Sebacate","Propylene Glycol Dicaprylate/Dicaprate","Stearyl Alcohol","Oryza Sativa Extract","Phenoxyethanol","C12-15 Alkyl Benzoate","Diisopropyl Adipate","Tocopheryl Acetate","Sodium Polyacrylate Starch","Lecithin","Marrubium Vulgare Extract","Ethylhexylglycerin","Tetrasodium EDTA","Chlorphenesin","1,2-Hexanediol","Sodium Hydroxide"],
     name: "Solar Smart UV Protector SPF 45 PA++++",
     brand: "Carasun",
     category: "sunscreen",
@@ -1405,6 +1411,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "avoskin-phte-essence",
     image: "/products/avoskin-phte-essence.jpg",
+    full_ingredients: ["Aqua","Alcohol","Ethyl Ascorbic Acid","Propylene Glycol","Glycerin","Fragrance","Anthemis Nobilis (Chamomile) Extract","Daucus Carota Sativa (Carrot) Oil","Rosa Canina (Rosehip) Oil","Carbomer","Triethanolamine","Mineral Oil"],
     name: "Perfect Hydrating Treatment Essence (PHTE)",
     brand: "Avoskin",
     category: "toner",
@@ -4027,6 +4034,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "olay-total-effects-cream",
     image: "/products/olay-total-effects-cream.jpg",
+    full_ingredients: ["Water","Glycerin","Ethylhexyl Salicylate","Niacinamide","Butyl Methoxydibenzoylmethane","Isopropyl Isostearate","Octocrylene","Phenylbenzimidazole Sulfonic Acid","Polyacrylamide","C13-14 Isoparaffin","Panthenol","Aminomethyl Propanol","Titanium Dioxide","Stearyl Alcohol","1,2-Hexanediol","Caprylyl Glycol","Phenoxyethanol","Zea Mays (Corn) Starch","Behenyl Alcohol","Cetyl Alcohol","Carbomer","Fragrance","Laureth-7","Cetearyl Alcohol","Cetearyl Glucoside","PEG-100 Stearate","Disodium EDTA","Palmitic Acid","Stearic Acid","Sodium Ascorbyl Phosphate","Tocopheryl Acetate","Camellia Sinensis Leaf Extract","CI 19140","CI 16035"],
     name: "Total Effects 7 in One Day Cream",
     brand: "Olay",
     category: "moisturizer",
@@ -4387,6 +4395,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "eucerin-spotless-serum",
     image: "/products/eucerin-spotless-serum.jpg",
+    full_ingredients: ["Aqua","Alcohol Denat","Butylene Glycol","Glycerine","Octocrylene","Isopropyl Palmitate","Cetearyl Isononanoate","Distarch Phosphate","Methylpropanediol","Isobutylamido Thiazolyl Resorcinol","Sodium Ascorbyl Phosphate","Sodium Hyaluronate","Glycyrrhiza Inflata Root Extract","Tocopherol","Glucosylrutin","Sodium Stearoyl Glutamate","Glyceryl Stearate","Sodium Polyacrylate","Dimethicone","Isoquercitrin","Citric Acid","Sodium Chloride","Trisodium EDTA","Caprylyl Glycol","Phenoxyethanol","Parfum"],
     name: "UltraWHITE+ Spotless Double Booster Serum",
     brand: "Eucerin",
     category: "serum_brightening",
