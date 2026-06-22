@@ -37,6 +37,48 @@ const TIER_STYLE: Record<RecTierLabel, { ring: string; badge: string; dot: strin
   luxury: { ring: "border-purple-400/40 bg-purple-50/30", badge: "bg-purple-100 text-purple-700 border-purple-300", dot: "🟣" },
 };
 
+// ── Logo brand asli (SVG inline, bukan emoji) untuk tombol berbagi ───────────
+function WhatsAppIcon({ className = "w-6 h-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
+      <path fill="#25D366" d="M16 .5C7.4.5.5 7.4.5 16c0 2.8.7 5.4 2 7.7L.5 31.5l8-2.1c2.2 1.2 4.8 1.9 7.5 1.9 8.6 0 15.5-6.9 15.5-15.5S24.6.5 16 .5z" />
+      <path fill="#fff" d="M23.4 19.3c-.4-.2-2.3-1.1-2.6-1.3-.3-.1-.6-.2-.8.2-.2.4-.9 1.3-1.1 1.5-.2.2-.4.3-.8.1-2.1-1-3.4-1.9-4.8-4.3-.4-.6.4-.6 1-1.9.1-.2 0-.4 0-.6 0-.2-.8-2-1.1-2.7-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.4-1.2 1.2-1.2 2.9 0 1.7 1.2 3.4 1.4 3.6.2.2 2.5 3.8 6 5.3 2.3 1 3.1.9 3.7.8.6-.1 2.3-.9 2.6-1.8.3-.9.3-1.7.2-1.8-.1-.2-.3-.3-.7-.5z" />
+    </svg>
+  );
+}
+
+function InstagramIcon({ className = "w-6 h-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="jsk-ig" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stopColor="#FEDA75" />
+          <stop offset=".25" stopColor="#FA7E1E" />
+          <stop offset=".5" stopColor="#D62976" />
+          <stop offset=".75" stopColor="#962FBF" />
+          <stop offset="1" stopColor="#4F5BD5" />
+        </linearGradient>
+      </defs>
+      <rect x="2" y="2" width="28" height="28" rx="8" fill="url(#jsk-ig)" />
+      <rect x="7" y="7" width="18" height="18" rx="5.5" fill="none" stroke="#fff" strokeWidth="2.2" />
+      <circle cx="16" cy="16" r="4.6" fill="none" stroke="#fff" strokeWidth="2.2" />
+      <circle cx="21.6" cy="10.4" r="1.5" fill="#fff" />
+    </svg>
+  );
+}
+
+function TikTokIcon({ className = "w-6 h-6" }: { className?: string }) {
+  const note =
+    "M21 4c.3 2.2 1.6 4 3.7 4.4v3.1c-1.3.1-2.6-.2-3.7-.8v6.4c0 3.6-2.9 6.5-6.5 6.5S8 20.7 8 17.1s2.9-6.5 6.5-6.5c.3 0 .6 0 .9.1v3.2c-.3-.1-.6-.1-.9-.1-1.8 0-3.3 1.5-3.3 3.3s1.5 3.3 3.3 3.3 3.3-1.5 3.3-3.3V4h3z";
+  return (
+    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
+      <path d={note} fill="#25F4EE" transform="translate(-1,1)" />
+      <path d={note} fill="#FE2C55" transform="translate(1,-1)" />
+      <path d={note} fill="#000" />
+    </svg>
+  );
+}
+
 type Analysis = {
   id: string;
   nama: string | null;
@@ -75,6 +117,7 @@ function HasilContent() {
   const [notFound, setNotFound] = useState(false);
   const [expandedRec, setExpandedRec] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
+  const [shareNote, setShareNote] = useState<string | null>(null);
   const [tierView, setTierView] = useState<"basic" | "sedang" | "lengkap">("lengkap");
   const { user } = useAuth();
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
@@ -158,6 +201,12 @@ function HasilContent() {
   const nama = data.nama || "Kamu";
   // Pengguna hamil/menyusui terdeteksi bila mesin menyertakan peringatan kehamilan.
   const isPregnant = (h.pregnancy_warnings?.length ?? 0) > 0;
+
+  // Teks berbagi. WhatsApp menerima deep-link teks; Instagram & TikTok tidak
+  // punya "share-link" web, jadi caption disalin lalu app dibuka untuk ditempel.
+  const shareUrl = "https://jujurskin.com/analisis";
+  const waText = `Hei! Aku baru analisis kondisi kulit di JujurSkin — platform skincare Indonesia yang jujur (bukan iklan).\n\nKulit ${data.tipe_kulit || "normal"} dengan skor kesehatan ${h.score.total}/100 setelah pakai rutinitas yang direkomendasikan.\n\nCoba sendiri gratis → ${shareUrl}`;
+  const shareCaption = `Aku cek kondisi kulitku di JujurSkin — platform skincare Indonesia yang JUJUR, bukan iklan. Rekomendasinya based on kandungan & transparan (ada opsi murah sampai premium). Coba gratis → ${shareUrl}`;
   const shownRecs =
     tierView === "basic"
       ? h.recs.slice(0, Math.min(3, h.recs.length))
@@ -855,46 +904,61 @@ function HasilContent() {
           </div>
           <p className="text-xs text-muted-foreground mb-4">Bantu teman kamu temukan skincare yang tepat — gratis dan jujur.</p>
           <div className="grid grid-cols-3 gap-2">
-            {/* WhatsApp */}
+            {/* WhatsApp — share langsung lewat deep-link */}
             <a
-              href={`https://wa.me/?text=${encodeURIComponent(
-                `Hei! Aku baru analisis kondisi kulit di JujurSkin — platform skincare Indonesia yang jujur (bukan iklan).\n\nKulit ${data.tipe_kulit || "normal"} dengan skor kesehatan ${h.score.total}/100 setelah pakai rutinitas yang direkomendasikan.\n\nCoba sendiri gratis → https://jujurskin.com/analisis`
-              )}`}
+              href={`https://wa.me/?text=${encodeURIComponent(waText)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-green-500/10 border border-green-500/20 hover:bg-green-500/20 transition-colors"
             >
-              <span className="text-lg">💬</span>
+              <WhatsAppIcon />
               <span className="text-xs font-medium text-green-700">WhatsApp</span>
             </a>
-            {/* Twitter/X */}
-            <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                `Baru analisis kondisi kulit di @JujurSkin — platform skincare Indonesia yang jujur, bukan iklan.\n\nSkor kulit ${data.tipe_kulit || ""}: ${h.score.total}/100 💚\n\nGratis → https://jujurskin.com/analisis`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-sky-500/10 border border-sky-500/20 hover:bg-sky-500/20 transition-colors"
-            >
-              <span className="text-lg">🐦</span>
-              <span className="text-xs font-medium text-sky-700">Twitter / X</span>
-            </a>
-            {/* Copy link */}
+            {/* Instagram — IG tak punya share-link web: salin caption + buka IG */}
             <button
               onClick={() => {
-                navigator.clipboard.writeText(`https://jujurskin.com/analisis`).then(() => {
+                navigator.clipboard.writeText(shareCaption).then(() => {
+                  setShareNote("Caption disalin! Buka Instagram → tempel di Stories/feed atau bio kamu.");
+                  setTimeout(() => setShareNote(null), 5000);
+                });
+                window.open("https://www.instagram.com/", "_blank", "noopener");
+              }}
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-pink-500/10 border border-pink-500/20 hover:bg-pink-500/20 transition-colors"
+            >
+              <InstagramIcon />
+              <span className="text-xs font-medium text-pink-700">Instagram</span>
+            </button>
+            {/* TikTok — sama: salin caption + buka TikTok */}
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(shareCaption).then(() => {
+                  setShareNote("Caption disalin! Buka TikTok → tempel di caption atau bio kamu.");
+                  setTimeout(() => setShareNote(null), 5000);
+                });
+                window.open("https://www.tiktok.com/", "_blank", "noopener");
+              }}
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-colors"
+            >
+              <TikTokIcon />
+              <span className="text-xs font-medium text-foreground">TikTok</span>
+            </button>
+          </div>
+          {shareNote ? (
+            <p className="text-[11px] text-primary mt-3 text-center leading-relaxed">{shareNote}</p>
+          ) : (
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(shareUrl).then(() => {
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 });
               }}
-              className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-secondary/50 border border-border hover:bg-secondary transition-colors"
+              className="flex items-center justify-center gap-1.5 mt-3 mx-auto text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
-              <span className={`text-xs font-medium ${copied ? "text-primary" : "text-muted-foreground"}`}>
-                {copied ? "Tersalin!" : "Salin Link"}
-              </span>
+              {copied ? <Check className="w-3.5 h-3.5 text-primary" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? "Link tersalin!" : "Salin link"}
             </button>
-          </div>
+          )}
         </motion.div>
       </div>
     </main>
