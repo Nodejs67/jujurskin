@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -364,6 +364,32 @@ export default function ProdukPage() {
     return list;
   }, [query, activeCategory, activePriceRange, activeSkinType]);
 
+  // Muat bertahap (ringan di HP): tampilkan sebagian dulu, sisanya saat di-scroll.
+  const PAGE_SIZE = 18;
+  const [visible, setVisible] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  // Reset jumlah tampil tiap filter/pencarian berubah
+  useEffect(() => {
+    setVisible(PAGE_SIZE);
+  }, [query, activeCategory, activePriceRange, activeSkinType]);
+
+  // Infinite scroll: tambah saat sentinel mendekati layar
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setVisible((v) => v + PAGE_SIZE);
+      },
+      { rootMargin: "600px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [filtered.length, visible]);
+
+  const shown = filtered.slice(0, visible);
+
   if (selectedProduct) {
     return <ProductDetail product={selectedProduct} onClose={() => setSelectedProduct(null)} />;
   }
@@ -533,7 +559,7 @@ export default function ProdukPage() {
             initial="hidden"
             animate="show"
           >
-            {filtered.map((product) => (
+            {shown.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -552,6 +578,21 @@ export default function ProdukPage() {
             >
               Reset filter
             </button>
+          </div>
+        )}
+
+        {/* Muat lebih banyak (infinite scroll + tombol fallback) — ringan di HP */}
+        {filtered.length > 0 && visible < filtered.length && (
+          <div ref={sentinelRef} className="mt-8 flex flex-col items-center gap-2">
+            <button
+              onClick={() => setVisible((v) => v + PAGE_SIZE)}
+              className="px-5 h-11 rounded-full border border-primary/30 bg-primary/5 text-sm font-semibold text-primary hover:bg-primary/10 transition-colors"
+            >
+              Muat lebih banyak
+            </button>
+            <p className="text-xs text-muted-foreground">
+              Menampilkan {visible} dari {filtered.length} produk
+            </p>
           </div>
         )}
 
