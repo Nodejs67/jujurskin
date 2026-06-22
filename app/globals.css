@@ -247,6 +247,22 @@
   .animate-float {
     animation: float-y 4s ease-in-out infinite;
   }
+
+  /* ── Aurora blobs (latar futuristik halaman auth) ───────────── */
+  @keyframes aurora-drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(6%, -8%) scale(1.12); }
+    66% { transform: translate(-7%, 6%) scale(0.94); }
+  }
+  .animate-aurora {
+    animation: aurora-drift 16s ease-in-out infinite;
+    will-change: transform;
+  }
+}
+
+/* Hormati preferensi reduce-motion: aurora jadi diam */
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora { animation: none !important; }
 }
 
 /* ── Mode Ringan (hemat / koneksi lambat / HP lama) ──────────────
