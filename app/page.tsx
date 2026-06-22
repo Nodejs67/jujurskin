@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { PRODUCTS as DB_PRODUCTS, type Product } from "@/lib/products";
 import {
   Search, Menu, X, ArrowRight, Check, ChevronRight, ChevronLeft,
   Shield, FlaskConical, Ban, Sparkles, Heart, Star, Upload,
@@ -62,13 +63,44 @@ const STORIES = [
   { id: "alya", name: "Alya", age: 24, city: "Jakarta", from: 55, to: 82, weeks: 7 },
 ];
 
-const PRODUCTS = [
-  { name: "CeraVe Foaming Cleanser", rating: 4.8, reviews: "2.1k", price: "89.000", cocok: "Acne, Berminyak", tidak: "Kulit Kering", tone: "from-sky-50 to-blue-50", best: true },
-  { name: "The Ordinary Niacinamide 10%", rating: 4.7, reviews: "1.8k", price: "129.000", cocok: "Berminyak, Acne", tidak: "Sensitif", tone: "from-amber-50 to-orange-50" },
-  { name: "Azarine Hydrasoothe SS", rating: 4.8, reviews: "1.3k", price: "75.000", cocok: "Semua Jenis Kulit", tidak: "—", tone: "from-rose-50 to-pink-50" },
-  { name: "Skintific Ceramide Moist.", rating: 4.7, reviews: "980", price: "139.000", cocok: "Barrier Rusak", tidak: "Berminyak berat", tone: "from-teal-50 to-emerald-50" },
-  { name: "Somethinc Niacinamide", rating: 4.6, reviews: "1.3k", price: "98.000", cocok: "Pori, Berminyak", tidak: "Sensitif", tone: "from-violet-50 to-purple-50" },
+// Palet warna kartu produk (latar gradient di belakang foto)
+const CARD_TONES = [
+  "from-sky-50 to-blue-50",
+  "from-amber-50 to-orange-50",
+  "from-rose-50 to-pink-50",
+  "from-teal-50 to-emerald-50",
+  "from-violet-50 to-purple-50",
+  "from-lime-50 to-green-50",
 ];
+
+type ProductCard = { id: string; img: string; name: string; rating: number; price: string; cocok: string; tidak: string };
+
+function notSuitable(p: Product): string {
+  const types = p.skin_types || [];
+  if (types.includes("semua tipe")) return "—";
+  const miss = (["berminyak", "kering", "sensitif", "kombinasi"] as const).filter((t) => !types.includes(t));
+  return miss.length ? miss.slice(0, 2).join(", ") : "—";
+}
+
+// Pool: semua produk yang punya foto → kartu siap render
+const PRODUCT_POOL: ProductCard[] = DB_PRODUCTS.filter((p) => !!p.image).map((p) => ({
+  id: p.id,
+  img: p.image as string,
+  name: `${p.brand} ${p.name}`,
+  rating: p.rating_community ?? 4.6,
+  price: (p.price_min ?? 0).toLocaleString("id-ID"),
+  cocok: (p.skin_types || []).slice(0, 3).join(", ") || "Semua jenis kulit",
+  tidak: notSuitable(p),
+}));
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 const DISCUSSIONS = [
   { name: "Naya", when: "2 jam lalu", q: "Kulit berjerawat cocok pakai apa ya?", tags: ["Jerawat", "Pemula"], ans: 24 },
@@ -98,6 +130,13 @@ export default function Home() {
   const router = useRouter();
   const [menu, setMenu] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+
+  // Produk yang tampil di homepage diacak tiap halaman dibuka.
+  // Inisialisasi stabil (slice) agar cocok saat SSR→hydrate, lalu diacak di client.
+  const [productCards, setProductCards] = useState<ProductCard[]>(() => PRODUCT_POOL.slice(0, 10));
+  useEffect(() => {
+    setProductCards(shuffle(PRODUCT_POOL).slice(0, 10));
+  }, []);
 
   return (
     <main className="min-h-screen bg-white text-slate-800 font-sans antialiased">
@@ -346,26 +385,25 @@ export default function Home() {
         </div>
 
         <div className="flex gap-4 overflow-x-auto snap-x pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-5">
-          {PRODUCTS.map((p) => (
-            <div key={p.name} className="snap-start shrink-0 w-[62%] sm:w-auto rounded-2xl bg-white border border-slate-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col">
-              <div className={`relative aspect-square bg-gradient-to-br ${p.tone} grid place-items-center`}>
-                {p.best && <span className="absolute top-2 left-2 text-[10px] font-bold text-white px-2 py-0.5 rounded-full" style={{ backgroundColor: PINK }}>BEST MATCH</span>}
-                <Droplet className="w-10 h-10 text-slate-300" />
-                <Heart className="absolute top-2 right-2 w-4 h-4 text-slate-300" />
+          {productCards.map((p, i) => (
+            <div key={p.id} className="snap-start shrink-0 w-[62%] sm:w-auto rounded-2xl bg-white border border-slate-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+              <div className={`relative aspect-square bg-gradient-to-br ${CARD_TONES[i % CARD_TONES.length]}`}>
+                {i === 0 && <span className="absolute top-2 left-2 z-10 text-[10px] font-bold text-white px-2 py-0.5 rounded-full" style={{ backgroundColor: PINK }}>BEST MATCH</span>}
+                <Image src={p.img} alt={p.name} fill sizes="(max-width:640px) 60vw, 220px" className="object-contain p-5" />
+                <Heart className="absolute top-2 right-2 z-10 w-4 h-4 text-slate-300" />
               </div>
               <div className="p-3 flex flex-col flex-1">
                 <p className="text-sm font-bold text-slate-900 leading-snug line-clamp-2">{p.name}</p>
                 <div className="flex items-center gap-1 mt-1">
                   <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                   <span className="text-xs font-semibold text-slate-700">{p.rating}</span>
-                  <span className="text-xs text-slate-400">({p.reviews})</span>
                 </div>
                 <p className="text-sm font-extrabold text-slate-900 mt-1">Rp {p.price}</p>
                 <div className="mt-2 space-y-1 text-[11px]">
                   <p className="text-emerald-700"><Check className="w-3 h-3 inline -mt-0.5" /> Cocok: {p.cocok}</p>
                   <p className="text-rose-600"><X className="w-3 h-3 inline -mt-0.5" /> Tidak cocok: {p.tidak}</p>
                 </div>
-                <button onClick={() => router.push("/produk")} className="mt-3 h-9 rounded-full border border-slate-200 text-xs font-semibold text-slate-700 hover:border-slate-300 transition-colors">Lihat Detail</button>
+                <button onClick={() => router.push(`/produk/${p.id}`)} className="mt-3 h-9 rounded-full border border-slate-200 text-xs font-semibold text-slate-700 hover:border-slate-300 transition-colors">Lihat Detail</button>
               </div>
             </div>
           ))}
