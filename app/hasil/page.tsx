@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info, Copy, Check, Clock, AlertTriangle, ListChecks, Wallet, GraduationCap, Sun, Moon, Bookmark, BookmarkCheck, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/components/auth-provider";
 import { saveAnalysis } from "@/lib/supabase/account";
 import type { AnalysisResult } from "@/lib/recommendations";
@@ -112,19 +111,22 @@ function HasilContent() {
       return;
     }
 
-    supabase.from("skin_analyses").select("*").eq("id", id).single().then(({ data: row, error }) => {
-      if (error || !row) {
+    // Baca lewat server route (service role) — tabel skin_analyses dikunci RLS
+    // sehingga tidak bisa di-dump massal oleh anon. Hanya baris dgn id ini.
+    fetch(`/api/analisis?id=${encodeURIComponent(id)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("not found"))))
+      .then(({ row }) => {
+        if (!row) throw new Error("empty");
+        setData(row as Analysis);
+        try { localStorage.setItem("jujurskin_hasil", JSON.stringify((row as Analysis).hasil)); } catch { /* abaikan */ }
+      })
+      .catch(() => {
         // Fallback ke localStorage agar hasil tidak hilang saat kembali dari halaman lain
         const cached = localStorage.getItem("jujurskin_hasil");
         if (cached) setData({ id: "local", nama: null, usia: 0, kota: "", tipe_kulit: "", masalah: [], budget: 0, hasil: JSON.parse(cached) });
         else setNotFound(true);
-      } else {
-        setData(row as Analysis);
-        // Cache hasil supaya bisa dibuka lagi tanpa mengulang analisis
-        try { localStorage.setItem("jujurskin_hasil", JSON.stringify((row as Analysis).hasil)); } catch { /* abaikan */ }
-      }
-      setLoading(false);
-    });
+      })
+      .finally(() => setLoading(false));
   }, [params]);
 
   if (loading) {

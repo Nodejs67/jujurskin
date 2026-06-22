@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getIngredientById, CATEGORY_LABELS, SAFETY_LABELS } from "@/lib/ingredients";
+import { safeJsonLd } from "@/lib/jsonld";
 
 export async function generateMetadata({
   params,
@@ -87,7 +88,7 @@ export default async function IngredientLayout({
       {jsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
         />
       )}
       {children}

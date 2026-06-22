@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { enforceRateLimit } from "@/lib/rate-limit";
+import { readJsonLimited } from "@/lib/validate";
 
 // Lapisan SARAN berbasis AI teks (provider-agnostic, OpenAI-compatible).
 // PENTING: route ini HANYA menerima ANGKA hasil ukur + konteks ringan.
@@ -16,6 +18,11 @@ type Body = {
 };
 
 export async function POST(req: NextRequest) {
+  // Rate limit KETAT: endpoint ini memanggil AI BERBAYAR. Maksimal 6 / menit / IP
+  // supaya tidak bisa dispam untuk membengkakkan tagihan.
+  const limited = enforceRateLimit(req, { bucket: "saran-kulit", limit: 6, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const key = process.env.AI_API_KEY || process.env.DEEPSEEK_API_KEY;
     // Belum dikonfigurasi → jangan error, biar halaman tetap jalan tanpa saran AI
@@ -24,7 +31,7 @@ export async function POST(req: NextRequest) {
     const baseUrl = process.env.AI_BASE_URL || "https://api.deepseek.com";
     const model = process.env.AI_MODEL || "deepseek-chat";
 
-    const body: Body = await req.json();
+    const body = (await readJsonLimited(req, 4 * 1024)) as Body;
     const s = body.scores || {};
     const l = body.levels || {};
     const m = body.meta || {};

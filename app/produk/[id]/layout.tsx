@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PRODUCTS, type ProductCategory } from "@/lib/products";
+import { safeJsonLd } from "@/lib/jsonld";
 
 const CATEGORY_LABELS: Record<ProductCategory, string> = {
   sunscreen: "Sunscreen",
@@ -98,7 +99,7 @@ export default async function ProdukDetailLayout({
       {jsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
         />
       )}
       {children}

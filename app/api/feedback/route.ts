@@ -1,45 +1,63 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { enforceRateLimit } from "@/lib/rate-limit";
+import { clipStr, intInRange, toBool, readJsonLimited } from "@/lib/validate";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Gunakan service role HANYA di server. Tabel feedback dikunci RLS (anon tak
+// boleh baca/tulis langsung) — semua tulisan lewat route ini.
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  try {
+    return createClient(url, key);
+  } catch {
+    return null;
+  }
+}
 
 export async function POST(req: NextRequest) {
+  // Rate limit: maksimal 5 feedback / menit / IP.
+  const limited = enforceRateLimit(req, { bucket: "feedback", limit: 5, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
-    const body = await req.json();
+    let body: Record<string, unknown>;
+    try {
+      body = (await readJsonLimited(req)) as Record<string, unknown>;
+    } catch {
+      return NextResponse.json({ error: "Permintaan tidak valid" }, { status: 400 });
+    }
+
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json({ error: "Server belum dikonfigurasi" }, { status: 503 });
+    }
 
     const { error } = await supabase.from("feedback").insert({
-      nama: body.nama || null,
-      usia: body.usia || null,
-      kota: body.kota || null,
-      pengguna_aktif: body.pengguna_aktif ?? false,
-      hal_disukai: body.hal_disukai || null,
-      hal_membingungkan: body.hal_membingungkan || null,
-      fitur_diinginkan: body.fitur_diinginkan || null,
-      fitur_tidak_penting: body.fitur_tidak_penting || null,
-      rating: body.rating || null,
+      nama: clipStr(body.nama, 80),
+      usia: intInRange(body.usia, 1, 120),
+      kota: clipStr(body.kota, 80),
+      pengguna_aktif: toBool(body.pengguna_aktif),
+      hal_disukai: clipStr(body.hal_disukai, 2000),
+      hal_membingungkan: clipStr(body.hal_membingungkan, 2000),
+      fitur_diinginkan: clipStr(body.fitur_diinginkan, 2000),
+      fitur_tidak_penting: clipStr(body.fitur_tidak_penting, 2000),
+      rating: intInRange(body.rating, 1, 5),
     });
 
     if (error) {
-      console.error("Supabase error:", error);
+      console.error("Supabase error:", error.message);
       return NextResponse.json({ error: "Gagal menyimpan feedback" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error(err);
+    console.error("feedback route error:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
 
-export async function GET() {
-  const { data, error } = await supabase
-    .from("feedback")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
-}
+// CATATAN KEAMANAN: endpoint GET dihapus. Sebelumnya GET mengembalikan SELURUH
+// feedback (nama/usia/kota/komentar) ke siapa pun tanpa autentikasi — kebocoran
+// data. Untuk melihat feedback, baca lewat Supabase dashboard (akun pemilik).
