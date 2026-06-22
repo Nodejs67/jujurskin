@@ -10,37 +10,33 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/components/auth-provider";
 import { saveAnalysis } from "@/lib/supabase/account";
 import type { AnalysisResult } from "@/lib/recommendations";
-import { PRODUCTS, type ProductCategory } from "@/lib/products";
+import { matchProducts, type ProductMatchResult, type RecTierLabel } from "@/lib/product-matcher";
 import { ClimateWidget } from "@/components/climate-widget";
 
-const CATEGORY_MAP: Record<string, ProductCategory> = {
-  "Sun Protection": "sunscreen",
-  "Cleansing": "cleanser",
-  "Moisturizing": "moisturizer",
-  "Acne Treatment": "treatment_jerawat",
-  "Brightening & Repair": "serum_niacinamide",
-  "Brightening": "serum_vitamin_c",
-  "Anti-Aging": "serum_retinol",
-  // product name fallbacks
-  "Sunscreen": "sunscreen",
-  "Cleanser": "cleanser",
-  "Moisturizer": "moisturizer",
-  "Niacinamide": "serum_niacinamide",
-  "Vitamin C": "serum_vitamin_c",
-  "Retinol": "serum_retinol",
-  "AHA/BHA": "serum_aha_bha",
-};
-
-function getProductSuggestions(category: string, budget: number) {
-  const productCategory = CATEGORY_MAP[category];
-  if (!productCategory) return [];
-  return PRODUCTS.filter(
-    (p) =>
-      p.category === productCategory &&
-      p.bpom_registered && // hanya rekomendasikan produk yang sudah terdaftar BPOM
-      (budget === 0 || p.price_min <= budget)
-  ).slice(0, 2);
+// Pencocokan produk 3-tier (Pilihan Jujur / Premium / Luxury) dari database
+// asli via lib/product-matcher.ts — menggantikan filter naif lama.
+function getTierMatches(
+  recCategory: string,
+  recProductName: string,
+  data: Analysis,
+  isPregnant: boolean
+): ProductMatchResult {
+  return matchProducts({
+    recCategory,
+    recProductName,
+    skinType: data.tipe_kulit || undefined,
+    concerns: data.masalah,
+    budget: data.budget,
+    pregnancySafe: isPregnant,
+  });
 }
+
+// Gaya per tier untuk kartu rekomendasi produk.
+const TIER_STYLE: Record<RecTierLabel, { ring: string; badge: string; dot: string }> = {
+  jujur: { ring: "border-green-400/50 bg-green-50/40", badge: "bg-green-100 text-green-700 border-green-300", dot: "🟢" },
+  premium: { ring: "border-blue-400/40 bg-blue-50/30", badge: "bg-blue-100 text-blue-700 border-blue-300", dot: "🔵" },
+  luxury: { ring: "border-purple-400/40 bg-purple-50/30", badge: "bg-purple-100 text-purple-700 border-purple-300", dot: "🟣" },
+};
 
 type Analysis = {
   id: string;
@@ -158,6 +154,8 @@ function HasilContent() {
 
   const h = data.hasil;
   const nama = data.nama || "Kamu";
+  // Pengguna hamil/menyusui terdeteksi bila mesin menyertakan peringatan kehamilan.
+  const isPregnant = (h.pregnancy_warnings?.length ?? 0) > 0;
   const shownRecs =
     tierView === "basic"
       ? h.recs.slice(0, Math.min(3, h.recs.length))
@@ -346,7 +344,8 @@ function HasilContent() {
           </p>
           <div className="space-y-3">
             {shownRecs.map((rec, i) => {
-              const productSuggs = getProductSuggestions(rec.category || rec.product, data.budget);
+              const match = getTierMatches(rec.category || rec.product, rec.product, data, isPregnant);
+              const tiers = match.tiers;
               const isOpen = expandedRec === i;
               return (
                 <div key={i} className="rounded-xl border border-primary/15 bg-primary/5 p-4">
@@ -364,7 +363,8 @@ function HasilContent() {
                   <p className="text-xs text-muted-foreground mb-2 leading-relaxed">{rec.reason}</p>
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     <Badge variant="outline" className="text-xs border-primary/20 text-primary">{rec.frequency}</Badge>
-                    {rec.examples.map((ex, j) => (
+                    {/* Daftar contoh teks hanya dipakai bila DB belum punya produk cocok */}
+                    {tiers.length === 0 && rec.examples.map((ex, j) => (
                       <Badge key={j} variant="outline" className="text-xs border-border text-muted-foreground">{ex}</Badge>
                     ))}
                   </div>
@@ -375,7 +375,7 @@ function HasilContent() {
                       className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors"
                     >
                       <ShoppingBag className="w-3 h-3" />
-                      {isOpen ? "Sembunyikan produk" : `Lihat produk${productSuggs.length > 0 ? ` (${productSuggs.length})` : ""} →`}
+                      {isOpen ? "Sembunyikan produk" : `Lihat ${tiers.length > 0 ? `${tiers.length} pilihan` : "produk"} →`}
                     </button>
                     <span className="text-muted-foreground/30">·</span>
                     <a
@@ -397,39 +397,61 @@ function HasilContent() {
                       transition={{ duration: 0.25, ease: "easeOut" as const }}
                       className="mt-3 space-y-2"
                     >
-                      {productSuggs.length > 0 ? (
+                      {tiers.length > 0 ? (
                         <>
-                          {productSuggs.map((prod) => (
-                            <a key={prod.id} href={`/produk/${prod.id}`} target="_blank" rel="noopener noreferrer"
-                              className="flex items-start justify-between gap-3 p-3 rounded-lg bg-background/60 border border-border/50 hover:border-primary/40 transition-colors">
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-1.5 mb-0.5">
-                                  <p className="text-xs font-semibold text-foreground truncate">{prod.name}</p>
-                                  {prod.bpom_registered && (
-                                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-green-400/40 text-green-700 shrink-0">BPOM</Badge>
-                                  )}
+                          <p className="text-[11px] text-muted-foreground leading-relaxed mb-1">
+                            Pilih sesuai kebutuhanmu — kandungan aktifnya setara. Yang lebih mahal kamu bayar untuk pengalaman, bukan hasil yang lebih baik.
+                          </p>
+                          {tiers.map((t) => {
+                            const style = TIER_STYLE[t.tier];
+                            const prod = t.product;
+                            return (
+                              <a key={prod.id} href={`/produk/${prod.id}`} target="_blank" rel="noopener noreferrer"
+                                className={`block p-3 rounded-lg border ${style.ring} hover:brightness-[0.98] transition-all`}>
+                                <div className="flex items-start justify-between gap-3 mb-1">
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                                      <Badge variant="outline" className={`text-[10px] px-1.5 py-0 font-semibold ${style.badge}`}>
+                                        {style.dot} {t.tier_label}
+                                      </Badge>
+                                      {t.tier === "jujur" && (
+                                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 font-semibold bg-primary/10 text-primary border-primary/30">✓ Rekomendasi kami</Badge>
+                                      )}
+                                      {prod.bpom_registered && (
+                                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-green-400/40 text-green-700 shrink-0">BPOM</Badge>
+                                      )}
+                                      {t.over_budget && (
+                                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-amber-400/50 text-amber-700 shrink-0">Di atas budget</Badge>
+                                      )}
+                                      <span className="text-[10px] text-muted-foreground">Aman {t.safety_score}/100</span>
+                                    </div>
+                                    <p className="text-xs font-semibold text-foreground">{prod.name}</p>
+                                    <p className="text-[11px] text-muted-foreground">{prod.brand}</p>
+                                  </div>
+                                  <div className="text-right shrink-0">
+                                    <p className="text-xs font-bold text-accent">Rp {prod.price_min.toLocaleString("id")}</p>
+                                    <p className="text-[10px] text-muted-foreground">– {prod.price_max.toLocaleString("id")}</p>
+                                  </div>
                                 </div>
-                                <p className="text-[11px] text-muted-foreground">{prod.brand}</p>
-                                <p className="text-[11px] text-muted-foreground line-clamp-1 mt-0.5">{prod.tagline}</p>
-                              </div>
-                              <div className="text-right shrink-0">
-                                <p className="text-xs font-bold text-accent">Rp {prod.price_min.toLocaleString("id")}</p>
-                                <p className="text-[10px] text-muted-foreground">– {prod.price_max.toLocaleString("id")}</p>
-                              </div>
-                            </a>
-                          ))}
+                                <p className="text-[11px] text-foreground/70 leading-relaxed mt-1.5">{t.honest_note}</p>
+                              </a>
+                            );
+                          })}
                           <a
                             href="/produk"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors py-1"
                           >
-                            Lihat semua produk →
+                            Lihat semua {match.total_matched} produk yang cocok →
                           </a>
                         </>
                       ) : (
-                        <div className="p-3 rounded-lg bg-background/60 border border-border/50 text-center">
-                          <p className="text-xs text-muted-foreground">Belum ada produk spesifik di database untuk kategori ini.</p>
+                        <div className="p-3 rounded-lg bg-background/60 border border-border/50">
+                          <p className="text-xs text-muted-foreground">
+                            Belum ada produk yang cocok di database kami untuk langkah ini
+                            {rec.examples.length > 0 ? `. Contoh yang bisa kamu cari: ${rec.examples.join(", ")}.` : "."}
+                          </p>
                           <a href="/produk" target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1 inline-block">
                             Cari di halaman produk →
                           </a>
