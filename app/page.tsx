@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { PRODUCTS as DB_PRODUCTS, type Product } from "@/lib/products";
+import { useAuth } from "@/components/auth-provider";
 import {
   Search, Menu, X, ArrowRight, Check, ChevronRight, ChevronLeft,
   Shield, FlaskConical, Ban, Sparkles, Heart, Star, Upload,
@@ -128,8 +129,16 @@ function ScoreRing({ value, size = 64, stroke = 6, color = PINK }: { value: numb
 
 export default function Home() {
   const router = useRouter();
+  const { user, signOut } = useAuth();
   const [menu, setMenu] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+
+  // Data tampilan akun (dari Google / email)
+  const meta = (user?.user_metadata ?? {}) as { full_name?: string; name?: string; avatar_url?: string; picture?: string };
+  const displayName = meta.full_name || meta.name || user?.email?.split("@")[0] || "Akun";
+  const firstName = displayName.split(" ")[0];
+  const avatarUrl = meta.avatar_url || meta.picture || "";
+  const initial = firstName.charAt(0).toUpperCase();
 
   // Produk yang tampil di homepage diacak tiap halaman dibuka.
   // Inisialisasi stabil (slice) agar cocok saat SSR→hydrate, lalu diacak di client.
@@ -172,7 +181,19 @@ export default function Home() {
             <button aria-label="Cari" className="hidden sm:grid place-items-center w-9 h-9 rounded-full hover:bg-slate-100 text-slate-600 transition-colors">
               <Search className="w-4.5 h-4.5" />
             </button>
-            <Link href="/masuk" className="hidden sm:inline-flex items-center px-4 h-9 rounded-full border border-slate-200 text-sm font-semibold text-slate-700 hover:border-slate-300 transition-colors">Masuk</Link>
+            {user ? (
+              <Link href="/akun" className="hidden sm:inline-flex items-center gap-2 pl-1 pr-3 h-9 rounded-full border border-slate-200 hover:border-slate-300 transition-colors" title="Akun saya">
+                {avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" referrerPolicy="no-referrer" />
+                ) : (
+                  <span className="w-7 h-7 rounded-full grid place-items-center text-white text-xs font-bold" style={{ backgroundColor: PINK }}>{initial}</span>
+                )}
+                <span className="text-sm font-semibold text-slate-700 max-w-[110px] truncate">{firstName}</span>
+              </Link>
+            ) : (
+              <Link href="/masuk" className="hidden sm:inline-flex items-center px-4 h-9 rounded-full border border-slate-200 text-sm font-semibold text-slate-700 hover:border-slate-300 transition-colors">Masuk</Link>
+            )}
             <button onClick={() => router.push("/analisis")} className="inline-flex items-center px-4 sm:px-5 h-9 rounded-full text-sm font-semibold text-white shadow-sm transition-transform hover:scale-105" style={{ backgroundColor: PINK }}>Mulai Gratis</button>
             <button aria-label="Menu" onClick={() => setMenu(!menu)} className="lg:hidden grid place-items-center w-9 h-9 rounded-full hover:bg-slate-100 text-slate-700">
               {menu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -182,6 +203,26 @@ export default function Home() {
 
         {menu && (
           <div className="lg:hidden border-t border-slate-100 bg-white max-h-[70vh] overflow-y-auto">
+            {/* Akun / Masuk */}
+            <div className="px-4 pt-3">
+              {user ? (
+                <div className="flex items-center gap-3 rounded-xl border border-slate-100 bg-rose-50/40 p-3">
+                  {avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={avatarUrl} alt="" className="w-9 h-9 rounded-full object-cover" referrerPolicy="no-referrer" />
+                  ) : (
+                    <span className="w-9 h-9 rounded-full grid place-items-center text-white text-sm font-bold" style={{ backgroundColor: PINK }}>{initial}</span>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-slate-900 truncate">{displayName}</p>
+                    <Link href="/akun" onClick={() => setMenu(false)} className="text-xs font-semibold" style={{ color: PINK }}>Lihat akun saya</Link>
+                  </div>
+                  <button onClick={() => { signOut(); setMenu(false); }} className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 py-1">Keluar</button>
+                </div>
+              ) : (
+                <Link href="/masuk" onClick={() => setMenu(false)} className="flex items-center justify-center h-11 rounded-xl text-white font-semibold" style={{ backgroundColor: PINK }}>Masuk / Daftar</Link>
+              )}
+            </div>
             <div className="px-4 py-3 grid grid-cols-2 gap-1">
               {[...NAV, ...MORE].map((l) => (
                 <Link key={l.href} href={l.href} onClick={() => setMenu(false)} className="px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-rose-50">{l.label}</Link>
