@@ -20,22 +20,46 @@ function CallbackInner() {
       setError("Login Google dibatalkan atau gagal. Coba lagi, ya.");
       return;
     }
-    if (!code) {
-      router.replace(next);
-      return;
-    }
 
     const supabase = createClient();
-    supabase.auth
-      .exchangeCodeForSession(code)
-      .then(({ error }) => {
-        if (error) {
-          setError("Gagal menyelesaikan login. Coba lagi dari halaman masuk.");
-        } else {
-          router.replace(next);
-        }
-      })
-      .catch(() => setError("Gagal menyelesaikan login. Coba lagi dari halaman masuk."));
+    let done = false;
+    const finish = (ok: boolean) => {
+      if (done) return;
+      done = true;
+      if (ok) router.replace(next);
+      else setError("Gagal menyelesaikan login. Coba lagi dari halaman masuk.");
+    };
+
+    // AuthProvider global juga mendeteksi sesi dari URL — pantau perubahannya.
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      if (session) finish(true);
+    });
+
+    (async () => {
+      // 1) Mungkin sesi sudah terbentuk (auto-detect / exchange oleh AuthProvider).
+      const { data: s0 } = await supabase.auth.getSession();
+      if (s0.session) return finish(true);
+
+      // 2) Coba tukar kode sendiri (kalau belum dipakai).
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (!error) return finish(true);
+        // Kode mungkin sudah dipakai instance lain → cek ulang sesi.
+        const { data: s1 } = await supabase.auth.getSession();
+        if (s1.session) return finish(true);
+      } else {
+        // Tanpa kode: kalau memang sudah ada sesi, lanjut; kalau tidak, ke 'next'.
+        return finish(true);
+      }
+
+      // 3) Beri waktu listener menyelesaikan, lalu cek terakhir kali.
+      setTimeout(async () => {
+        const { data: s2 } = await supabase.auth.getSession();
+        finish(!!s2.session);
+      }, 3000);
+    })();
+
+    return () => sub.subscription.unsubscribe();
   }, [sp, router]);
 
   if (error) {
