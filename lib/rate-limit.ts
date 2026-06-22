@@ -25,11 +25,20 @@ function sweep(now: number) {
   }
 }
 
-/** Ambil IP klien dari header proxy (Vercel mengisi x-forwarded-for). */
+/**
+ * Ambil IP klien. Dahulukan x-real-ip yang di-set oleh Vercel (lebih sulit
+ * dipalsukan daripada x-forwarded-for yang bagian kirinya bisa di-spoof klien).
+ */
 export function clientIp(req: NextRequest): string {
+  const real = req.headers.get("x-real-ip");
+  if (real) return real.trim();
   const xff = req.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
-  return req.headers.get("x-real-ip") || "unknown";
+  if (xff) {
+    const parts = xff.split(",").map((s) => s.trim()).filter(Boolean);
+    // Ambil entri TERAKHIR (paling dekat proxy tepercaya), bukan yang kiri (spoofable).
+    if (parts.length) return parts[parts.length - 1];
+  }
+  return "unknown";
 }
 
 export interface RateLimitOptions {

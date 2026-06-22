@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Sparkles, Mail, Lock, User as UserIcon, ArrowLeft, CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/components/auth-provider";
+import { safeNextPath } from "@/lib/safe-redirect";
 
 type Mode = "masuk" | "daftar";
 
@@ -84,7 +85,8 @@ function MasukInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, loading: authLoading } = useAuth();
-  const redirectTo = searchParams.get("next") || "/akun";
+  // Validasi anti open-redirect: hanya path internal yang diizinkan.
+  const redirectTo = safeNextPath(searchParams.get("next"));
 
   const [mode, setMode] = useState<Mode>("masuk");
   const [nama, setNama] = useState("");

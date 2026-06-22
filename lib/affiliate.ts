@@ -12,9 +12,11 @@ import type { Product } from "@/lib/products";
 export const AFFILIATE_DISCLOSURE =
   "Kami dapat komisi kecil dari Shopee kalau kamu beli lewat sini — TANPA nambah harga buatmu. Ini yang bikin JujurSkin tetap gratis & jujur.";
 
-/** Apakah produk punya link affiliate Shopee yang sudah diisi. */
+/** Apakah produk punya link affiliate Shopee yang VALID (https). */
 export function hasShopeeAffiliate(product: Product): boolean {
-  return typeof product.affiliate_url === "string" && product.affiliate_url.trim().length > 0;
+  const u = product.affiliate_url?.trim();
+  // Hanya terima URL https absolut (cegah skema berbahaya spt javascript:).
+  return !!u && /^https:\/\//i.test(u);
 }
 
 /**

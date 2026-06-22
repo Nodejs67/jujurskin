@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/lib/supabase";
 import type { AnalysisResult, RoutineStep } from "@/lib/recommendations";
 import { ReminderSetup } from "@/components/reminder-setup";
 
@@ -92,14 +91,19 @@ function RutinitasContent() {
   useEffect(() => {
     async function loadData() {
       const id = searchParams.get("id");
-      if (id && supabase) {
+      if (id) {
+        // Baca lewat server route (service role) — tabel skin_analyses dikunci
+        // RLS, tidak bisa dibaca/di-scrape langsung oleh anon.
         try {
-          const { data } = await supabase.from("skin_analyses").select("hasil, nama").eq("id", id).single();
-          if (data?.hasil) {
-            setHasil(data.hasil as AnalysisResult);
-            setNamaUser(data.nama ?? "");
-            setLoading(false);
-            return;
+          const res = await fetch(`/api/analisis?id=${encodeURIComponent(id)}`);
+          if (res.ok) {
+            const { row } = await res.json();
+            if (row?.hasil) {
+              setHasil(row.hasil as AnalysisResult);
+              setNamaUser(row.nama ?? "");
+              setLoading(false);
+              return;
+            }
           }
         } catch { /* fallback */ }
       }

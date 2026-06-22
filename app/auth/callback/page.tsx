@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Loader2, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { safeNextPath } from "@/lib/safe-redirect";
 
 function CallbackInner() {
   const router = useRouter();
@@ -12,7 +13,7 @@ function CallbackInner() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const next = sp.get("next") || "/akun";
+    const next = safeNextPath(sp.get("next"));
     const code = sp.get("code");
     const oauthError = sp.get("error_description") || sp.get("error");
 

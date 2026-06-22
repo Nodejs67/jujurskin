@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabase";
 import { enforceRateLimit } from "@/lib/rate-limit";
 import { clipStr, intInRange, readJsonLimited } from "@/lib/validate";
 
@@ -19,14 +18,23 @@ function getServiceSupabase() {
 }
 
 export async function GET(request: NextRequest) {
+  // Rate limit baca: cegah scraping massal (enumerasi product_id).
+  const limited = enforceRateLimit(request, { bucket: "reviews-get", limit: 40, windowMs: 60_000 });
+  if (limited) return limited;
+
   const product_id = clipStr(request.nextUrl.searchParams.get("product_id"), 120);
   if (!product_id) {
     return NextResponse.json({ error: "product_id required" }, { status: 400 });
   }
 
-  const { data, error } = await supabase
+  // Pakai service role + filter per-produk. Tabel product_reviews dikunci RLS
+  // (anon tak bisa SELECT langsung) sehingga tak bisa di-dump massal via anon key.
+  const service = getServiceSupabase();
+  if (!service) return NextResponse.json({ reviews: [] });
+
+  const { data, error } = await service
     .from("product_reviews")
-    .select("*")
+    .select("id, product_id, rating, komentar, nama, skin_type, created_at")
     .eq("product_id", product_id)
     .order("created_at", { ascending: false })
     .limit(200);
