@@ -18,7 +18,7 @@ function getSupabase() {
 
 export async function POST(req: NextRequest) {
   // Rate limit: maksimal 5 feedback / menit / IP.
-  const limited = enforceRateLimit(req, { bucket: "feedback", limit: 5, windowMs: 60_000 });
+  const limited = await enforceRateLimit(req, { bucket: "feedback", limit: 5, windowMs: 60_000 });
   if (limited) return limited;
 
   try {

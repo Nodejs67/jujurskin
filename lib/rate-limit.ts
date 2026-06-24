@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Rate limiter ringan (tanpa dependency) untuk melindungi API route dari spam,
- * penyalahgunaan, dan biaya tak terduga (terutama endpoint yang memanggil AI
- * berbayar). Berbasis sliding-window per-IP di memori instance.
+ * Rate limiter untuk melindungi API route dari spam, penyalahgunaan, dan biaya
+ * tak terduga (terutama endpoint yang memanggil AI berbayar).
  *
- * ⚠️ CATATAN SERVERLESS: di Vercel, state memori tidak dibagikan antar instance
- * dan bisa hilang saat cold start — jadi ini adalah LAPISAN PERTAMA, bukan
- * proteksi sempurna. Untuk proteksi tingkat produksi yang persisten, upgrade ke
- * Upstash Redis (@upstash/ratelimit) atau aktifkan Vercel Firewall/Attack
- * Challenge. Desain ini sengaja sederhana supaya gampang ditingkatkan nanti.
+ * DUA LAPIS:
+ *  1. Upstash Redis (persisten antar-instance serverless) bila env diisi:
+ *       UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN
+ *     Dipanggil lewat REST API memakai fetch — TANPA dependency tambahan.
+ *  2. In-memory per-instance (fallback) bila Upstash tidak dikonfigurasi ATAU
+ *     sedang gagal/down — supaya proteksi tetap ada dan layanan tidak ikut mati.
+ *
+ * Tanpa env Upstash, perilaku PERSIS sama seperti sebelumnya (in-memory).
  */
 
 type Hit = { count: number; resetAt: number };
@@ -56,8 +58,8 @@ export interface RateLimitResult {
   resetAt: number;
 }
 
-/** Cek & catat satu permintaan. Mengembalikan ok=false bila melewati limit. */
-export function rateLimit(req: NextRequest, opts: RateLimitOptions): RateLimitResult {
+/** Implementasi in-memory (lapisan fallback / default). */
+function rateLimitMemory(req: NextRequest, opts: RateLimitOptions): RateLimitResult {
   const now = Date.now();
   sweep(now);
   const key = `${opts.bucket}:${clientIp(req)}`;
@@ -73,17 +75,68 @@ export function rateLimit(req: NextRequest, opts: RateLimitOptions): RateLimitRe
   return { ok, remaining: Math.max(0, opts.limit - cur.count), resetAt: cur.resetAt };
 }
 
+const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL?.trim();
+const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
+
+/** Apakah rate-limit persisten via Upstash aktif. */
+export function upstashEnabled(): boolean {
+  return !!UPSTASH_URL && !!UPSTASH_TOKEN;
+}
+
+/**
+ * Fixed-window counter di Upstash Redis lewat REST pipeline:
+ *   INCR key            → naikkan & ambil hitungan saat ini
+ *   PEXPIRE key ttl NX  → set kedaluwarsa HANYA saat key baru (awal jendela)
+ *   PTTL key            → sisa waktu jendela (untuk Retry-After akurat)
+ * Bila gagal (jaringan/Upstash down) → fallback ke in-memory.
+ */
+async function rateLimitUpstash(req: NextRequest, opts: RateLimitOptions): Promise<RateLimitResult> {
+  const now = Date.now();
+  const key = `rl:${opts.bucket}:${clientIp(req)}`;
+  try {
+    const res = await fetch(`${UPSTASH_URL}/pipeline`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${UPSTASH_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([
+        ["INCR", key],
+        ["PEXPIRE", key, opts.windowMs, "NX"],
+        ["PTTL", key],
+      ]),
+      cache: "no-store",
+      signal: AbortSignal.timeout(1500),
+    });
+    if (!res.ok) throw new Error(`upstash ${res.status}`);
+    const data = (await res.json()) as Array<{ result?: number; error?: string }>;
+    const count = Number(data?.[0]?.result);
+    if (!Number.isFinite(count) || count < 1) throw new Error("upstash bad payload");
+    const ttl = Number(data?.[2]?.result);
+    const resetAt = now + (Number.isFinite(ttl) && ttl > 0 ? ttl : opts.windowMs);
+    return { ok: count <= opts.limit, remaining: Math.max(0, opts.limit - count), resetAt };
+  } catch {
+    // Jangan jatuhkan layanan kalau Upstash bermasalah — tetap batasi via memori.
+    return rateLimitMemory(req, opts);
+  }
+}
+
+/** Cek & catat satu permintaan. ok=false bila melewati limit. */
+export async function rateLimit(req: NextRequest, opts: RateLimitOptions): Promise<RateLimitResult> {
+  return upstashEnabled() ? rateLimitUpstash(req, opts) : rateLimitMemory(req, opts);
+}
+
 /**
  * Helper: kembalikan response 429 standar bila limit terlampaui, atau null bila
  * masih boleh lanjut. Pemakaian di route:
- *   const limited = enforceRateLimit(req, { bucket: "feedback", limit: 5, windowMs: 60_000 });
+ *   const limited = await enforceRateLimit(req, { bucket: "feedback", limit: 5, windowMs: 60_000 });
  *   if (limited) return limited;
  */
-export function enforceRateLimit(
+export async function enforceRateLimit(
   req: NextRequest,
   opts: RateLimitOptions
-): NextResponse | null {
-  const res = rateLimit(req, opts);
+): Promise<NextResponse | null> {
+  const res = await rateLimit(req, opts);
   if (res.ok) return null;
   const retryAfter = Math.ceil((res.resetAt - Date.now()) / 1000);
   return NextResponse.json(

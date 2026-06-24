@@ -17,7 +17,7 @@ function getSupabase() {
 
 export async function POST(req: NextRequest) {
   // Rate limit: maksimal 10 analisa / menit / IP.
-  const limited = enforceRateLimit(req, { bucket: "analisis", limit: 10, windowMs: 60_000 });
+  const limited = await enforceRateLimit(req, { bucket: "analisis", limit: 10, windowMs: 60_000 });
   if (limited) return limited;
 
   try {
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
 // Hanya mengembalikan baris yang id-nya tepat diminta — tidak bisa di-enumerate
 // massal seperti SELECT * langsung ke tabel.
 export async function GET(req: NextRequest) {
-  const limited = enforceRateLimit(req, { bucket: "analisis-get", limit: 30, windowMs: 60_000 });
+  const limited = await enforceRateLimit(req, { bucket: "analisis-get", limit: 30, windowMs: 60_000 });
   if (limited) return limited;
 
   const id = clipStr(req.nextUrl.searchParams.get("id"), 64);

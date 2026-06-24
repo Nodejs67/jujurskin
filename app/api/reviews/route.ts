@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { enforceRateLimit } from "@/lib/rate-limit";
 import { clipStr, intInRange, readJsonLimited } from "@/lib/validate";
+import { PRODUCTS } from "@/lib/products";
+
+// Set id produk yang sah — POST review hanya boleh untuk produk yang BENAR ada,
+// supaya DB tidak bisa dipoles ulasan palsu untuk id sembarang/ngarang.
+const VALID_PRODUCT_IDS = new Set(PRODUCTS.map((p) => p.id));
 
 // Service-role HANYA untuk menulis review (server-side). RLS product_reviews:
 // anon boleh SELECT (review publik) tapi TIDAK boleh INSERT langsung — semua
@@ -19,7 +24,7 @@ function getServiceSupabase() {
 
 export async function GET(request: NextRequest) {
   // Rate limit baca: cegah scraping massal (enumerasi product_id).
-  const limited = enforceRateLimit(request, { bucket: "reviews-get", limit: 40, windowMs: 60_000 });
+  const limited = await enforceRateLimit(request, { bucket: "reviews-get", limit: 40, windowMs: 60_000 });
   if (limited) return limited;
 
   const product_id = clipStr(request.nextUrl.searchParams.get("product_id"), 120);
@@ -48,7 +53,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   // Rate limit: maksimal 4 review / menit / IP (cegah spam ulasan).
-  const limited = enforceRateLimit(request, { bucket: "reviews", limit: 4, windowMs: 60_000 });
+  const limited = await enforceRateLimit(request, { bucket: "reviews", limit: 4, windowMs: 60_000 });
   if (limited) return limited;
 
   let body: Record<string, unknown>;
@@ -62,6 +67,9 @@ export async function POST(request: NextRequest) {
   const rating = intInRange(body.rating, 1, 5);
   if (!product_id || rating === null) {
     return NextResponse.json({ error: "product_id valid & rating 1–5 wajib" }, { status: 400 });
+  }
+  if (!VALID_PRODUCT_IDS.has(product_id)) {
+    return NextResponse.json({ error: "Produk tidak dikenali" }, { status: 400 });
   }
 
   const service = getServiceSupabase();

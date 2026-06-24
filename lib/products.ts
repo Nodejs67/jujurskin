@@ -49,6 +49,13 @@ export interface Product {
    * JANGAN biarkan komisi memengaruhi urutan rekomendasi (lihat lib/product-matcher.ts).
    */
   affiliate_url?: string;
+  /**
+   * URL halaman produk Shopee (opsional, mis. "https://shopee.co.id/...").
+   * Dipakai sebagai TUJUAN saat membungkus link affiliate Involve Asia secara
+   * otomatis (lib/affiliate.ts). Kalau kosong, otomasi membungkus link PENCARIAN
+   * Shopee (tetap dapat komisi, tapi konversi lebih rendah). Diisi bertahap.
+   */
+  shopee_url?: string;
   spf?: number;
   bpom_registered: boolean;
 

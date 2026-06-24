@@ -362,7 +362,7 @@ export default function ProdukDetailPage({
           <h2 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary" /> Cari & Bandingkan Harga
           </h2>
-          <div className="grid grid-cols-2 gap-2 mb-3">
+          <div className={`grid ${hasShopeeAffiliate(product) ? "grid-cols-1" : "grid-cols-2"} gap-2 mb-3`}>
             <a
               href={shopeeUrl(product)}
               target="_blank"
@@ -371,14 +371,19 @@ export default function ProdukDetailPage({
             >
               {shopeeButtonLabel(product)} <ExternalLink className="w-3.5 h-3.5" />
             </a>
-            <a
-              href={`https://www.tokopedia.com/search?st=product&q=${encodeURIComponent(`${product.brand} ${product.name}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-green-400/30 bg-green-400/10 text-sm font-medium text-green-700 hover:bg-green-400/20 transition-colors"
-            >
-              Cari di Tokopedia <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+            {/* Pasal 7.2(e) T&C Shopee Affiliate: konten yang memuat link affiliate
+                Shopee tidak boleh menautkan ke e-commerce lain. Tokopedia hanya
+                disembunyikan untuk produk yang SUDAH punya link affiliate Shopee. */}
+            {!hasShopeeAffiliate(product) && (
+              <a
+                href={`https://www.tokopedia.com/search?st=product&q=${encodeURIComponent(`${product.brand} ${product.name}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-green-400/30 bg-green-400/10 text-sm font-medium text-green-700 hover:bg-green-400/20 transition-colors"
+              >
+                Cari di Tokopedia <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            )}
           </div>
           {hasShopeeAffiliate(product) && (
             <p className="text-[11px] text-muted-foreground leading-relaxed mb-2 italic">

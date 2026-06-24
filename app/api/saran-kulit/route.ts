@@ -20,7 +20,7 @@ type Body = {
 export async function POST(req: NextRequest) {
   // Rate limit KETAT: endpoint ini memanggil AI BERBAYAR. Maksimal 6 / menit / IP
   // supaya tidak bisa dispam untuk membengkakkan tagihan.
-  const limited = enforceRateLimit(req, { bucket: "saran-kulit", limit: 6, windowMs: 60_000 });
+  const limited = await enforceRateLimit(req, { bucket: "saran-kulit", limit: 6, windowMs: 60_000 });
   if (limited) return limited;
 
   try {

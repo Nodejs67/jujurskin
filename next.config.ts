@@ -35,6 +35,12 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(), payment=()" },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-DNS-Prefetch-Control", value: "on" },
+  // Isolasi konteks jendela (anti XS-Leaks/cross-window). "allow-popups" supaya
+  // tombol share (WA/IG/TikTok via window.open) & redirect OAuth Google tetap jalan.
+  // CATATAN: TIDAK memakai COEP/CORP — keduanya akan memblok OG-image share lintas
+  // origin (crawler WhatsApp dll) & MediaPipe WASM (jsdelivr/googleapis) di fitur kamera.
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
+  { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
 ];
 
 const nextConfig: NextConfig = {
