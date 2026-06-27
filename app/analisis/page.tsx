@@ -518,11 +518,16 @@ export default function AnalisisPage() {
               <motion.div key="step4" variants={slide} initial="hidden" animate="show" exit="exit" className="space-y-6">
                 <StepLabel step={4} label="Analisis Foto (opsional)" />
                 <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-400/15 border border-amber-400/30 px-2.5 py-1 rounded-full">
+                      ⏭️ Langkah ini opsional — boleh dilewati
+                    </span>
+                  </div>
                   <h1 className="text-2xl font-bold text-foreground mb-1">Mau hasil lebih akurat? 📸</h1>
                   <p className="text-sm text-muted-foreground">
                     Scan wajahmu sebentar — kami ukur kemerahan, minyak, kerataan & warna kulit, lalu pakai untuk
-                    menajamkan rekomendasi. <strong className="text-foreground">Opsional</strong> — boleh dilewati,
-                    tekan <em>Lanjut</em> kalau mau skip.
+                    menajamkan rekomendasi. <strong className="text-foreground">Tidak wajib.</strong> Kalau tidak mau,
+                    tinggal tekan tombol <em>&ldquo;Lewati langkah ini&rdquo;</em> di bawah.
                   </p>
                 </div>
 
@@ -535,7 +540,19 @@ export default function AnalisisPage() {
                 </div>
 
                 {!fotoResult ? (
-                  <SkinPhotoCapture onResult={(res) => setFotoResult(res)} />
+                  <>
+                    <SkinPhotoCapture onResult={(res) => setFotoResult(res)} />
+                    {/* Tombol lewati eksplisit — biar di HP jelas langkah ini boleh dilompati tanpa scan */}
+                    <button
+                      type="button"
+                      onClick={goNext}
+                      className="w-full mt-1 py-3 rounded-xl border border-dashed border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors flex items-center justify-center gap-2"
+                    >
+                      Lewati langkah ini — tanpa scan
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    <p className="text-center text-xs text-muted-foreground">Rekomendasi tetap akurat dari jawaban sebelumnya.</p>
+                  </>
                 ) : (
                   <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 space-y-3">
                     <div className="flex items-center gap-2">
