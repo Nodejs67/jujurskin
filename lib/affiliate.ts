@@ -92,9 +92,11 @@ function directShopeeUrl(product: Product): string | null {
  * diketahui, kalau tidak halaman PENCARIAN brand + nama.
  */
 function shopeeDestination(product: Product): string {
+  // Fallback pencarian diurut "Terlaris" (sortBy=sales) → listing paling laku &
+  // paling banyak diulas muncul dulu = pilihan lebih terpercaya untuk pembeli.
   return (
     directShopeeUrl(product) ??
-    `https://shopee.co.id/search?keyword=${encodeURIComponent(`${product.brand} ${product.name}`)}`
+    `https://shopee.co.id/search?keyword=${encodeURIComponent(`${product.brand} ${product.name}`)}&sortBy=sales`
   );
 }
 
