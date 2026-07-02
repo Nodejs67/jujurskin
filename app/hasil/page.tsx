@@ -10,6 +10,7 @@ import { useAuth } from "@/components/auth-provider";
 import { saveAnalysis } from "@/lib/supabase/account";
 import type { AnalysisResult } from "@/lib/recommendations";
 import { matchProducts, type ProductMatchResult, type RecTierLabel } from "@/lib/product-matcher";
+import { shopeeUrl, shopeeButtonLabel, hasShopeeAffiliate, AFFILIATE_DISCLOSURE } from "@/lib/affiliate";
 import { ClimateWidget } from "@/components/climate-widget";
 
 // Pencocokan produk 3-tier (Pilihan Jujur / Premium / Luxury) dari database
@@ -453,12 +454,17 @@ function HasilContent() {
                           <p className="text-[11px] text-muted-foreground leading-relaxed mb-1">
                             Pilih sesuai kebutuhanmu — kandungan aktifnya setara. Yang lebih mahal kamu bayar untuk pengalaman, bukan hasil yang lebih baik.
                           </p>
+                          {tiers.some((t) => hasShopeeAffiliate(t.product)) && (
+                            <p className="text-[10px] text-muted-foreground/80 leading-relaxed mb-1.5 italic">
+                              {AFFILIATE_DISCLOSURE}
+                            </p>
+                          )}
                           {tiers.map((t) => {
                             const style = TIER_STYLE[t.tier];
                             const prod = t.product;
                             return (
-                              <a key={prod.id} href={`/produk/${prod.id}`} target="_blank" rel="noopener noreferrer"
-                                className={`block p-3 rounded-lg border ${style.ring} hover:brightness-[0.98] transition-all`}>
+                              <div key={prod.id}
+                                className={`block p-3 rounded-lg border ${style.ring} transition-all`}>
                                 <div className="flex items-start gap-3 mb-1">
                                   <div className="w-14 h-14 rounded-lg bg-white border border-border/50 flex items-center justify-center overflow-hidden shrink-0">
                                     {prod.image ? (
@@ -495,7 +501,17 @@ function HasilContent() {
                                   </div>
                                 </div>
                                 <p className="text-[11px] text-foreground/70 leading-relaxed mt-1.5">{t.honest_note}</p>
-                              </a>
+                                <div className="flex items-center gap-2 mt-2.5">
+                                  <a href={`/produk/${prod.id}`} target="_blank" rel="noopener noreferrer"
+                                    className="flex-1 text-center text-[11px] font-medium py-1.5 rounded-md border border-border/70 text-foreground hover:bg-secondary/50 transition-colors">
+                                    Lihat detail
+                                  </a>
+                                  <a href={shopeeUrl(prod)} target="_blank" rel="sponsored noopener noreferrer"
+                                    className="flex-1 text-center text-[11px] font-semibold py-1.5 rounded-md bg-primary text-primary-foreground hover:brightness-95 transition-all">
+                                    {shopeeButtonLabel(prod)}
+                                  </a>
+                                </div>
+                              </div>
                             );
                           })}
                           <a
@@ -851,7 +867,7 @@ function HasilContent() {
               <ShoppingBag className="w-4 h-4 text-accent shrink-0" />
               <div>
                 <p className="text-xs font-medium text-foreground">Produk Indonesia</p>
-                <p className="text-xs text-muted-foreground">150+ produk terkurasi</p>
+                <p className="text-xs text-muted-foreground">220 produk terkurasi</p>
               </div>
             </button>
             <button

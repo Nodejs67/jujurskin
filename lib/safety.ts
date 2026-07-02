@@ -12,8 +12,26 @@ export interface SafetyResult {
   params: SafetyParam[];
 }
 
-const POTENT = ["retinol", "retinoid", "tretinoin", "adapalene", "salicylic", "glycolic", "lactic", "aha", "bha", "benzoyl", "azelaic", "ascorbic acid", "vitamin c", "alpha arbutin", "mandelic"];
+// Kelompok bahan aktif "kuat". Sinonim dari molekul yang SAMA dikelompokkan
+// agar tidak dihitung dua kali (mis. "Vitamin C" + "Ascorbic Acid" = 1 aktif).
+const POTENT_GROUPS: string[][] = [
+  ["retinol"], ["retinoid"], ["tretinoin"], ["adapalene"],
+  ["salicylic"], ["glycolic"], ["lactic"], ["mandelic"],
+  ["aha"], ["bha"], ["benzoyl"], ["azelaic"],
+  ["vitamin c", "ascorbic acid"],
+  ["alpha arbutin"],
+];
 const IRRITANTS = ["fragrance", "parfum", "alcohol denat", "essential oil", "menthol", "citrus", "peppermint"];
+
+/**
+ * Cocokkan istilah dengan BATAS KATA (\b), bukan substring. Ini mencegah
+ * "benzoyl" salah cocok di "methoxydibenzoylmethane" (avobenzone, filter UV yang
+ * aman) dan "aha"/"bha" salah cocok di tengah kata lain.
+ */
+function mentions(text: string, term: string): boolean {
+  const esc = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`\\b${esc}\\b`, "i").test(text);
+}
 
 /**
  * Skor keamanan produk berbasis heuristik dari data yang tersedia
@@ -31,8 +49,8 @@ export function productSafety(p: Product): SafetyResult {
   const legality = p.bpom_registered ? 30 : 8;
 
   // 3. Risiko iritasi (semakin sedikit aktif keras/iritan, semakin tinggi skornya)
-  const potentCount = POTENT.filter((a) => joined.includes(a)).length;
-  const irritantCount = IRRITANTS.filter((a) => joined.includes(a)).length;
+  const potentCount = POTENT_GROUPS.filter((group) => group.some((term) => mentions(joined, term))).length;
+  const irritantCount = IRRITANTS.filter((a) => mentions(joined, a)).length;
   const irritationScore = Math.max(8, 30 - potentCount * 6 - irritantCount * 8);
   const irritationLevel = irritationScore >= 24 ? "rendah" : irritationScore >= 16 ? "sedang" : "tinggi";
 

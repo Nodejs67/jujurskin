@@ -57,13 +57,6 @@ const METRICS = [
   { label: "Sensitivitas", val: 70, icon: Smile, color: "#ec4899" },
 ];
 
-const STORIES = [
-  { id: "dina", name: "Dina", age: 23, city: "Bekasi", from: 52, to: 84, weeks: 6 },
-  { id: "rika", name: "Rika", age: 26, city: "Bandung", from: 48, to: 79, weeks: 8 },
-  { id: "salsa", name: "Salsa", age: 21, city: "Surabaya", from: 60, to: 86, weeks: 10 },
-  { id: "alya", name: "Alya", age: 24, city: "Jakarta", from: 55, to: 82, weeks: 7 },
-];
-
 // Palet warna kartu produk (latar gradient di belakang foto)
 const CARD_TONES = [
   "from-sky-50 to-blue-50",
@@ -103,10 +96,11 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-const DISCUSSIONS = [
-  { name: "Naya", when: "2 jam lalu", q: "Kulit berjerawat cocok pakai apa ya?", tags: ["Jerawat", "Pemula"], ans: 24 },
-  { name: "Ricky", when: "5 jam lalu", q: "Review jujur Azelaic Acid 10% dari pengalaman", tags: ["Review", "Azelaic Acid"], ans: 18 },
-  { name: "Putri", when: "8 jam lalu", q: "Niacinamide bikin purging? Ini pengalaman aku", tags: ["Niacinamide", "Purging"], ans: 31 },
+// Pertanyaan umum → jawaban ke halaman edukasi NYATA (bukan thread komunitas palsu).
+const FAQ_LINKS = [
+  { q: "Kulit berjerawat sebaiknya pakai apa dulu?", tags: ["Jerawat", "Pemula"], href: "/analisis" },
+  { q: "Apa urutan pakai skincare yang benar?", tags: ["Panduan", "Rutinitas"], href: "/panduan" },
+  { q: "Niacinamide bikin purging? Mitos atau fakta?", tags: ["Niacinamide", "Mitos"], href: "/mitos-fakta" },
 ];
 
 const EDU = [
@@ -256,14 +250,12 @@ export default function Home() {
               </button>
             </div>
             <div className="mt-6 flex items-center gap-3">
-              <div className="flex -space-x-2">
-                {["dina", "rika", "salsa", "alya"].map((p) => (
-                  <span key={p} className="relative w-8 h-8 rounded-full ring-2 ring-white overflow-hidden bg-rose-100">
-                    <Image src={`/redesign/${p}-after.jpg`} alt="" fill sizes="32px" className="object-cover" />
-                  </span>
-                ))}
-              </div>
-              <p className="text-sm text-slate-500"><span className="font-bold text-slate-800">Ribuan</span> analisis kulit sudah dibuat</p>
+              <span className="grid place-items-center w-9 h-9 rounded-full bg-rose-50 shrink-0" style={{ color: PINK }}>
+                <ShieldCheck className="w-5 h-5" />
+              </span>
+              <p className="text-sm text-slate-500">
+                <span className="font-bold text-slate-800">Gratis & tanpa perlu daftar akun</span> — analisis jalan langsung di HP-mu, foto tidak dikirim ke server.
+              </p>
             </div>
           </div>
 
@@ -379,36 +371,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── BEFORE / AFTER ──────────────────────────── */}
+      {/* ── KENAPA BEDA (diferensiasi nyata, bukan testimoni) ─── */}
       <section className="bg-gradient-to-b from-white to-rose-50/40 py-14 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-end justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Hasil Nyata dari Pengguna</p>
-              <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900">Perubahan yang bisa kamu lihat</h2>
-              <p className="mt-2 text-slate-600 max-w-xl">Pengguna kami merasakan hasilnya dengan rekomendasi yang tepat — bukan dengan beli lebih banyak produk.</p>
-            </div>
-            <Link href="/progress" className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold shrink-0" style={{ color: PINK }}>Lihat Semua Cerita <ArrowRight className="w-4 h-4" /></Link>
+          <div className="mb-8 max-w-2xl">
+            <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Kenapa JujurSkin Beda</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900">Kami untung kalau kamu percaya, bukan kalau kamu boros</h2>
+            <p className="mt-2 text-slate-600">Kebanyakan platform skincare dibayar brand untuk merekomendasikan. Kami tidak. Rekomendasi diurutkan dari kandungan & keamanan — bukan dari siapa yang bayar.</p>
           </div>
 
-          <div className="flex gap-4 overflow-x-auto snap-x pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4">
-            {STORIES.map((s) => (
-              <div key={s.id} className="snap-start shrink-0 w-[78%] sm:w-auto rounded-2xl bg-white border border-rose-50 shadow-sm overflow-hidden">
-                <div className="grid grid-cols-2">
-                  {(["before", "after"] as const).map((k) => (
-                    <div key={k} className="relative aspect-[3/4]">
-                      <Image src={`/redesign/${s.id}-${k}.jpg`} alt={`${s.name} ${k}`} fill sizes="(max-width:640px) 40vw, 160px" className="object-cover" />
-                      <span className={`absolute top-2 ${k === "before" ? "left-2 bg-slate-900/60" : "right-2"} text-[10px] font-bold text-white px-1.5 py-0.5 rounded`} style={k === "after" ? { backgroundColor: PINK } : {}}>{k === "before" ? "Before" : "After"}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="p-3">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-bold text-slate-900">{s.name} · {s.age} th</p>
-                    <p className="text-sm font-extrabold" style={{ color: PINK }}>{s.from} → {s.to}</p>
-                  </div>
-                  <p className="text-xs text-slate-500 mt-0.5">{s.city} · {s.weeks} minggu</p>
-                </div>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { icon: FlaskConical, title: "Diurut dari kandungan, bukan hype", body: "Produk diperingkat berdasarkan bahan aktif, kecocokan tipe kulit, dan keamanan — bukan brand yang paling ngiklan." },
+              { icon: Ban, title: "Kami bilang kalau kamu nggak perlu beli", body: "Punya fitur khusus yang menghitung produk yang bisa kamu skip + berapa rupiah yang kamu hemat. Industri lain justru ingin sebaliknya.", href: "/tidak-perlu" },
+              { icon: ShieldCheck, title: "Komisi tidak mengubah urutan", body: "Kami dapat komisi kecil dari Shopee kalau kamu beli lewat sini — TANPA nambah harga buatmu, dan tanpa mengubah rekomendasi. Selalu kami sebutkan terbuka." },
+            ].map((c) => (
+              <div key={c.title} className="rounded-2xl bg-white border border-rose-50 shadow-sm p-5 flex flex-col">
+                <span className="grid place-items-center w-11 h-11 rounded-xl bg-rose-50 shrink-0 mb-3" style={{ color: PINK }}><c.icon className="w-5 h-5" /></span>
+                <h3 className="text-base font-bold text-slate-900 leading-snug">{c.title}</h3>
+                <p className="mt-1.5 text-sm text-slate-600 leading-relaxed flex-1">{c.body}</p>
+                {c.href && (
+                  <Link href={c.href} className="mt-3 inline-flex items-center gap-1 text-sm font-semibold" style={{ color: PINK }}>Lihat fiturnya <ArrowRight className="w-3.5 h-3.5" /></Link>
+                )}
               </div>
             ))}
           </div>
@@ -455,27 +439,21 @@ export default function Home() {
       <section className="bg-gradient-to-b from-rose-50/40 to-white py-14 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-8">
           <div className="lg:col-span-3">
-            <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Komunitas JujurSkin</p>
-            <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">Tempat berbagi, bertanya, dan belajar bersama.</h2>
-            <button onClick={() => router.push("/feedback")} className="mt-5 inline-flex items-center gap-2 px-5 h-11 rounded-full text-white font-semibold" style={{ backgroundColor: PINK }}>Gabung Komunitas</button>
+            <p className="text-xs font-bold tracking-widest uppercase" style={{ color: PINK }}>Pertanyaan Umum</p>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">Bingung mulai dari mana? Ini yang paling sering ditanya.</h2>
+            <button onClick={() => router.push("/feedback")} className="mt-5 inline-flex items-center gap-2 px-5 h-11 rounded-full text-white font-semibold" style={{ backgroundColor: PINK }}>Kirim Pertanyaan / Masukan</button>
           </div>
 
           <div className="lg:col-span-6 grid sm:grid-cols-3 gap-4">
-            {DISCUSSIONS.map((d) => (
-              <div key={d.name} className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4 flex flex-col">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="grid place-items-center w-8 h-8 rounded-full bg-rose-100 text-xs font-bold" style={{ color: PINK }}>{d.name[0]}</span>
-                  <div>
-                    <p className="text-xs font-bold text-slate-800">{d.name}</p>
-                    <p className="text-[10px] text-slate-400">{d.when}</p>
-                  </div>
-                </div>
+            {FAQ_LINKS.map((d) => (
+              <Link key={d.q} href={d.href} className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4 flex flex-col hover:border-rose-200 transition-colors">
+                <span className="grid place-items-center w-8 h-8 rounded-full bg-rose-100 mb-3" style={{ color: PINK }}><Sparkles className="w-4 h-4" /></span>
                 <p className="text-sm font-semibold text-slate-800 leading-snug flex-1">{d.q}</p>
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   {d.tags.map((t) => <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-rose-50 text-rose-600">{t}</span>)}
                 </div>
-                <p className="text-xs text-slate-400 mt-2">{d.ans} jawaban</p>
-              </div>
+                <span className="inline-flex items-center gap-1 text-xs font-semibold mt-2" style={{ color: PINK }}>Lihat jawaban <ArrowRight className="w-3 h-3" /></span>
+              </Link>
             ))}
           </div>
 

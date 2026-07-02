@@ -53,9 +53,13 @@ ALTER TABLE feedback ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public insert analyses" ON skin_analyses FOR INSERT WITH CHECK (true);
 CREATE POLICY "public insert feedback" ON feedback FOR INSERT WITH CHECK (true);
 
--- Policy: bisa baca analysis berdasarkan ID (untuk halaman hasil)
-CREATE POLICY "public read analyses by id" ON skin_analyses FOR SELECT USING (true);
-CREATE POLICY "public read feedback" ON feedback FOR SELECT USING (true);
+-- PENTING: TIDAK ADA policy SELECT untuk anon di sini (sengaja).
+-- skin_analyses & feedback berisi PII (nama/usia/kota/status kehamilan/riwayat).
+-- RLS aktif TANPA policy SELECT = anon/authenticated DITOLAK; hanya service_role
+-- (server, di app/api/*) yang bisa membaca. Ini mencerminkan kondisi production
+-- yang sudah dikunci & diverifikasi (anon dump = 0 baris).
+-- JANGAN pernah menambahkan `FOR SELECT USING (true)` di tabel PII ini.
+-- (Policy lama "public read ... USING (true)" DIHAPUS 2026-07-02 — membuka seluruh tabel.)
 
 -- =============================================
 -- MIGRATION: Tambah kolom baru (quiz 7 langkah)
@@ -93,4 +97,5 @@ CREATE TABLE IF NOT EXISTS skin_progress (
 ALTER TABLE skin_progress ENABLE ROW LEVEL SECURITY;
 CREATE INDEX IF NOT EXISTS idx_skin_progress_session ON skin_progress(session_id);
 CREATE POLICY "public insert progress" ON skin_progress FOR INSERT WITH CHECK (true);
-CREATE POLICY "public read progress" ON skin_progress FOR SELECT USING (true);
+-- Sengaja TANPA policy SELECT anon (lihat catatan di atas) — baca lewat service_role saja.
+-- (Policy lama "public read progress USING (true)" DIHAPUS 2026-07-02.)

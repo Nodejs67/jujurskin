@@ -414,14 +414,14 @@ export default function PanduanPage() {
               {
                 icon: "📚",
                 title: "Edukasi Ingredient",
-                desc: "Pahami 29+ bahan skincare yang paling penting",
+                desc: "Pahami 100+ bahan skincare yang paling penting",
                 href: "/edukasi",
                 color: "border-purple-400/20 bg-purple-400/5",
               },
               {
                 icon: "🛍️",
                 title: "Produk Indonesia",
-                desc: "30+ produk lokal terkurasi berdasarkan ingredient",
+                desc: "220 produk terkurasi berdasarkan ingredient",
                 href: "/produk",
                 color: "border-primary/20 bg-primary/5",
               },

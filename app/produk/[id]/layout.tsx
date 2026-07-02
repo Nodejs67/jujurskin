@@ -84,13 +84,10 @@ export default async function ProdukDetailLayout({
           lowPrice: product.price_min,
           highPrice: product.price_max,
         },
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: product.rating_community,
-          bestRating: 5,
-          worstRating: 1,
-          ratingCount: 1,
-        },
+        // Catatan: TIDAK menyertakan aggregateRating. rating_community bukan hasil
+        // agregasi ulasan nyata, jadi menerbitkannya sebagai structured data =
+        // menyesatkan + melanggar kebijakan rich-result Google. Sambungkan dari
+        // tabel product_reviews saat sudah ada ulasan asli yang cukup.
       }
     : null;
 
