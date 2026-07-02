@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { MotionConfig } from "framer-motion";
 import type { Session, User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 
@@ -56,7 +57,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [session, loading, supabase]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  // reducedMotion="user" → hormati setting OS "kurangi gerak" (aksesibilitas),
+  // menonaktifkan animasi transform/opacity framer-motion utk pengguna sensitif gerak.
+  return (
+    <AuthContext.Provider value={value}>
+      <MotionConfig reducedMotion="user">{children}</MotionConfig>
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
+import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { CheckCircle, XCircle, ArrowLeft, Share2, MapPin, Sparkles, MessageSquare, BookOpen, ShoppingBag, Repeat, Baby, Info, Copy, Check, Clock, AlertTriangle, ListChecks, Wallet, GraduationCap, Sun, Moon, Bookmark, BookmarkCheck, Loader2 } from "lucide-react";
@@ -468,8 +469,7 @@ function HasilContent() {
                                 <div className="flex items-start gap-3 mb-1">
                                   <div className="w-14 h-14 rounded-lg bg-white border border-border/50 flex items-center justify-center overflow-hidden shrink-0">
                                     {prod.image ? (
-                                      // eslint-disable-next-line @next/next/no-img-element
-                                      <img src={prod.image} alt={prod.name} loading="lazy" className="w-full h-full object-contain" />
+                                      <Image src={prod.image} alt={prod.name} width={56} height={56} className="w-full h-full object-contain" />
                                     ) : (
                                       <span className="text-2xl">{prod.emoji}</span>
                                     )}

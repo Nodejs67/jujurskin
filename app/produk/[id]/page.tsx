@@ -211,7 +211,7 @@ export default function ProdukDetailPage({
 
         {/* SPF badge */}
         {product.spf && (
-          <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-3 text-sm text-yellow-300/90 flex items-center gap-2">
+          <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-3 text-sm text-yellow-800 flex items-center gap-2">
             ☀️ SPF {product.spf} — lindungi dari UV setiap hari
           </div>
         )}
@@ -245,7 +245,7 @@ export default function ProdukDetailPage({
             {product.concerns.map((c) => (
               <span
                 key={c}
-                className="px-2.5 py-1 rounded-full border border-green-500/20 bg-green-500/5 text-xs text-green-300/80"
+                className="px-2.5 py-1 rounded-full border border-green-500/20 bg-green-500/5 text-xs text-green-700"
               >
                 {c}
               </span>

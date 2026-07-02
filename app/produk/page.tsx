@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
@@ -92,8 +93,7 @@ function ProductCard({ product }: { product: Product }) {
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
           {product.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={product.image} alt={product.name} loading="lazy" className="w-12 h-12 rounded-lg object-contain bg-white border border-border shrink-0" />
+            <Image src={product.image} alt={product.name} width={48} height={48} className="w-12 h-12 rounded-lg object-contain bg-white border border-border shrink-0" />
           ) : (
             <span className="text-2xl">{product.emoji}</span>
           )}
