@@ -9,11 +9,18 @@ import { SHOPEE_AFFILIATE_LINKS } from "@/lib/affiliate-links";
  * pemeringkatan tetap berbasis kandungan & keamanan (lib/product-matcher.ts).
  *
  * OTOMASI (Involve Asia): deeplink Involve Asia pada dasarnya adalah URL template
- * yang membungkus URL tujuan di domain shopee.co.id. Begitu `offer_id` (Shopee di
- * Involve Asia) dan `aff_id` (ID publisher) diketahui, SEMUA produk otomatis punya
- * link komisi tanpa perlu generate satu-satu. Format resmi:
+ * yang membungkus URL tujuan di domain shopee.co.id. Begitu satu deeplink dibuat,
+ * SEMUA produk otomatis punya link komisi tanpa perlu generate satu-satu.
+ *
+ * Format BARU (2026-07, terverifikasi live): short-link `invl.io`
+ *   https://invl.io/<code>?aff_sub=<subid>&url=<dest>
+ * Kode <code> (mis. "clnlp1t") membawa ID publisher + offer; parameter `url=` DIBACA
+ * dinamis oleh redirector (tes: tukar url → tujuan ikut pindah, affiliate_id tetap
+ * nempel), jadi satu kode dipakai ulang untuk semua produk dengan menukar `url=`.
+ *
+ * Format LAMA (masih didukung sbg fallback):
  *   https://invol.co/aff_m?offer_id=<offer>&aff_id=<aff>&source=<subid>&url=<dest>
- * offer_id & aff_id BUKAN rahasia — keduanya muncul di setiap link affiliate publik.
+ * Semua nilai ini BUKAN rahasia — muncul di setiap link affiliate publik.
  */
 
 /** Kalimat keterbukaan yang ditampilkan di dekat tombol beli. */
@@ -29,28 +36,39 @@ export const AFFILIATE_DISCLOSURE =
  * Tanpa kedua ID ini, app jatuh ke link pencarian Shopee biasa (tanpa komisi),
  * jadi tidak ada tombol mati dan tidak ada klaim komisi palsu.
  */
+// Format BARU (short-link invl.io): satu kode dari Deeplink Generator, dipakai ulang.
+const INVOLVE_LINK_CODE = process.env.NEXT_PUBLIC_INVOLVE_LINK_CODE?.trim();
+// Format LAMA (fallback): offer_id + aff_id.
 const INVOLVE_OFFER_ID = process.env.NEXT_PUBLIC_INVOLVE_OFFER_ID?.trim();
 const INVOLVE_AFF_ID = process.env.NEXT_PUBLIC_INVOLVE_AFF_ID?.trim();
+// Sub-id pelacakan (di link baru = `aff_sub`, di link lama = `source`).
 const INVOLVE_SOURCE = process.env.NEXT_PUBLIC_INVOLVE_SOURCE?.trim() || "jujurskin";
 
-/** Apakah otomasi Involve Asia aktif (kedua ID terisi). */
+/** Apakah otomasi Involve Asia aktif (kode short-link ATAU pasangan offer/aff terisi). */
 export function involveEnabled(): boolean {
-  return !!INVOLVE_OFFER_ID && !!INVOLVE_AFF_ID;
+  return !!INVOLVE_LINK_CODE || (!!INVOLVE_OFFER_ID && !!INVOLVE_AFF_ID);
 }
 
 /**
  * Bungkus URL tujuan (harus di domain shopee.co.id) menjadi deeplink affiliate
  * Involve Asia. Mengembalikan null bila otomasi belum dikonfigurasi.
+ * Prioritas: short-link `invl.io` (baru) → `invol.co/aff_m` (lama).
  */
 export function involDeeplink(destUrl: string): string | null {
-  if (!involveEnabled()) return null;
-  const params = new URLSearchParams({
-    offer_id: INVOLVE_OFFER_ID!,
-    aff_id: INVOLVE_AFF_ID!,
-    source: INVOLVE_SOURCE,
-    url: destUrl,
-  });
-  return `https://invol.co/aff_m?${params.toString()}`;
+  if (INVOLVE_LINK_CODE) {
+    const params = new URLSearchParams({ aff_sub: INVOLVE_SOURCE, url: destUrl });
+    return `https://invl.io/${INVOLVE_LINK_CODE}?${params.toString()}`;
+  }
+  if (INVOLVE_OFFER_ID && INVOLVE_AFF_ID) {
+    const params = new URLSearchParams({
+      offer_id: INVOLVE_OFFER_ID,
+      aff_id: INVOLVE_AFF_ID,
+      source: INVOLVE_SOURCE,
+      url: destUrl,
+    });
+    return `https://invol.co/aff_m?${params.toString()}`;
+  }
+  return null;
 }
 
 /**

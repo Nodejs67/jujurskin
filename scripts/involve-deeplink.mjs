@@ -16,13 +16,14 @@
  *      Ambil XXXX (offer_id) dan YYYY (aff_id) dari situ.
  */
 
+const linkCode = (process.env.NEXT_PUBLIC_INVOLVE_LINK_CODE || "").trim();
 const offerId = (process.env.NEXT_PUBLIC_INVOLVE_OFFER_ID || "").trim();
 const affId = (process.env.NEXT_PUBLIC_INVOLVE_AFF_ID || "").trim();
 const source = (process.env.NEXT_PUBLIC_INVOLVE_SOURCE || "jujurskin").trim();
 const dest = process.argv[2];
 
-if (!offerId || !affId) {
-  console.error("✗ Set NEXT_PUBLIC_INVOLVE_OFFER_ID dan NEXT_PUBLIC_INVOLVE_AFF_ID dulu.");
+if (!linkCode && (!offerId || !affId)) {
+  console.error("✗ Set NEXT_PUBLIC_INVOLVE_LINK_CODE (baru) ATAU NEXT_PUBLIC_INVOLVE_OFFER_ID+AFF_ID (lama) dulu.");
   process.exit(1);
 }
 if (!dest) {
@@ -33,5 +34,10 @@ if (!/^https:\/\/(www\.)?shopee\.co\.id\//i.test(dest)) {
   console.error("⚠ Tujuan sebaiknya di domain shopee.co.id (halaman produk/pencarian).");
 }
 
-const params = new URLSearchParams({ offer_id: offerId, aff_id: affId, source, url: dest });
-console.log(`https://invol.co/aff_m?${params.toString()}`);
+if (linkCode) {
+  const params = new URLSearchParams({ aff_sub: source, url: dest });
+  console.log(`https://invl.io/${linkCode}?${params.toString()}`);
+} else {
+  const params = new URLSearchParams({ offer_id: offerId, aff_id: affId, source, url: dest });
+  console.log(`https://invol.co/aff_m?${params.toString()}`);
+}
