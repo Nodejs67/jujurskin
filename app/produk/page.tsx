@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
-  Search, ArrowLeft, ShoppingBag, Star, CheckCircle, AlertTriangle,
+  Search, ArrowLeft, ShoppingBag, Star, AlertTriangle,
   Sparkles, Filter, ChevronDown, ChevronUp,
 } from "lucide-react";
 import { SiteFooter } from "@/components/site-footer";
@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import {
   PRODUCTS,
   CATEGORY_LABELS,
-  getActivesWithPercent,
   type ProductCategory,
   type PriceRange,
   type Product,
@@ -83,13 +82,13 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-function ProductCard({ product, onClick }: { product: Product; onClick: () => void }) {
+function ProductCard({ product }: { product: Product }) {
   return (
-    <motion.button
-      variants={fadeUp}
-      onClick={onClick}
-      className="w-full text-left glow-card rounded-2xl border border-border bg-card p-5 hover:border-primary/30 transition-colors group"
-    >
+    <motion.div variants={fadeUp}>
+      <Link
+        href={`/produk/${product.id}`}
+        className="block w-full text-left glow-card rounded-2xl border border-border bg-card p-5 hover:border-primary/30 transition-colors group"
+      >
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
           {product.image ? (
@@ -145,187 +144,8 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
           </Badge>
         ))}
       </div>
-    </motion.button>
-  );
-}
-
-function ProductDetail({ product, onClose }: { product: Product; onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm overflow-y-auto">
-      <div className="max-w-lg mx-auto px-6 py-8">
-        <button onClick={onClose} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6">
-          <ArrowLeft className="w-4 h-4" /> Kembali ke daftar produk
-        </button>
-
-        <div className="space-y-5">
-          {/* Header */}
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Badge variant="outline" className="text-xs border-primary/30 text-primary bg-primary/10">
-                {CATEGORY_LABELS[product.category]}
-              </Badge>
-              {product.bpom_registered ? (
-                <Badge variant="outline" className="text-xs border-green-400/30 text-green-700 bg-green-400/10">
-                  <CheckCircle className="w-2.5 h-2.5 mr-1" /> BPOM
-                </Badge>
-              ) : (
-                <Badge variant="outline" className="text-xs border-yellow-500/40 text-yellow-800 bg-yellow-400/15">
-                  <AlertTriangle className="w-2.5 h-2.5 mr-1" /> Belum terverifikasi BPOM
-                </Badge>
-              )}
-            </div>
-            <div className="flex items-center gap-3 mb-1">
-              {product.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={product.image} alt={product.name} className="w-16 h-16 rounded-xl object-contain bg-white border border-border shrink-0" />
-              ) : (
-                <span className="text-4xl">{product.emoji}</span>
-              )}
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">{product.brand}</p>
-                <h1 className="text-xl font-bold text-foreground">{product.name}</h1>
-              </div>
-            </div>
-            <p className="text-sm text-primary font-medium mt-2">{product.tagline}</p>
-          </div>
-
-          {/* Warning BPOM belum terverifikasi */}
-          {!product.bpom_registered && (
-            <div className="rounded-xl border border-yellow-500/40 bg-yellow-400/10 p-4">
-              <p className="text-xs text-yellow-800 font-semibold uppercase tracking-wide mb-1.5 flex items-center gap-1.5">
-                <AlertTriangle className="w-3.5 h-3.5" /> Status BPOM belum terverifikasi
-              </p>
-              <p className="text-sm text-foreground leading-relaxed">
-                Kami belum bisa memastikan produk ini sudah punya nomor notifikasi BPOM. Ini <strong>bukan berarti produk berbahaya</strong> — hanya belum kami verifikasi. Sebelum membeli/memakai, cek sendiri nomor BPOM-nya di{" "}
-                <a href="https://cekbpom.pom.go.id/" target="_blank" rel="noopener noreferrer" className="text-primary underline font-medium">cekbpom.pom.go.id</a>{" "}
-                atau lewat halaman <Link href="/cek-bpom" className="text-primary underline font-medium">Cek BPOM</Link>.
-              </p>
-            </div>
-          )}
-
-          {/* Price + Rating */}
-          <div className="rounded-xl border border-border bg-card p-4 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-muted-foreground mb-0.5">Harga estimasi</p>
-              <p className="text-xl font-bold text-accent">
-                Rp {product.price_min.toLocaleString("id")}
-                {product.price_max !== product.price_min && (
-                  <span className="text-sm font-normal text-muted-foreground"> – Rp {product.price_max.toLocaleString("id")}</span>
-                )}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-xs text-muted-foreground mb-1">Rating komunitas</p>
-              <StarRating rating={product.rating_community} />
-            </div>
-          </div>
-
-          {/* Why good */}
-          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
-            <p className="text-xs text-primary font-semibold uppercase tracking-wide mb-2">💚 Kenapa bagus</p>
-            <p className="text-sm text-foreground leading-relaxed">{product.why_good}</p>
-          </div>
-
-          {/* Key ingredients + kadar + komposisi lengkap */}
-          <div className="rounded-xl border border-border bg-card p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Bahan Aktif & Komposisi</p>
-
-            {getActivesWithPercent(product).length > 0 && (
-              <div className="mb-3 flex flex-wrap gap-2">
-                {getActivesWithPercent(product).map((a) => (
-                  <span
-                    key={a.name + a.percent}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-primary/40 bg-primary/10 text-xs font-semibold text-primary"
-                  >
-                    {a.name}
-                    <span className="px-1 py-0.5 rounded bg-primary text-primary-foreground text-[10px] font-bold">{a.percent}</span>
-                  </span>
-                ))}
-              </div>
-            )}
-
-            <div className="flex flex-wrap gap-2">
-              {product.key_ingredients.map((ing) => (
-                <Badge key={ing} variant="outline" className="text-xs border-border text-foreground">
-                  {ing}
-                </Badge>
-              ))}
-            </div>
-
-            {product.full_ingredients && product.full_ingredients.length > 0 ? (
-              <details className="mt-3">
-                <summary className="text-xs font-medium text-primary cursor-pointer">
-                  Lihat komposisi lengkap (INCI) — {product.full_ingredients.length} bahan
-                </summary>
-                <p className="text-[11px] text-muted-foreground leading-relaxed mt-2">
-                  {product.full_ingredients.join(", ")}
-                </p>
-                <p className="text-[10px] text-muted-foreground/80 mt-2">
-                  Sumber: kemasan/database publik. Formula bisa berubah — selalu cek kemasan asli, terutama jika punya alergi.
-                </p>
-              </details>
-            ) : (
-              <p className="text-[10px] text-muted-foreground mt-3">
-                Komposisi lengkap belum diverifikasi — cek daftar bahan di kemasan asli.
-              </p>
-            )}
-          </div>
-
-          {/* Who it's for */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-green-400/20 bg-green-400/5 p-4">
-              <p className="text-xs text-green-700 font-semibold mb-2">✅ Cocok untuk</p>
-              <div className="space-y-1.5">
-                {product.skin_types.map((st) => (
-                  <p key={st} className="text-xs text-foreground capitalize">• Kulit {st}</p>
-                ))}
-              </div>
-            </div>
-            {product.who_should_skip ? (
-              <div className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-4">
-                <p className="text-xs text-yellow-700 font-semibold mb-2">⚠️ Skip jika</p>
-                <p className="text-xs text-foreground leading-relaxed">{product.who_should_skip}</p>
-              </div>
-            ) : (
-              <div className="rounded-xl border border-green-400/20 bg-green-400/5 p-4 flex items-center justify-center">
-                <div className="text-center">
-                  <CheckCircle className="w-5 h-5 text-green-700 mx-auto mb-1" />
-                  <p className="text-xs text-green-700">Aman untuk semua</p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Concerns */}
-          <div className="rounded-xl border border-border bg-card p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Mengatasi Masalah</p>
-            <div className="flex flex-wrap gap-2">
-              {product.concerns.map((c) => (
-                <Badge key={c} variant="outline" className="text-xs border-primary/20 text-primary/80 bg-primary/5">
-                  {c}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          {/* Where to buy */}
-          <div className="rounded-xl border border-border bg-card p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Beli di</p>
-            <div className="flex flex-wrap gap-2">
-              {product.where_to_buy.map((store) => (
-                <div key={store} className="px-3 py-1.5 rounded-full border border-border bg-secondary/30 text-xs text-foreground">
-                  {store}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Button onClick={onClose} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-            Kembali ke Daftar Produk
-          </Button>
-        </div>
-      </div>
-    </div>
+      </Link>
+    </motion.div>
   );
 }
 
@@ -335,7 +155,6 @@ export default function ProdukPage() {
   const [activeCategory, setActiveCategory] = useState<ProductCategory | "semua">("semua");
   const [activePriceRange, setActivePriceRange] = useState<PriceRange | "semua">("semua");
   const [activeSkinType, setActiveSkinType] = useState<SkinTypeMatch | "semua">("semua");
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
   const filtered = useMemo(() => {
@@ -389,10 +208,6 @@ export default function ProdukPage() {
   }, [filtered.length, visible]);
 
   const shown = filtered.slice(0, visible);
-
-  if (selectedProduct) {
-    return <ProductDetail product={selectedProduct} onClose={() => setSelectedProduct(null)} />;
-  }
 
   return (
     <main className="min-h-screen bg-background flex flex-col">
@@ -563,7 +378,6 @@ export default function ProdukPage() {
               <ProductCard
                 key={product.id}
                 product={product}
-                onClick={() => setSelectedProduct(product)}
               />
             ))}
           </motion.div>
