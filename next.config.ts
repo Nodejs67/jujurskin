@@ -12,12 +12,19 @@ import type { NextConfig } from "next";
  */
 const ContentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  // 'wasm-unsafe-eval' + blob: + cdn.jsdelivr.net WAJIB untuk fitur Analisis Foto:
+  // MediaPipe (@mediapipe/tasks-vision) meng-compile WebAssembly (butuh
+  // 'wasm-unsafe-eval'), memuat glue-code dari jsdelivr, dan menjalankan worker
+  // dari blob:. Tanpa ini, deteksi wajah gagal → mode Kamera & Upload dua-duanya
+  // error. 'wasm-unsafe-eval' hanya mengizinkan WASM, BUKAN eval() JS biasa.
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://cdn.jsdelivr.net",
+  "worker-src 'self' blob:",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  // Supabase (REST + realtime websocket), Vercel insights, dan API publik lain
-  // yang dipanggil dari client. AI berbayar dipanggil dari server, bukan client.
+  // Supabase (REST + realtime websocket), Vercel insights, model MediaPipe
+  // (jsdelivr WASM + storage.googleapis.com .task), dan API publik lain yang
+  // dipanggil dari client. AI berbayar dipanggil dari server, bukan client.
   "connect-src 'self' https: wss:",
   "frame-ancestors 'none'",
   "base-uri 'self'",
