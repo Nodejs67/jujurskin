@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Sparkles, CheckCircle, Info, ShieldCheck, Home, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Check, CheckCircle, Info, ShieldCheck, Home, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Problem, SkinType } from "@/lib/recommendations";
 import { SkinPhotoCapture } from "@/components/skin-photo-capture";
@@ -66,14 +66,15 @@ const SKIN_TYPES: { value: SkinType; label: string; desc: string; emoji: string 
   { value: "sensitif", label: "Sensitif", desc: "Mudah kemerahan, iritasi, atau bereaksi terhadap produk", emoji: "🌸" },
 ];
 
-const MASALAH_OPTIONS: { value: Problem; label: string; emoji: string }[] = [
+// `sub` = istilah medisnya, ditaruh di baris kecil supaya label utama tetap muat di kartu HP (~122px).
+const MASALAH_OPTIONS: { value: Problem; label: string; sub?: string; emoji: string }[] = [
   { value: "jerawat", label: "Jerawat aktif", emoji: "😤" },
   { value: "bekas_jerawat", label: "Bekas jerawat", emoji: "🔴" },
   { value: "kusam", label: "Kulit kusam", emoji: "😶" },
   { value: "pori_besar", label: "Pori-pori besar", emoji: "🔍" },
-  { value: "kering", label: "Kulit kering/dehidrasi", emoji: "💧" },
+  { value: "kering", label: "Kulit kering", sub: "dehidrasi", emoji: "💧" },
   { value: "berminyak", label: "Minyak berlebih", emoji: "✨" },
-  { value: "pigmentasi", label: "Noda hitam/hiperpigmentasi", emoji: "🌑" },
+  { value: "pigmentasi", label: "Noda hitam / flek", sub: "hiperpigmentasi", emoji: "🌑" },
   { value: "anti_aging", label: "Tanda penuaan dini", emoji: "⏰" },
 ];
 
@@ -106,10 +107,10 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
   );
 }
 
-function YesNo({ label, value, onChange }: { label: string; value: boolean | null; onChange: (v: boolean) => void }) {
+function YesNo({ label, value, onChange, optional = false }: { label: string; value: boolean | null; onChange: (v: boolean) => void; optional?: boolean }) {
   return (
     <div className="flex items-center justify-between gap-3 py-1">
-      <span className="text-sm text-foreground">{label}</span>
+      <span className="text-sm text-foreground flex items-center gap-1.5 flex-wrap">{label} {optional && <Opt />}</span>
       <div className="flex gap-2 shrink-0">
         {([["Ya", true], ["Tidak", false]] as const).map(([l, v]) => (
           <button
@@ -125,6 +126,22 @@ function YesNo({ label, value, onChange }: { label: string; value: boolean | nul
     </div>
   );
 }
+
+// Pembungkus satu pertanyaan: jadi target scroll saat kosong, dan disorot merah setelah user coba Lanjut.
+function Field({ id, missing = false, className = "", children }: { id: string; missing?: boolean; className?: string; children: React.ReactNode }) {
+  return (
+    <div
+      id={id}
+      className={`scroll-mt-24 rounded-2xl transition-all ${missing ? "ring-2 ring-destructive/60 ring-offset-4 ring-offset-background" : ""} ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+// Penanda wajib / opsional — supaya pertanyaan yang boleh dilewati tidak tampak sama dengan yang wajib.
+const Req = () => <span className="text-destructive" aria-label="wajib">*</span>;
+const Opt = () => <span className="text-[10px] font-normal text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded-full">opsional</span>;
 
 function StepLabel({ step, label }: { step: number; label: string }) {
   return (
@@ -189,30 +206,42 @@ export default function AnalisisPage() {
     return true;
   };
 
-  // Daftar isian yang masih kosong di langkah ini → ditampilkan ke user
-  const missingFields = (): string[] => {
-    const m: string[] = [];
+  // Isian yang masih kosong di langkah ini. `key` dipakai untuk menyorot + melompat ke pertanyaannya.
+  const missingFields = (): { key: string; label: string }[] => {
+    const m: { key: string; label: string }[] = [];
+    const need = (ok: unknown, key: string, label: string) => { if (!ok) m.push({ key, label }); };
     if (step === 1) {
-      if (!form.usia) m.push("Usia");
-      if (!form.kota) m.push("Kota");
-      if (!form.jenis_kelamin) m.push("Jenis kelamin");
+      need(form.usia, "usia", "Usia");
+      need(form.kota, "kota", "Kota");
+      need(form.jenis_kelamin, "jenis_kelamin", "Jenis kelamin");
     } else if (step === 2) {
-      if (form.tipe_kulit === "" && form.tipe_kulit_custom.trim() === "") m.push("Tipe kulit (pilih salah satu atau jelaskan sendiri)");
+      need(form.tipe_kulit !== "" || form.tipe_kulit_custom.trim() !== "", "tipe_kulit", "Tipe kulit (pilih salah satu atau jelaskan sendiri)");
     } else if (step === 3) {
-      if (form.masalah.length === 0) m.push("Minimal 1 masalah kulit");
+      need(form.masalah.length > 0, "masalah", "Minimal 1 masalah kulit");
     } else if (step === 5) {
-      if (!form.penggunaan_sunscreen) m.push("Frekuensi pakai sunscreen");
-      if (!form.paparan_matahari) m.push("Paparan matahari");
-      if (!form.lingkungan) m.push("Lingkungan");
-      if (!form.kualitas_tidur) m.push("Kualitas tidur");
-      if (!form.tingkat_stress) m.push("Tingkat stres");
+      need(form.penggunaan_sunscreen, "penggunaan_sunscreen", "Frekuensi pakai sunscreen");
+      need(form.paparan_matahari, "paparan_matahari", "Paparan matahari");
+      need(form.lingkungan, "lingkungan", "Lingkungan");
+      need(form.kualitas_tidur, "kualitas_tidur", "Kualitas tidur");
+      need(form.tingkat_stress, "tingkat_stress", "Tingkat stres");
     } else if (step === 6) {
-      if (isWanita && form.status_kehamilan === "") m.push("Status kehamilan / menyusui");
-      if (form.pengalaman_retinoid === "") m.push("Pengalaman dengan retinol / vitamin A");
+      if (isWanita) need(form.status_kehamilan !== "", "status_kehamilan", "Status kehamilan / menyusui");
+      need(form.pengalaman_retinoid !== "", "pengalaman_retinoid", "Pengalaman dengan retinol / vitamin A");
     } else if (step === 7) {
-      if (!form.budget) m.push("Budget bulanan");
+      need(form.budget, "budget", "Budget bulanan");
     }
     return m;
+  };
+
+  const missing = missingFields();
+  // Sorot merah hanya setelah user menekan Lanjut — sebelum itu cukup petunjuk lembut di atas tombol.
+  const missingKeys = new Set(tried ? missing.map(f => f.key) : []);
+
+  const jumpTo = (key: string) => {
+    setTried(true);
+    requestAnimationFrame(() =>
+      document.getElementById(`q-${key}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
+    );
   };
 
   const goNext = () => {
@@ -221,8 +250,7 @@ export default function AnalisisPage() {
       setStep((s) => s + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      setTried(true); // tampilkan daftar yang kurang + scroll ke peringatan
-      requestAnimationFrame(() => alertRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
+      jumpTo(missing[0].key); // langsung bawa user ke pertanyaan kosong pertama, jangan cuma daftar teks
     }
   };
   const goBack = () => { setTried(false); setStep((s) => s - 1); window.scrollTo({ top: 0, behavior: "smooth" }); };
@@ -328,21 +356,21 @@ export default function AnalisisPage() {
                       placeholder="Nama atau inisial kamu" />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-1.5 block">Usia <span className="text-destructive">*</span></label>
+                    <Field id="q-usia" missing={missingKeys.has("usia")}>
+                      <label className="text-sm font-medium text-foreground mb-1.5 block">Usia <Req /></label>
                       <input type="number" value={form.usia} onChange={e => update("usia", e.target.value)} min={10} max={80}
                         className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                         placeholder="Umur kamu" />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-1.5 block">Kota <span className="text-destructive">*</span></label>
+                    </Field>
+                    <Field id="q-kota" missing={missingKeys.has("kota")}>
+                      <label className="text-sm font-medium text-foreground mb-1.5 block">Kota <Req /></label>
                       <input value={form.kota} onChange={e => update("kota", e.target.value)}
                         className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                         placeholder="Kota tempat tinggal" />
-                    </div>
+                    </Field>
                   </div>
-                  <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">Jenis Kelamin <span className="text-destructive">*</span></label>
+                  <Field id="q-jenis_kelamin" missing={missingKeys.has("jenis_kelamin")}>
+                    <label className="text-sm font-medium text-foreground mb-2 block">Jenis Kelamin <Req /></label>
                     <div className="grid grid-cols-2 gap-3">
                       {(["wanita", "pria"] as const).map(g => (
                         <button key={g} onClick={() => update("jenis_kelamin", g)}
@@ -351,7 +379,7 @@ export default function AnalisisPage() {
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </Field>
                 </div>
               </motion.div>
             )}
@@ -364,6 +392,7 @@ export default function AnalisisPage() {
                   <h1 className="text-2xl font-bold text-foreground mb-1">Apa tipe kulitmu?</h1>
                   <p className="text-sm text-muted-foreground">Pilih yang paling menggambarkan kondisi kulit harian kamu.</p>
                 </div>
+                <Field id="q-tipe_kulit" missing={missingKeys.has("tipe_kulit")} className="space-y-6">
                 <div className="space-y-3">
                   {SKIN_TYPES.map(t => (
                     <button key={t.value} onClick={() => update("tipe_kulit", t.value)}
@@ -392,6 +421,7 @@ export default function AnalisisPage() {
                   />
                   <p className="text-xs text-muted-foreground mt-1.5">Boleh pilih salah satu di atas, isi ini, atau keduanya — pendapatmu kami catat.</p>
                 </div>
+                </Field>
               </motion.div>
             )}
 
@@ -403,19 +433,29 @@ export default function AnalisisPage() {
                   <h1 className="text-2xl font-bold text-foreground mb-1">Masalah utama kulitmu?</h1>
                   <p className="text-sm text-muted-foreground">Pilih semua yang relevan. Kami akan prioritaskan yang paling penting.</p>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {MASALAH_OPTIONS.map(m => {
-                    const active = form.masalah.includes(m.value);
-                    return (
-                      <button key={m.value} onClick={() => toggleMasalah(m.value)}
-                        className={`flex items-center gap-3 p-4 rounded-xl border text-left transition-all ${active ? "border-primary bg-primary/10" : "border-border bg-card hover:border-border/80"}`}>
-                        <span className="text-xl">{m.emoji}</span>
-                        <span className={`text-sm font-medium leading-tight ${active ? "text-primary" : "text-foreground"}`}>{m.label}</span>
-                        {active && <CheckCircle className="w-3.5 h-3.5 text-primary ml-auto shrink-0" />}
-                      </button>
-                    );
-                  })}
-                </div>
+                <Field id="q-masalah" missing={missingKeys.has("masalah")}>
+                  <div className="grid grid-cols-2 gap-3">
+                    {MASALAH_OPTIONS.map(m => {
+                      const active = form.masalah.includes(m.value);
+                      return (
+                        <button key={m.value} onClick={() => toggleMasalah(m.value)}
+                          aria-pressed={active}
+                          className={`flex flex-col gap-2 p-3.5 rounded-xl border text-left transition-all ${active ? "border-primary bg-primary/10" : "border-border bg-card hover:border-border/80"}`}>
+                          <span className="flex items-center justify-between gap-2">
+                            <span className="text-xl leading-none">{m.emoji}</span>
+                            <span className={`w-[18px] h-[18px] rounded-md border flex items-center justify-center shrink-0 transition-colors ${active ? "border-primary bg-primary" : "border-border bg-background"}`}>
+                              {active && <Check className="w-3 h-3 text-primary-foreground" strokeWidth={3} />}
+                            </span>
+                          </span>
+                          <span className="min-w-0">
+                            <span className={`block text-sm font-medium leading-snug break-words ${active ? "text-primary" : "text-foreground"}`}>{m.label}</span>
+                            {m.sub && <span className="block text-[10px] leading-tight text-muted-foreground mt-0.5 break-words">{m.sub}</span>}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </Field>
                 {form.masalah.length > 0 && (
                   <p className="text-xs text-primary">{form.masalah.length} masalah dipilih</p>
                 )}
@@ -586,9 +626,9 @@ export default function AnalisisPage() {
                 </div>
 
                 {/* Sunscreen */}
-                <div>
-                  <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5">
-                    Seberapa sering pakai sunscreen?
+                <Field id="q-penggunaan_sunscreen" missing={missingKeys.has("penggunaan_sunscreen")}>
+                  <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5 flex-wrap">
+                    Seberapa sering pakai sunscreen? <Req />
                     <span className="text-[10px] text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">Paling Penting</span>
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -603,11 +643,11 @@ export default function AnalisisPage() {
                       </OptionCard>
                     ))}
                   </div>
-                </div>
+                </Field>
 
                 {/* Paparan matahari */}
-                <div>
-                  <label className="text-sm font-semibold text-foreground mb-2 block">Seberapa sering terpapar matahari langsung?</label>
+                <Field id="q-paparan_matahari" missing={missingKeys.has("paparan_matahari")}>
+                  <label className="text-sm font-semibold text-foreground mb-2 block">Seberapa sering terpapar matahari langsung? <Req /></label>
                   <div className="grid grid-cols-2 gap-2">
                     {([
                       { v: "dalam_ruangan", l: "Mayoritas di dalam ruangan" },
@@ -620,11 +660,11 @@ export default function AnalisisPage() {
                       </OptionCard>
                     ))}
                   </div>
-                </div>
+                </Field>
 
                 {/* Lingkungan */}
-                <div>
-                  <label className="text-sm font-semibold text-foreground mb-2 block">Lingkungan tempat kamu lebih sering berada?</label>
+                <Field id="q-lingkungan" missing={missingKeys.has("lingkungan")}>
+                  <label className="text-sm font-semibold text-foreground mb-2 block">Lingkungan tempat kamu lebih sering berada? <Req /></label>
                   <div className="grid grid-cols-3 gap-2">
                     {([
                       { v: "kering_ac", l: "Ber-AC (kering)", emoji: "❄️" },
@@ -639,12 +679,12 @@ export default function AnalisisPage() {
                       </OptionCard>
                     ))}
                   </div>
-                </div>
+                </Field>
 
                 {/* Tidur & Stress */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-semibold text-foreground mb-2 block">Kualitas tidur?</label>
+                  <Field id="q-kualitas_tidur" missing={missingKeys.has("kualitas_tidur")}>
+                    <label className="text-sm font-semibold text-foreground mb-2 block">Kualitas tidur? <Req /></label>
                     <div className="space-y-2">
                       {([
                         { v: "buruk", l: "Buruk (< 6 jam)" },
@@ -656,9 +696,9 @@ export default function AnalisisPage() {
                         </OptionCard>
                       ))}
                     </div>
-                  </div>
-                  <div>
-                    <label className="text-sm font-semibold text-foreground mb-2 block">Tingkat stres saat ini?</label>
+                  </Field>
+                  <Field id="q-tingkat_stress" missing={missingKeys.has("tingkat_stress")}>
+                    <label className="text-sm font-semibold text-foreground mb-2 block">Tingkat stres saat ini? <Req /></label>
                     <div className="space-y-2">
                       {([
                         { v: "rendah", l: "Rendah" },
@@ -670,13 +710,13 @@ export default function AnalisisPage() {
                         </OptionCard>
                       ))}
                     </div>
-                  </div>
+                  </Field>
                 </div>
 
-                {/* Air & Olahraga */}
+                {/* Air & Olahraga — opsional */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-semibold text-foreground mb-2 block">Konsumsi air harian?</label>
+                    <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5 flex-wrap">Konsumsi air harian? <Opt /></label>
                     <div className="space-y-2">
                       {([
                         { v: "kurang", l: "Kurang (< 1 L)" },
@@ -690,7 +730,7 @@ export default function AnalisisPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-semibold text-foreground mb-2 block">Seberapa sering olahraga?</label>
+                    <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5 flex-wrap">Seberapa sering olahraga? <Opt /></label>
                     <div className="space-y-2">
                       {([
                         { v: "jarang", l: "Jarang" },
@@ -705,9 +745,9 @@ export default function AnalisisPage() {
                   </div>
                 </div>
 
-                {/* Merokok */}
+                {/* Merokok — opsional */}
                 <div className="rounded-xl border border-border bg-card p-3">
-                  <YesNo label="Apakah kamu merokok?" value={form.merokok} onChange={v => update("merokok", v)} />
+                  <YesNo label="Apakah kamu merokok?" optional value={form.merokok} onChange={v => update("merokok", v)} />
                 </div>
 
                 <div className="flex items-start gap-2 rounded-xl border border-primary/20 bg-primary/5 p-3">
@@ -729,9 +769,9 @@ export default function AnalisisPage() {
                 {isWanita && (
                   <>
                 {/* Kehamilan */}
-                <div>
-                  <label className="text-sm font-semibold text-foreground mb-1 flex items-center gap-1.5">
-                    Status kehamilan / menyusui?
+                <Field id="q-status_kehamilan" missing={missingKeys.has("status_kehamilan")}>
+                  <label className="text-sm font-semibold text-foreground mb-1 flex items-center gap-1.5 flex-wrap">
+                    Status kehamilan / menyusui? <Req />
                     <span className="text-[10px] text-destructive bg-destructive/10 px-1.5 py-0.5 rounded-full">Keamanan produk</span>
                   </label>
                   <p className="text-xs text-muted-foreground mb-2">Beberapa bahan aktif (retinol, BHA) tidak aman saat hamil — kami akan filter otomatis.</p>
@@ -746,11 +786,11 @@ export default function AnalisisPage() {
                       </OptionCard>
                     ))}
                   </div>
-                </div>
+                </Field>
 
-                {/* Hormonal */}
+                {/* Hormonal — opsional */}
                 <div>
-                  <label className="text-sm font-semibold text-foreground mb-2 block">Pernah mengalami jerawat hormonal (siklus bulanan)?</label>
+                  <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5 flex-wrap">Pernah mengalami jerawat hormonal (siklus bulanan)? <Opt /></label>
                   <div className="grid grid-cols-2 gap-2">
                     <OptionCard selected={form.riwayat_hormonal === true} onClick={() => update("riwayat_hormonal", true)}>
                       <span className={`text-sm font-medium ${form.riwayat_hormonal === true ? "text-primary" : "text-foreground"}`}>Ya, sering timbul sebelum haid</span>
@@ -761,9 +801,9 @@ export default function AnalisisPage() {
                   </div>
                 </div>
 
-                {/* Siklus haid */}
+                {/* Siklus haid — opsional */}
                 <div>
-                  <label className="text-sm font-semibold text-foreground mb-2 block">Siklus haid kamu?</label>
+                  <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5 flex-wrap">Siklus haid kamu? <Opt /></label>
                   <div className="flex flex-wrap gap-2">
                     {([
                       ["teratur", "Teratur"],
@@ -775,16 +815,16 @@ export default function AnalisisPage() {
                   </div>
                 </div>
 
-                {/* Diagnosis hormonal */}
+                {/* Diagnosis hormonal — opsional */}
                 <div className="rounded-xl border border-border bg-card p-3">
-                  <YesNo label="Pernah didiagnosis kondisi hormonal (mis. PCOS)?" value={form.diagnosis_hormonal} onChange={v => update("diagnosis_hormonal", v)} />
+                  <YesNo label="Pernah didiagnosis kondisi hormonal (mis. PCOS)?" optional value={form.diagnosis_hormonal} onChange={v => update("diagnosis_hormonal", v)} />
                 </div>
                   </>
                 )}
 
-                {/* Sensitif history */}
+                {/* Sensitif history — opsional */}
                 <div>
-                  <label className="text-sm font-semibold text-foreground mb-2 block">Punya riwayat kulit sensitif atau eksim?</label>
+                  <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5 flex-wrap">Punya riwayat kulit sensitif atau eksim? <Opt /></label>
                   <div className="grid grid-cols-2 gap-2">
                     <OptionCard selected={form.riwayat_sensitif === true} onClick={() => update("riwayat_sensitif", true)}>
                       <span className={`text-sm font-medium ${form.riwayat_sensitif === true ? "text-primary" : "text-foreground"}`}>Ya, kulit mudah bereaksi</span>
@@ -796,8 +836,8 @@ export default function AnalisisPage() {
                 </div>
 
                 {/* Pengalaman Retinoid */}
-                <div>
-                  <label className="text-sm font-semibold text-foreground mb-1 block">Pengalaman dengan retinol / vitamin A?</label>
+                <Field id="q-pengalaman_retinoid" missing={missingKeys.has("pengalaman_retinoid")}>
+                  <label className="text-sm font-semibold text-foreground mb-1 block">Pengalaman dengan retinol / vitamin A? <Req /></label>
                   <p className="text-xs text-muted-foreground mb-2">Ini menentukan kekuatan retinoid yang tepat untukmu.</p>
                   <div className="space-y-2">
                     {([
@@ -811,7 +851,7 @@ export default function AnalisisPage() {
                       </OptionCard>
                     ))}
                   </div>
-                </div>
+                </Field>
 
                 {/* Reaksi produk */}
                 <div>
@@ -832,8 +872,8 @@ export default function AnalisisPage() {
                   <p className="text-sm text-muted-foreground">Kami akan pastikan rekomendasinya sesuai budget — tidak lebih, tidak kurang.</p>
                 </div>
                 {/* Input budget manual — ketik angka, otomatis diformat */}
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-1.5 block">Ketik budget bulananmu</label>
+                <Field id="q-budget" missing={missingKeys.has("budget")}>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Ketik budget bulananmu <Req /></label>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">Rp</span>
                     <input
@@ -850,7 +890,7 @@ export default function AnalisisPage() {
                   <p className="text-xs text-muted-foreground mt-2">
                     Contoh: ketik <span className="text-foreground font-medium">150000</span> → otomatis jadi <span className="text-primary font-medium">Rp 150.000</span>. Bisa juga 75000, 250000, dst.
                   </p>
-                </div>
+                </Field>
 
                 {/* Level rekomendasi (muncul setelah budget diisi) */}
                 <AnimatePresence>
@@ -935,15 +975,31 @@ export default function AnalisisPage() {
 
           </AnimatePresence>
 
-          {/* Peringatan: apa yang masih kurang untuk lanjut */}
-          {tried && !canNext() && (
-            <div ref={alertRef} className="mt-6 rounded-xl border border-destructive/40 bg-destructive/10 p-3.5 flex items-start gap-2.5">
-              <AlertCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
-              <div className="text-xs text-destructive">
-                <p className="font-semibold mb-1">Belum bisa lanjut — lengkapi dulu:</p>
-                <ul className="list-disc pl-4 space-y-0.5">
-                  {missingFields().map((f) => <li key={f}>{f}</li>)}
+          {/* Apa yang masih kurang untuk lanjut — tampil SEBELUM user menekan Lanjut, tiap baris bisa diketuk */}
+          {step < TOTAL_STEPS && missing.length > 0 && (
+            <div
+              ref={alertRef}
+              className={`mt-6 rounded-xl border p-3.5 flex items-start gap-2.5 transition-colors ${tried ? "border-destructive/40 bg-destructive/10" : "border-amber-400/40 bg-amber-400/10"}`}
+            >
+              <AlertCircle className={`w-4 h-4 shrink-0 mt-0.5 ${tried ? "text-destructive" : "text-amber-700"}`} />
+              <div className={`text-xs ${tried ? "text-destructive" : "text-amber-800"}`}>
+                <p className="font-semibold mb-1.5">
+                  {tried ? "Belum bisa lanjut — lengkapi dulu:" : `Tinggal ${missing.length} lagi supaya bisa lanjut:`}
+                </p>
+                <ul className="space-y-1">
+                  {missing.map((f) => (
+                    <li key={f.key}>
+                      <button
+                        type="button"
+                        onClick={() => jumpTo(f.key)}
+                        className="underline underline-offset-2 text-left hover:opacity-70 transition-opacity"
+                      >
+                        {f.label}
+                      </button>
+                    </li>
+                  ))}
                 </ul>
+                <p className="mt-1.5 opacity-80">Ketuk salah satu untuk langsung ke pertanyaannya.</p>
               </div>
             </div>
           )}
