@@ -2,9 +2,13 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import { Camera, Upload, AlertTriangle, Loader2, CheckCircle2, X } from "lucide-react";
-import { analyzeSkin, type Sample, type SkinInput, type SkinResult } from "@/lib/skin-analysis";
+import { analyzeSkin, type AnalysisStage, type Sample, type SkinInput, type SkinResult } from "@/lib/skin-analysis";
+import { SkinAnalysisHud } from "@/components/skin-analysis-hud";
 
-// titik landmark MediaPipe (FaceMesh 468) per zona wajah
+// Indeks titik landmark MediaPipe per zona wajah.
+// CATATAN: model face_landmarker.task yang kita muat mengeluarkan 478 titik
+// (468 wajah + 10 iris) — BUKAN 468. Jangan tulis angka ini dari ingatan;
+// HUD membacanya dari runtime (`faces[0].length`).
 const REGION = {
   cheekL: [50, 101, 118, 117, 119],
   cheekR: [280, 330, 347, 346, 348],
@@ -15,7 +19,9 @@ const REGION = {
 const EDGE_L = 234, EDGE_R = 454, EYE_L = 33, EYE_R = 263, NOSE_TIP = 1, MOUTH = 13;
 
 type Pt = { x: number; y: number };
-type Capture = { label: string; thumb: string; input: SkinInput };
+// `landmarks` & `sampleMs` dicatat dari eksekusi NYATA (bukan angka hafalan) —
+// dipakai HUD supaya yang tampil di layar = yang benar-benar dikerjakan mesin.
+type Capture = { label: string; thumb: string; input: SkinInput; landmarks: number; sampleMs: number; detectMs: number };
 type LiveStatus = { face: boolean; light: "gelap" | "baik" | "silau"; dist: "jauh" | "pas" | "dekat"; yaw: number };
 
 const ANGLES = [
@@ -39,6 +45,8 @@ export function SkinPhotoCapture({
   const [mode, setMode] = useState<"pilih" | "kamera" | "upload">("pilih");
   const [captures, setCaptures] = useState<Capture[]>([]);
   const [status, setStatus] = useState<"idle" | "loading-model" | "analyzing" | "error">("idle");
+  const [pipeline, setPipeline] = useState<AnalysisStage[]>([]);
+  const [pending, setPending] = useState<{ res: SkinResult; sides: number } | null>(null);
 
   // model refs (lazy — MediaPipe baru diunduh saat dibutuhkan)
   const imgLmRef = useRef<unknown>(null);
@@ -82,8 +90,36 @@ export function SkinPhotoCapture({
       pose: front.pose, faceFound: list.some((c) => c.input.faceFound),
     };
     setStatus("analyzing");
-    const res = analyzeSkin(merged);
-    onResult(res, list.length);
+
+    // Tahap sisi-penangkap (MediaPipe + sampling region) — angka diambil dari
+    // eksekusi nyata, bukan ditulis tangan.
+    const captured: AnalysisStage[] = [
+      {
+        key: "detect",
+        label: "MediaPipe FaceLandmarker (WASM, on-device)",
+        detail: `${list[0].landmarks} titik landmark · ${list.length} sudut wajah`,
+        ms: Math.round(list.reduce((a, c) => a + c.detectMs, 0) * 100) / 100,
+      },
+      {
+        key: "segment",
+        label: "Segmentasi region — pipi · dahi · hidung · dagu",
+        detail: `${merged.all.length} piksel kulit disampel`,
+        ms: Math.round(list.reduce((a, c) => a + c.sampleMs, 0) * 100) / 100,
+      },
+    ];
+
+    const engine: AnalysisStage[] = [];
+    const res = analyzeSkin(merged, (s) => engine.push(s));
+    setPipeline([...captured, ...engine]);
+    setPending({ res, sides: list.length });
+  }
+
+  // HUD selesai diputar → baru serahkan hasil ke pemanggil.
+  function finishAnalysis() {
+    if (!pending) return;
+    onResult(pending.res, pending.sides);
+    setPending(null);
+    setPipeline([]);
     setStatus("idle");
   }
 
@@ -92,6 +128,11 @@ export function SkinPhotoCapture({
     setStatus("idle");
     setMode("pilih");
     onCancel?.();
+  }
+
+  // HUD pipeline sedang diputar — sembunyikan UI tangkap foto agar fokus ke prosesnya.
+  if (status === "analyzing" && pipeline.length > 0) {
+    return <SkinAnalysisHud stages={pipeline} onDone={finishAnalysis} />;
   }
 
   return (
@@ -154,6 +195,7 @@ function CameraCapture({ getVideoLandmarker, captures, setCaptures, onDone, onCa
   const videoRef = useRef<HTMLVideoElement>(null);
   const workRef = useRef<HTMLCanvasElement>(null);
   const lastLmsRef = useRef<Pt[] | null>(null);
+  const lastDetectMsRef = useRef(0); // waktu deteksi frame terakhir — dipakai HUD (angka nyata)
   const rafRef = useRef<number>(0);
   const streamRef = useRef<MediaStream | null>(null);
   const [live, setLive] = useState<LiveStatus>({ face: false, light: "gelap", dist: "jauh", yaw: 0 });
@@ -184,7 +226,9 @@ function CameraCapture({ getVideoLandmarker, captures, setCaptures, onDone, onCa
         const work = workRef.current!;
         const loop = () => {
           if (!alive || !video.videoWidth) { rafRef.current = requestAnimationFrame(loop); return; }
-          const res = lm.detectForVideo(video, performance.now());
+          const tDet = performance.now();
+          const res = lm.detectForVideo(video, tDet);
+          lastDetectMsRef.current = performance.now() - tDet;
           const faces = res.faceLandmarks;
           if (faces && faces.length) {
             const lms = faces[0];
@@ -247,10 +291,12 @@ function CameraCapture({ getVideoLandmarker, captures, setCaptures, onDone, onCa
     ctx.drawImage(video, 0, 0, W, H);
     const imgData = ctx.getImageData(0, 0, W, H);
     const px = lms.map((p) => ({ x: p.x * W, y: p.y * H }));
+    const t0 = performance.now();
     const input = buildInput(px, imgData, W, H);
+    const sampleMs = performance.now() - t0;
     const thumb = c.toDataURL("image/jpeg", 0.6);
     if (step > 0) signsRef.current.push(Math.sign(live.yaw));
-    const next = [...captures, { label: target.label, thumb, input }];
+    const next = [...captures, { label: target.label, thumb, input, landmarks: lms.length, sampleMs, detectMs: lastDetectMsRef.current }];
     setCaptures(next);
     if (next.length >= 3) { stop(); onDone(next); }
   }
@@ -338,16 +384,21 @@ function UploadCapture({ getImageLandmarker, captures, setCaptures, loadingModel
       const ctx = c.getContext("2d", { willReadFrequently: true })!;
       ctx.drawImage(img, 0, 0, W, H);
       const imgData = ctx.getImageData(0, 0, W, H);
+      const tDet = performance.now();
       const det = lm.detect(c);
+      const detectMs = performance.now() - tDet;
       const faces = det.faceLandmarks;
+      const t0 = performance.now();
       const input: SkinInput = faces && faces.length
         ? buildInput(faces[0].map((p) => ({ x: p.x * W, y: p.y * H })), imgData, W, H)
         : { cheek: [], tzone: [], all: [], faceLum: [], faceLumW: 0, faceLumH: 0, pose: { yaw: 0, pitch: 0, roll: 0 }, faceFound: false };
+      const sampleMs = performance.now() - t0;
+      const landmarks = faces && faces.length ? faces[0].length : 0;
       const thumb = c.toDataURL("image/jpeg", 0.6);
       setCaptures((prev) => {
         const without = prev.filter((p) => p.label !== angle.label);
         // jaga urutan depan dulu
-        const list = [...without, { label: angle.label, thumb, input }];
+        const list = [...without, { label: angle.label, thumb, input, landmarks, sampleMs, detectMs }];
         return list.sort((a, b) => ANGLES.findIndex((x) => x.label === a.label) - ANGLES.findIndex((x) => x.label === b.label));
       });
       URL.revokeObjectURL(url);

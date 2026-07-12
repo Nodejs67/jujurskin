@@ -28,6 +28,15 @@ export type SkinMetric = {
   tip: string;
 };
 
+// Satu tahap nyata dalam pipeline. `ms` = waktu eksekusi ASLI (bukan animasi palsu),
+// `detail` = angka yang benar-benar dihasilkan tahap itu. Dipakai HUD di UI & video.
+export type AnalysisStage = {
+  key: string;
+  label: string;
+  detail: string;
+  ms: number;
+};
+
 export type SkinResult = {
   metrics: SkinMetric[];
   confidence: number; // 0–100
@@ -97,15 +106,30 @@ function trimmedStats(values: number[], trim = 0.1): { mean: number; std: number
   return { mean: m, std: Math.sqrt(v) };
 }
 
+const now = () => (typeof performance !== "undefined" ? performance.now() : Date.now());
+const round2 = (x: number) => Math.round(x * 100) / 100;
+
 // ---------- Analisis utama ----------
-export function analyzeSkin(input: SkinInput): SkinResult {
+// `onStage` (opsional) dipanggil setiap satu tahap NYATA selesai, membawa waktu
+// eksekusi sebenarnya. Tidak mengubah hasil apa pun — murni pelaporan.
+export function analyzeSkin(input: SkinInput, onStage?: (s: AnalysisStage) => void): SkinResult {
   const warnings: string[] = [];
+  let t = now();
+  const stage = (key: string, label: string, detail: string) => {
+    onStage?.({ key, label, detail, ms: round2(now() - t) });
+    t = now();
+  };
 
   // --- Kemerahan (erythema) via a* CIELAB pada pipi (nilai MENTAH + trimmed) ---
   const cheekA = input.cheek.map(([r, g, b]) => labFromRgb(r, g, b).a);
+  stage("cielab", "sRGB → linear → XYZ (D65) → CIELAB", `${input.cheek.length} piksel pipi`);
+
   const meanA = trimmedStats(cheekA).mean;
+  stage("trimmed", "Trimmed statistics — 10% outlier dibuang", "rambut · bayangan · kilau");
+
   const rednessLevel: Level = meanA > 20 ? "tinggi" : meanA > 14 ? "sedang" : "rendah";
   const rednessScore = clamp01to100(((meanA - 8) / 20) * 100); // a* ~8..28 → 0..100
+  stage("redness", "Kuantifikasi kemerahan (a*)", `a* ${round2(meanA)} — ${rednessLevel}`);
 
   // --- Kilap/minyak via specular (HSV: terang + tak jenuh) pada T-zone ---
   let shineTz = 0;
@@ -118,6 +142,7 @@ export function analyzeSkin(input: SkinInput): SkinResult {
   const shineFrac = input.tzone.length ? shineTz / input.tzone.length : 0;
   const shineLevel: Level = shineFrac > 0.05 ? "tinggi" : shineFrac > 0.015 ? "sedang" : "rendah";
   const oilScore = clamp01to100(shineFrac * 1200);
+  stage("oil", "Deteksi specular highlight (HSV) — T-zone", `${round2(shineFrac * 100)}% — ${shineLevel}`);
 
   // --- Warna kulit seluruh area (Lab mentah, trimmed) → kerataan + tone ITA° ---
   const allL: number[] = [], allA: number[] = [], allB: number[] = [];
@@ -129,12 +154,14 @@ export function analyzeSkin(input: SkinInput): SkinResult {
   const chromaSpread = Math.sqrt(sa.std ** 2 + sb.std ** 2);
   const evenLevel: Level = chromaSpread > 8 ? "tinggi" : chromaSpread > 5 ? "sedang" : "rendah";
   const evenScore = clamp01to100(((chromaSpread - 2) / 9) * 100); // makin tinggi = makin tidak rata
+  stage("even", "Sebaran chroma → kerataan warna", `Δ ${round2(chromaSpread)} — ${evenLevel}`);
 
   // --- Warna kulit via ITA° (Individual Typology Angle) — standar dermatologi ---
   const ita = (Math.atan2(sl.mean - 50, sb.mean || 0.0001) * 180) / Math.PI;
   const toneLabel =
     ita > 55 ? "Sangat terang" : ita > 41 ? "Terang" : ita > 28 ? "Sedang" :
     ita > 10 ? "Sawo matang" : ita > -30 ? "Cokelat" : "Gelap";
+  stage("ita", "Individual Typology Angle (ITA°)", `${Math.round(ita)}° — ${toneLabel}`);
 
   // --- Kualitas foto: exposure, clipping, blur ---
   const lum = input.faceLum;
@@ -158,10 +185,12 @@ export function analyzeSkin(input: SkinInput): SkinResult {
     lapVar = std(lap) ** 2;
   }
   const blur: "tajam" | "agak buram" | "buram" = lapVar < 60 ? "buram" : lapVar < 200 ? "agak buram" : "tajam";
+  stage("quality", "Kontrol kualitas — exposure · clipping · blur", `${exposure} · ${round2(clipping * 100)}% · ${blur}`);
 
   // --- Pose ---
   const frontal = Math.abs(input.pose.yaw) < 16 && Math.abs(input.pose.pitch) < 16 && Math.abs(input.pose.roll) < 14;
   const pose: "lurus" | "miring" = frontal ? "lurus" : "miring";
+  stage("pose", "Pose kepala (yaw · pitch · roll)", `${Math.round(input.pose.yaw)}° · ${Math.round(input.pose.pitch)}° · ${Math.round(input.pose.roll)}° — ${pose}`);
 
   // --- Confidence gabungan ---
   let confidence = 98;
@@ -174,6 +203,7 @@ export function analyzeSkin(input: SkinInput): SkinResult {
     if (clipping > 0.06) { confidence -= 10; warnings.push("Ada area kelebihan cahaya (flash/silau). Matikan flash, hindari sumber cahaya langsung."); }
   }
   confidence = Math.round(Math.min(98, Math.max(10, confidence)));
+  stage("confidence", "Skor keyakinan", `${confidence}%${warnings.length ? ` — ${warnings.length} peringatan` : ""}`);
 
   const metrics: SkinMetric[] = [
     {
