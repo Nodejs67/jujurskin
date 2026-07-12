@@ -40,7 +40,7 @@ export function SkinAnalysisHud({
   }, [shown, stages.length, onDone]);
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 font-mono overflow-hidden">
+    <div data-hud className="rounded-2xl border border-slate-800 bg-slate-950 p-4 font-mono overflow-hidden">
       <div className="flex items-center justify-between mb-3 pb-3 border-b border-slate-800">
         <span className="text-[11px] font-semibold text-slate-300 tracking-wide">
           Analisis kulit · on-device
