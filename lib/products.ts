@@ -4599,26 +4599,36 @@ for (const p of PRODUCTS) {
   p.price_range = mid < 60000 ? "budget" : mid <= 150000 ? "mid" : "premium";
 }
 
-/** Kata kunci bahan aktif (huruf kecil, tanpa angka/persen) untuk membandingkan dua produk. */
-function activeKeys(p: Product): Set<string> {
-  return new Set(
-    p.key_ingredients.map((i) => i.toLowerCase().replace(/\d+(?:[.,]\d+)?\s*%/g, "").replace(/\(.*?\)/g, "").trim()).filter(Boolean)
-  );
+/** Peta bahan aktif -> kadar ("2%" atau ""), nama huruf kecil tanpa angka/kurung. */
+function activeMap(p: Product): Map<string, string> {
+  const m = new Map<string, string>();
+  for (const i of p.key_ingredients) {
+    const pct = (i.match(/(\d+(?:[.,]\d+)?)\s*%/) || [])[1] ?? "";
+    const name = i.toLowerCase().replace(/\d+(?:[.,]\d+)?\s*%/g, "").replace(/\(.*?\)/g, "").trim();
+    if (name) m.set(name, pct.replace(",", "."));
+  }
+  return m;
 }
 
 /**
  * Alternatif LEBIH MURAH: kategori sama, berbagi minimal satu bahan aktif, harga tengah lebih rendah.
- * Bukan "kembaran formula": kadar dan basis formula bisa berbeda. Urut dari yang paling mirip,
- * lalu termurah. Tidak memakai rating atau komisi.
+ * Urutan: kemiripan bahan (shared/union), bonus bila kadar bahan bersama sama persis, lalu termurah.
+ * Bukan "kembaran formula": kadar dan basis formula bisa berbeda. Tidak memakai rating atau komisi.
  */
 export function cheaperAlternatives(product: Product, limit = 3): Product[] {
   const mid = (p: Product) => (p.price_min + p.price_max) / 2;
-  const mine = activeKeys(product);
+  const mine = activeMap(product);
   return PRODUCTS
     .filter((p) => p.id !== product.id && p.category === product.category && mid(p) < mid(product) * 0.8)
-    .map((p) => ({ p, shared: [...activeKeys(p)].filter((k) => mine.has(k)).length }))
+    .map((p) => {
+      const theirs = activeMap(p);
+      const shared = [...theirs.keys()].filter((k) => mine.has(k));
+      const union = new Set([...mine.keys(), ...theirs.keys()]).size;
+      const sameDose = shared.some((k) => mine.get(k) && mine.get(k) === theirs.get(k));
+      return { p, shared: shared.length, score: shared.length / union + (sameDose ? 0.3 : 0) };
+    })
     .filter((x) => x.shared > 0)
-    .sort((a, b) => b.shared - a.shared || mid(a.p) - mid(b.p))
+    .sort((a, b) => b.score - a.score || mid(a.p) - mid(b.p))
     .slice(0, limit)
     .map((x) => x.p);
 }

@@ -21,3 +21,8 @@ assert.equal(cheaperAlternatives(cheapest).length, 0);
 const lamer = PRODUCTS.find((p) => p.id === "la-mer-creme-de-la-mer");
 console.log("produk dengan alternatif:", withAlt, "/", PRODUCTS.length, "| La Mer:", cheaperAlternatives(lamer).map((a) => a.id));
 console.log("alternatives tests OK");
+
+// Kadar sama harus diutamakan: Paula's Choice 2% BHA -> Somethinc BHA 2% di urutan pertama.
+const paula = PRODUCTS.find((p) => p.id === "paulas-choice-2bha-liquid");
+assert.equal(cheaperAlternatives(paula)[0].id, "somethinc-bha-exfoliant");
+console.log("urutan kadar OK");
