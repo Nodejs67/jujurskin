@@ -197,8 +197,8 @@ export function matchProducts(need: MatchNeed): ProductMatchResult {
     // Tumpang tindih concern.
     score += Math.min(20, concernOverlap(p, need.concerns) * 10);
 
-    // Rating komunitas sebagai pemecah seri (maks ~+10).
-    score += Math.max(0, (p.rating_community - 4) * 10);
+    // rating_community = skor editorial tanpa sumber, TIDAK dipakai untuk peringkat.
+    // Seri dipecah oleh harga (lebih murah dulu) di sort di bawah.
 
     return { product: p, score, safety, ingredientHit };
   });

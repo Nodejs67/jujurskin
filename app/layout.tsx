@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/auth-provider";
+import { safeJsonLd } from "@/lib/jsonld";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -68,6 +69,18 @@ export default function RootLayout({
       className={`${jakarta.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: safeJsonLd({
+              "@context": "https://schema.org",
+              "@graph": [
+                { "@type": "WebSite", "@id": "https://jujurskin.com/#website", url: "https://jujurskin.com", name: "JujurSkin", inLanguage: "id-ID" },
+                { "@type": "Organization", "@id": "https://jujurskin.com/#org", name: "JujurSkin", url: "https://jujurskin.com", logo: "https://jujurskin.com/icon-192.png" },
+              ],
+            }),
+          }}
+        />
         <AuthProvider>{children}</AuthProvider>
         <Analytics />
         <SpeedInsights />

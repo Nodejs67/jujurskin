@@ -156,6 +156,7 @@ export default function AnalisisPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
   const [fotoResult, setFotoResult] = useState<SkinResult | null>(null);
   const [tried, setTried] = useState(false); // user menekan Lanjut padahal belum lengkap
   const alertRef = useRef<HTMLDivElement | null>(null);
@@ -970,6 +971,19 @@ export default function AnalisisPage() {
                     )}
                   </div>
                 </div>
+                <label className="mt-3 flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+                  />
+                  <span>
+                    Saya setuju data di atas, termasuk status kehamilan/menyusui dan riwayat
+                    hormonal bila diisi, dipakai untuk menyusun rekomendasi. Lihat{" "}
+                    <a href="/kebijakan" target="_blank" rel="noopener" className="underline text-primary">Kebijakan Privasi</a>.
+                  </span>
+                </label>
               </motion.div>
             )}
 
@@ -1017,7 +1031,7 @@ export default function AnalisisPage() {
                 Lanjut <ArrowRight className="w-4 h-4" />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} disabled={loading}
+              <Button onClick={handleSubmit} disabled={loading || !consent}
                 className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1 gap-2">
                 {loading ? (
                   <><motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}

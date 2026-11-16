@@ -4587,6 +4587,14 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
+// price_range DITURUNKAN dari harga tengah supaya selalu cocok dengan label UI
+// (Budget < Rp60k, Mid 60-150k, Premium > 150k). Sebelumnya 54 produk berlabel tangan
+// dan tak konsisten dengan angkanya.
+for (const p of PRODUCTS) {
+  const mid = (p.price_min + p.price_max) / 2;
+  p.price_range = mid < 60000 ? "budget" : mid <= 150000 ? "mid" : "premium";
+}
+
 /**
  * Ambil bahan aktif yang punya kadar/persentase RESMI dari key_ingredients
  * (mis. "Niacinamide 10%", "Salicylic Acid 2%"). Dipakai untuk badge persen menonjol.
