@@ -58,6 +58,10 @@ export interface Product {
   shopee_url?: string;
   spf?: number;
   bpom_registered: boolean;
+  /** Nomor registrasi BPOM (mis. "NA18..."). Isi HANYA dari cekbpom.pom.go.id, jangan menebak. */
+  bpom_number?: string;
+  /** Tanggal terakhir data produk (harga/BPOM) dicek manual, format "2026-11-16". */
+  data_verified_at?: string;
 
   why_good: string;
   who_should_skip?: string;

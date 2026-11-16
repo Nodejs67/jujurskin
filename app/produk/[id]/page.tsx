@@ -209,6 +209,20 @@ export default function ProdukDetailPage({
           </div>
         )}
 
+        {/* BPOM terdaftar: tampilkan nomor bila sudah dicatat, kalau belum jujur soal itu */}
+        {product.bpom_registered && (
+          <p className="text-xs text-muted-foreground">
+            {product.bpom_number ? (
+              <>Nomor BPOM: <strong className="text-foreground">{product.bpom_number}</strong>{product.data_verified_at ? ` (dicek ${product.data_verified_at})` : ""}. </>
+            ) : (
+              <>Nomor registrasi BPOM produk ini belum kami catat. </>
+            )}
+            Pastikan sendiri di{" "}
+            <a href="https://cekbpom.pom.go.id/" target="_blank" rel="noopener noreferrer" className="text-primary underline">cekbpom.pom.go.id</a>{" "}
+            sebelum membeli.
+          </p>
+        )}
+
         {/* SPF badge */}
         {product.spf && (
           <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-3 text-sm text-yellow-800 flex items-center gap-2">
