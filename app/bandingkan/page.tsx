@@ -460,6 +460,7 @@ export default function BandingkanPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
+        <h1 className="sr-only">Perbandingan Ingredient Skincare</h1>
         <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
       </div>
     }>
