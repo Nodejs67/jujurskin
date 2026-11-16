@@ -13,6 +13,7 @@ import type { AnalysisResult } from "@/lib/recommendations";
 import { matchProducts, type ProductMatchResult, type RecTierLabel } from "@/lib/product-matcher";
 import { shopeeUrl, shopeeButtonLabel, hasShopeeAffiliate, AFFILIATE_DISCLOSURE } from "@/lib/affiliate";
 import { ClimateWidget } from "@/components/climate-widget";
+import { ShoppingList } from "@/components/shopping-list";
 
 // Pencocokan produk 3-tier (Pilihan Jujur / Premium / Luxury) dari database
 // asli via lib/product-matcher.ts — menggantikan filter naif lama.
@@ -541,6 +542,8 @@ function HasilContent() {
             })}
           </div>
         </motion.div>
+
+        <ShoppingList recs={h.recs} />
 
         {/* Cara & urutan pemakaian (AM/PM) */}
         {((h.morning_routine && h.morning_routine.length > 0) || (h.night_routine && h.night_routine.length > 0)) && (
