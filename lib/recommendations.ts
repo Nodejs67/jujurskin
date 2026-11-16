@@ -73,6 +73,8 @@ export interface SkipItem {
   product: string;
   reason: string;
   saving_estimate: number;
+  /** true = produk yang user SUDAH punya (penghematan nyata). Selain itu hanya saran "hindari". */
+  owned?: boolean;
 }
 
 export interface SkinScore {
@@ -641,6 +643,7 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
       product: "Micellar Water",
       reason: "Kamu sudah punya cleanser — micellar water adalah alternatif cleanser, bukan pelengkap. Tidak perlu keduanya.",
       saving_estimate: 50000,
+      owned: true,
     });
   }
 
@@ -649,6 +652,7 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
       product: "Essence (jika sudah ada serum aktif)",
       reason: "Essence dan serum punya fungsi sangat mirip. Pilih serum dengan konsentrasi lebih tinggi — lebih efisien.",
       saving_estimate: 80000,
+      owned: true,
     });
   }
 
@@ -719,7 +723,19 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
     : wantMax
     ? " Sesuai pilihanmu, kami sertakan rutinitas yang lebih lengkap."
     : "";
-  const summary = `Dengan budget Rp ${input.budget.toLocaleString("id")}, kamu bisa mengatasi ${mainMasalah} hanya dengan ${recs.length} produk yang tepat. Total estimasi biaya: Rp ${Math.max(0, input.budget - budgetLeft).toLocaleString("id")}.${tierNote}`;
+  // Jerawat dipilih tapi budget habis sebelum obat jerawat masuk → jangan klaim "teratasi".
+  const acneUnmet = has("jerawat") && !recs.some((r) => r.category === "Acne Treatment");
+  if (acneUnmet) {
+    lifestyleNotes.unshift(
+      `Budget Rp ${input.budget.toLocaleString("id")} baru cukup untuk dasar (sunscreen + cleanser), belum untuk perawatan jerawat. Untuk jerawat, sisihkan sekitar Rp 35.000–90.000 lagi (${isPregnant ? "Azelaic Acid, pilihan yang umumnya dipakai saat hamil/menyusui" : "Salicylic Acid atau Azelaic Acid"}), atau konsultasikan ke dokter/apotek.`
+    );
+  }
+  if (isPregnant && has("jerawat")) {
+    lifestyleNotes.unshift("Jerawat saat hamil/menyusui: pilihan bahan terbatas. Konsultasikan ke dokter kulit atau dokter kandunganmu sebelum memakai produk jerawat apa pun. Ini saran edukatif, bukan diagnosis medis.");
+  }
+  const summary = acneUnmet
+    ? `Dengan budget Rp ${input.budget.toLocaleString("id")}, ${recs.length} produk ini baru membangun dasar kulit sehat. ${mainMasalah[0].toUpperCase() + mainMasalah.slice(1)} BELUM tertangani oleh daftar ini, lihat catatan di bawah. Total estimasi biaya: Rp ${Math.max(0, input.budget - budgetLeft).toLocaleString("id")}.${tierNote}`
+    : `Dengan budget Rp ${input.budget.toLocaleString("id")}, kamu bisa mengatasi ${mainMasalah} hanya dengan ${recs.length} produk yang tepat. Total estimasi biaya: Rp ${Math.max(0, input.budget - budgetLeft).toLocaleString("id")}.${tierNote}`;
 
   const budgetUsed = Math.min(input.budget, Math.max(0, input.budget - budgetLeft));
 
@@ -789,7 +805,8 @@ export function generateRecommendations(input: AnalysisInput): AnalysisResult {
     { tier: "Menengah", total: sumAvg, desc: "Keseimbangan harga & kualitas. Paling umum direkomendasikan." },
     { tier: "Premium", total: sumMax, desc: "Opsi premium bila budget memungkinkan — bukan keharusan." },
   ];
-  const potential_saving = skips.reduce((a, s) => a + s.saving_estimate, 0);
+  // Hanya hitung produk yang user SUDAH punya; saran "hindari" bukan penghematan nyata.
+  const potential_saving = skips.filter((s) => s.owned).reduce((a, s) => a + s.saving_estimate, 0);
   let eff = 65;
   if (skips.length > 0) eff += Math.min(20, skips.length * 7);
   if (input.budget > 0) eff += budgetUsed <= input.budget ? 12 : -12;

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const title = "Sunscreen Tanpa Whitecast untuk Kulit Indonesia | JujurSkin";
+const title = "Sunscreen Tanpa Whitecast untuk Kulit Indonesia";
 const description =
   "Kulit sawo matang sering kena whitecast (wajah abu-abu/pucat) setelah pakai sunscreen. Cek apakah sunscreen-mu menyatu di kulitmu, pahami filter kimia vs mineral, dan cara memilih yang tepat. Gratis & jujur.";
 

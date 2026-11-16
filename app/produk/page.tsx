@@ -78,7 +78,7 @@ function StarRating({ rating }: { rating: number }) {
           className={`w-3 h-3 ${s <= Math.round(rating) ? "text-accent fill-accent" : "text-border"}`}
         />
       ))}
-      <span className="text-xs text-muted-foreground ml-1">{rating.toFixed(1)}</span>
+      <span className="text-xs text-muted-foreground ml-1" title="Skor editorial JujurSkin, bukan rata-rata ulasan pengguna">{rating.toFixed(1)} · skor editorial</span>
     </div>
   );
 }

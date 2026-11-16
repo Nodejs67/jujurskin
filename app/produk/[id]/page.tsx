@@ -171,7 +171,7 @@ export default function ProdukDetailPage({
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-muted-foreground mb-1">Rating</p>
+                <p className="text-xs text-muted-foreground mb-1">{reviews.length > 0 ? "Rating pengguna" : "Skor editorial"}</p>
                 <p className="text-sm font-semibold text-primary flex items-center justify-center gap-1">
                   <Star className="w-3 h-3 fill-primary" />
                   {communityAvg}

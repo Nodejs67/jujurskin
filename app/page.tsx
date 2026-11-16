@@ -270,7 +270,7 @@ export default function Home() {
           <div className="lg:col-span-3 space-y-3">
             <div className="rounded-2xl bg-white shadow-lg shadow-rose-100/50 border border-rose-50 p-4 flex items-center gap-3">
               <div>
-                <p className="text-xs text-slate-500">Healthy Skin Score</p>
+                <p className="text-xs text-slate-500">Healthy Skin Score · contoh tampilan</p>
                 <p className="text-3xl font-extrabold text-slate-900 leading-none">82<span className="text-sm text-slate-400 font-semibold">/100</span></p>
                 <p className="text-xs font-semibold text-emerald-600 mt-0.5">Kulitmu sehat</p>
               </div>
@@ -341,7 +341,7 @@ export default function Home() {
           {/* results */}
           <div className="lg:col-span-4">
             <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
-              <p className="text-sm font-bold text-slate-900 mb-3">Hasil Analisis</p>
+              <p className="text-sm font-bold text-slate-900 mb-3">Hasil Analisis <span className="text-xs font-medium text-slate-500">(contoh tampilan, bukan hasil nyata)</span></p>
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-xs text-slate-500">Healthy Skin Score</span>
                 <span className="ml-auto text-2xl font-extrabold text-slate-900">82<span className="text-xs text-slate-400 font-semibold">/100</span></span>

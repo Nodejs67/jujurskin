@@ -41,7 +41,18 @@ export default function KebijakanPage() {
                   <span>
                     <strong className="text-foreground">Jawaban analisis kulit</strong> (jenis
                     kulit, masalah, budget, gaya hidup) — dipakai untuk menyusun
-                    rekomendasimu saat itu juga.
+                    rekomendasimu saat itu juga. Ini mencakup data kesehatan seperti status
+                    kehamilan/menyusui dan riwayat hormonal bila kamu mengisinya. Isi hanya bila
+                    kamu setuju datanya dipakai untuk menyusun rekomendasi.
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-primary mt-0.5">•</span>
+                  <span>
+                    <strong className="text-foreground">Saran AI (opsional)</strong> — di fitur
+                    Analisis Foto, ANGKA hasil ukur (skor kemerahan, kilap, kerataan, perkiraan
+                    warna kulit), usia, tipe kulit, dan kota dikirim ke penyedia model bahasa
+                    (saat ini DeepSeek) untuk menulis saran. Fotomu sendiri tidak pernah dikirim.
                   </span>
                 </li>
                 <li className="flex gap-2">
