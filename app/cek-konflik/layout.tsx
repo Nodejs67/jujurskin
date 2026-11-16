@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "kombinasi skincare aman",
   ],
   alternates: { canonical: "https://jujurskin.com/cek-konflik" },
-  openGraph: { title, description, url: "https://jujurskin.com/cek-konflik", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/cek-konflik", type: "website", images: ["/opengraph-image"] },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

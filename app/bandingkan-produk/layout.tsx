@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     description,
     url: "https://jujurskin.com/bandingkan-produk",
     type: "website",
+    images: ["/opengraph-image"],
   },
   twitter: { card: "summary", title, description },
   alternates: { canonical: "https://jujurskin.com/bandingkan-produk" },

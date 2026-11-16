@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "produk skincare ilegal",
     "skincare merkuri bahaya",
   ],
-  openGraph: { title, description, url: "https://jujurskin.com/cek-bpom", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/cek-bpom", type: "website", images: ["/opengraph-image"] },
   twitter: { card: "summary", title, description },
   alternates: { canonical: "https://jujurskin.com/cek-bpom" },
 };

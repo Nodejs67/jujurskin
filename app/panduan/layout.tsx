@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "urutan pakai serum",
   ],
   alternates: { canonical: "https://jujurskin.com/panduan" },
-  openGraph: { title, description, url: "https://jujurskin.com/panduan", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/panduan", type: "website", images: ["/opengraph-image"] },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

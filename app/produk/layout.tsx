@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "harga skincare",
   ],
   alternates: { canonical: "https://jujurskin.com/produk" },
-  openGraph: { title, description, url: "https://jujurskin.com/produk", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/produk", type: "website", images: ["/opengraph-image"] },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

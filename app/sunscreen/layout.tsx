@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "sunscreen kulit gelap indonesia",
     "filter kimia vs mineral sunscreen",
   ],
-  openGraph: { title, description, url: "https://jujurskin.com/sunscreen", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/sunscreen", type: "website", images: ["/opengraph-image"] },
   twitter: { card: "summary", title, description },
   alternates: { canonical: "https://jujurskin.com/sunscreen" },
 };

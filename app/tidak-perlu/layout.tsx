@@ -22,6 +22,7 @@ export const metadata: Metadata = {
     description,
     url: "https://jujurskin.com/tidak-perlu",
     type: "website",
+    images: ["/opengraph-image"],
   },
   twitter: { card: "summary", title, description },
   alternates: { canonical: "https://jujurskin.com/tidak-perlu" },

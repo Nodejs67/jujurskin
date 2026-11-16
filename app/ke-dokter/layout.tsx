@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "rujukan poli kulit bpjs",
     "klinik kecantikan vs dokter kulit",
   ],
-  openGraph: { title, description, url: "https://jujurskin.com/ke-dokter", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/ke-dokter", type: "website", images: ["/opengraph-image"] },
   twitter: { card: "summary", title, description },
   alternates: { canonical: "https://jujurskin.com/ke-dokter" },
 };

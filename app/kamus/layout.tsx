@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "kamus skincare indonesia",
     "pih pie bekas jerawat",
   ],
-  openGraph: { title, description, url: "https://jujurskin.com/kamus", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/kamus", type: "website", images: ["/opengraph-image"] },
   twitter: { card: "summary", title, description },
   alternates: { canonical: "https://jujurskin.com/kamus" },
 };

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "bahan skincare yang tidak boleh dicampur",
   ],
   alternates: { canonical: "https://jujurskin.com/edukasi" },
-  openGraph: { title, description, url: "https://jujurskin.com/edukasi", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/edukasi", type: "website", images: ["/opengraph-image"] },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

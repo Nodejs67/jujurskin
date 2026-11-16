@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "skincare puasa",
   ],
   alternates: { canonical: "https://jujurskin.com/artikel" },
-  openGraph: { title, description, url: "https://jujurskin.com/artikel", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/artikel", type: "website", images: ["/opengraph-image"] },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "kandungan skincare",
   ],
   alternates: { canonical: "https://jujurskin.com/bandingkan" },
-  openGraph: { title, description, url: "https://jujurskin.com/bandingkan", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/bandingkan", type: "website", images: ["/opengraph-image"] },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

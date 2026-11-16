@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "basic skincare routine",
   ],
   alternates: { canonical: "https://jujurskin.com/rutinitas" },
-  openGraph: { title, description, url: "https://jujurskin.com/rutinitas", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/rutinitas", type: "website", images: ["/opengraph-image"] },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

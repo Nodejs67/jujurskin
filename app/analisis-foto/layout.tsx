@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "kulit berminyak cek",
     "skin analysis indonesia",
   ],
-  openGraph: { title, description, url: "https://jujurskin.com/analisis-foto", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/analisis-foto", type: "website", images: ["/opengraph-image"] },
   twitter: { card: "summary", title, description },
   alternates: { canonical: "https://jujurskin.com/analisis-foto" },
 };

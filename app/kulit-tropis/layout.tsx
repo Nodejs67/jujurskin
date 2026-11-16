@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "kulit lembap berkeringat",
     "masalah kulit cuaca panas indonesia",
   ],
-  openGraph: { title, description, url: "https://jujurskin.com/kulit-tropis", type: "website" },
+  openGraph: { title, description, url: "https://jujurskin.com/kulit-tropis", type: "website", images: ["/opengraph-image"] },
   twitter: { card: "summary", title, description },
   alternates: { canonical: "https://jujurskin.com/kulit-tropis" },
 };
