@@ -4599,6 +4599,30 @@ for (const p of PRODUCTS) {
   p.price_range = mid < 60000 ? "budget" : mid <= 150000 ? "mid" : "premium";
 }
 
+/** Kata kunci bahan aktif (huruf kecil, tanpa angka/persen) untuk membandingkan dua produk. */
+function activeKeys(p: Product): Set<string> {
+  return new Set(
+    p.key_ingredients.map((i) => i.toLowerCase().replace(/\d+(?:[.,]\d+)?\s*%/g, "").replace(/\(.*?\)/g, "").trim()).filter(Boolean)
+  );
+}
+
+/**
+ * Alternatif LEBIH MURAH: kategori sama, berbagi minimal satu bahan aktif, harga tengah lebih rendah.
+ * Bukan "kembaran formula": kadar dan basis formula bisa berbeda. Urut dari yang paling mirip,
+ * lalu termurah. Tidak memakai rating atau komisi.
+ */
+export function cheaperAlternatives(product: Product, limit = 3): Product[] {
+  const mid = (p: Product) => (p.price_min + p.price_max) / 2;
+  const mine = activeKeys(product);
+  return PRODUCTS
+    .filter((p) => p.id !== product.id && p.category === product.category && mid(p) < mid(product) * 0.8)
+    .map((p) => ({ p, shared: [...activeKeys(p)].filter((k) => mine.has(k)).length }))
+    .filter((x) => x.shared > 0)
+    .sort((a, b) => b.shared - a.shared || mid(a.p) - mid(b.p))
+    .slice(0, limit)
+    .map((x) => x.p);
+}
+
 /**
  * Ambil bahan aktif yang punya kadar/persentase RESMI dari key_ingredients
  * (mis. "Niacinamide 10%", "Salicylic Acid 2%"). Dipakai untuk badge persen menonjol.

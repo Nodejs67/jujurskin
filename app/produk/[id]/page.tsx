@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PRODUCTS, getActivesWithPercent, type ProductCategory } from "@/lib/products";
+import { PRODUCTS, getActivesWithPercent, cheaperAlternatives, type ProductCategory } from "@/lib/products";
 import { productSafety } from "@/lib/safety";
 import { shopeeUrl, shopeeButtonLabel, hasShopeeAffiliate, AFFILIATE_DISCLOSURE } from "@/lib/affiliate";
 import { SiteFooter } from "@/components/site-footer";
@@ -410,6 +410,34 @@ export default function ProdukDetailPage({
             </p>
           )}
         </motion.div>
+
+        {/* Alternatif lebih murah (bahan aktif sama, bukan kembaran formula) */}
+        {(() => {
+          const alts = cheaperAlternatives(product);
+          if (alts.length === 0) return null;
+          return (
+            <section className="rounded-xl border border-border bg-card p-4">
+              <h2 className="text-sm font-semibold text-foreground mb-1">Alternatif lebih murah</h2>
+              <p className="text-xs text-muted-foreground mb-3">
+                Berbagi bahan aktif yang sama. Kadar dan formula dasarnya bisa berbeda, jadi cek komposisinya sebelum menukar.
+              </p>
+              <ul className="space-y-2">
+                {alts.map((a) => (
+                  <li key={a.id}>
+                    <Link href={`/produk/${a.id}`} className="flex items-center justify-between gap-3 rounded-lg border border-border px-3 py-2 hover:border-primary/50 transition-colors">
+                      <span className="text-sm text-foreground">
+                        <span className="text-xs text-muted-foreground">{a.brand}</span> {a.name}
+                      </span>
+                      <span className="text-xs font-semibold text-primary shrink-0">
+                        Rp{Math.round(a.price_min / 1000)}k–{Math.round(a.price_max / 1000)}k
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })()}
 
         {/* Reviews */}
         <div className="border-t border-border/30 pt-6">
