@@ -115,10 +115,10 @@ export default function KebijakanPage() {
                 lewat pengaturan browser. Untuk permintaan terkait data,
                 hubungi kami di{" "}
                 <a
-                  href="mailto:jerichomedion@gmail.com"
+                  href="mailto:jerrymedion@gmail.com"
                   className="text-primary hover:underline"
                 >
-                  jerichomedion@gmail.com
+                  jerrymedion@gmail.com
                 </a>
                 .
               </p>

@@ -100,7 +100,7 @@
 
 ---
 
-## OPTION C — FEMALE-FOCUSED BEAUTY APP  ⭐ (paling dekat referensi Jericho)
+## OPTION C — FEMALE-FOCUSED BEAUTY APP  ⭐ (paling dekat referensi)
 **Mood:** Sociolla/Female Daily/Glossier **tanpa pink** — hangat, ramah, foto-forward, bisa dijelajah.
 
 ### Wireframe — Mobile
