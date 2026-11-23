@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle, CheckCircle, XCircle, ArrowLeft, Sparkles, FlaskConical, Info, Search, Plus, Trash2 } from "lucide-react";
@@ -259,6 +260,10 @@ export default function CekKonflikPage() {
               </button>
             ))}
           </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Mau baca penjelasannya?{" "}
+            <Link href="/bisa-dicampur" className="text-primary hover:underline">Lihat semua pasangan bahan</Link>
+          </p>
         </motion.div>
 
         {/* Input Fields */}

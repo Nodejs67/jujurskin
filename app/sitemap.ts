@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { INGREDIENTS } from "@/lib/ingredients";
 import { ARTICLES } from "@/lib/articles";
 import { PRODUCTS } from "@/lib/products";
+import { KONFLIK_PAIRS } from "@/lib/konflik-pairs";
 
 const BASE = "https://jujurskin.com";
 
@@ -13,6 +14,7 @@ const STATIC_PAGES = [
   { url: "/produk", priority: 0.8, changeFrequency: "weekly" as const },
   { url: "/panduan", priority: 0.8, changeFrequency: "monthly" as const },
   { url: "/cek-konflik", priority: 0.7, changeFrequency: "monthly" as const },
+  { url: "/bisa-dicampur", priority: 0.8, changeFrequency: "monthly" as const },
   { url: "/tidak-perlu", priority: 0.8, changeFrequency: "monthly" as const },
   { url: "/simulasi", priority: 0.7, changeFrequency: "monthly" as const },
   { url: "/cek-klaim", priority: 0.7, changeFrequency: "monthly" as const },
@@ -69,5 +71,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...ingredientEntries, ...artikelHub, ...artikelEntries, ...produkEntries];
+  const pasanganEntries: MetadataRoute.Sitemap = KONFLIK_PAIRS.map((p) => ({
+    url: `${BASE}/bisa-dicampur/${p.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticEntries, ...ingredientEntries, ...artikelHub, ...artikelEntries, ...produkEntries, ...pasanganEntries];
 }
