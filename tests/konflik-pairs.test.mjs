@@ -46,3 +46,21 @@ describe("pasangan konflik bahan (halaman SEO)", () => {
     assert.ok(lain.every((p) => p.slug !== "retinol-dan-vitamin-c"));
   });
 });
+
+describe("konflikAntara (alat /cek-konflik)", async () => {
+  const { konflikAntara } = await import("@/lib/konflik-pairs");
+  const { getIngredientById } = await import("@/lib/ingredients");
+  const ing = (...ids) => ids.map((i) => getIngredientById(i));
+
+  it("Retinol + Vitamin C terdeteksi", () => {
+    assert.equal(konflikAntara(ing("retinol", "vitamin-c")).length, 1);
+  });
+  it("Bakuchiol + Retinol TIDAK terdeteksi sebagai konflik", () => {
+    const b = ing("bakuchiol", "retinol");
+    assert.ok(b.every(Boolean), "bahan harus ada");
+    assert.equal(konflikAntara(b).length, 0);
+  });
+  it("tanpa bahan bentrok, hasilnya kosong", () => {
+    assert.equal(konflikAntara(ing("niacinamide", "retinol")).length, 0);
+  });
+});

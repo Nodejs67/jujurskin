@@ -50,14 +50,14 @@ export type KonflikPair = {
 
 const HIGH_WORDS = ["jangan", "rusak", "menonaktifkan", "nonaktifkan", "mengoksidasi"];
 
-function build(): KonflikPair[] {
+function build(withSkip: boolean): KonflikPair[] {
   const map = new Map<string, KonflikPair>();
 
   for (const src of INGREDIENTS) {
     for (const c of src.conflicts_with) {
       for (const targetId of TARGETS[c.name] ?? []) {
         if (targetId === src.id) continue;
-        if (SKIP_IDS.has(src.id) || SKIP_IDS.has(targetId)) continue;
+        if (withSkip && (SKIP_IDS.has(src.id) || SKIP_IDS.has(targetId))) continue;
         const tgt = getIngredientById(targetId);
         if (!tgt) continue;
 
@@ -79,7 +79,29 @@ function build(): KonflikPair[] {
   return [...map.values()].sort((x, y) => x.slug.localeCompare(y.slug));
 }
 
-export const KONFLIK_PAIRS: KonflikPair[] = build();
+/** Semua pasangan, dipakai alat /cek-konflik (tanpa penyaring halaman SEO). */
+const SEMUA_PAIRS: KonflikPair[] = build(false);
+
+/** Pasangan yang dibuatkan halaman sendiri di /bisa-dicampur. */
+export const KONFLIK_PAIRS: KonflikPair[] = build(true);
+
+export type KonflikHasil = {
+  ingredient1: Ingredient;
+  ingredient2: Ingredient;
+  reason: string;
+  severity: "high" | "medium";
+};
+
+/** Konflik di antara daftar bahan yang dimasukkan pengguna. */
+export function konflikAntara(ingredients: Ingredient[]): KonflikHasil[] {
+  const ids = new Set(ingredients.map((i) => i.id));
+  return SEMUA_PAIRS.filter((p) => ids.has(p.a.id) && ids.has(p.b.id)).map((p) => ({
+    ingredient1: p.a,
+    ingredient2: p.b,
+    reason: p.reasons[0],
+    severity: p.severity,
+  }));
+}
 
 export function getKonflikPair(slug: string): KonflikPair | undefined {
   return KONFLIK_PAIRS.find((p) => p.slug === slug);

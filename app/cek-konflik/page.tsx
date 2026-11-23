@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { konflikAntara } from "@/lib/konflik-pairs";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle, CheckCircle, XCircle, ArrowLeft, Sparkles, FlaskConical, Info, Search, Plus, Trash2 } from "lucide-react";
@@ -107,63 +108,6 @@ function matchIngredients(text: string): Ingredient[] {
   return INGREDIENTS.filter((i) => found.has(i.id));
 }
 
-type ConflictResult = {
-  ingredient1: Ingredient;
-  ingredient2: Ingredient;
-  reason: string;
-  severity: "high" | "medium";
-};
-
-function findConflicts(ingredients: Ingredient[]): ConflictResult[] {
-  const results: ConflictResult[] = [];
-
-  for (let i = 0; i < ingredients.length; i++) {
-    for (let j = i + 1; j < ingredients.length; j++) {
-      const a = ingredients[i];
-      const b = ingredients[j];
-
-      // Check a's conflicts for b
-      for (const conflict of a.conflicts_with) {
-        const matchesB =
-          conflict.name.toLowerCase().includes(b.name.toLowerCase()) ||
-          b.name.toLowerCase().includes(conflict.name.toLowerCase()) ||
-          b.aliases.some((al) => al.toLowerCase().includes(conflict.name.toLowerCase()));
-
-        if (matchesB) {
-          const severity = conflict.reason.toLowerCase().includes("jangan") ||
-            conflict.reason.toLowerCase().includes("rusak") ||
-            conflict.reason.toLowerCase().includes("menonaktifkan") ? "high" : "medium";
-          results.push({ ingredient1: a, ingredient2: b, reason: conflict.reason, severity });
-        }
-      }
-
-      // Check b's conflicts for a
-      for (const conflict of b.conflicts_with) {
-        const matchesA =
-          conflict.name.toLowerCase().includes(a.name.toLowerCase()) ||
-          a.name.toLowerCase().includes(conflict.name.toLowerCase()) ||
-          a.aliases.some((al) => al.toLowerCase().includes(conflict.name.toLowerCase()));
-
-        if (matchesA) {
-          // Avoid duplicate
-          const alreadyAdded = results.some(
-            (r) => (r.ingredient1.id === a.id && r.ingredient2.id === b.id) ||
-              (r.ingredient1.id === b.id && r.ingredient2.id === a.id)
-          );
-          if (!alreadyAdded) {
-            const severity = conflict.reason.toLowerCase().includes("jangan") ||
-              conflict.reason.toLowerCase().includes("rusak") ||
-              conflict.reason.toLowerCase().includes("menonaktifkan") ? "high" : "medium";
-            results.push({ ingredient1: b, ingredient2: a, reason: conflict.reason, severity });
-          }
-        }
-      }
-    }
-  }
-
-  return results;
-}
-
 const PRESET_COMBOS = [
   { label: "Retinol + AHA", ingredients: "Retinol, Glycolic Acid (AHA)" },
   { label: "Vit C + BHA", ingredients: "Vitamin C, Salicylic Acid (BHA)" },
@@ -203,7 +147,7 @@ export default function CekKonflikPage() {
     return matchIngredients(combined);
   }, [inputs, checked]);
 
-  const conflicts = useMemo(() => findConflicts(allIngredients), [allIngredients]);
+  const conflicts = useMemo(() => konflikAntara(allIngredients), [allIngredients]);
   const safeIngredients = allIngredients.filter(
     (ing) => !conflicts.some((c) => c.ingredient1.id === ing.id || c.ingredient2.id === ing.id)
   );
