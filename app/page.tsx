@@ -249,6 +249,9 @@ export default function Home() {
                 Lihat Demo
               </button>
             </div>
+            <Link href="/roast" className="mt-4 inline-flex items-center gap-2 px-4 h-11 rounded-full border-2 bg-white/70 text-sm font-semibold transition-colors hover:bg-white" style={{ color: PINK, borderColor: PINK }}>
+              <Sparkles className="w-4 h-4" /> Berani skincare-mu dijujurin? Coba Jujur Check <ArrowRight className="w-4 h-4" />
+            </Link>
             <div className="mt-6 flex items-center gap-3">
               <span className="grid place-items-center w-9 h-9 rounded-full bg-rose-50 shrink-0" style={{ color: PINK }}>
                 <ShieldCheck className="w-5 h-5" />
